@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "game.h"
+
 typedef enum {
     GAME_MODE,
     DIFFICULTY,
@@ -29,8 +31,16 @@ typedef struct command_t {
     int arg;
 } Command;
 
-bool parser_is_int(const char* str);
+bool parse_is_int(const char* str);
 
-Command parse_line(const char* str);
+/*
+ * get command and change game if needed
+ */
+Command parse_line(game* cur_game, const char* str);
+
+/*
+ * creates a defualt game updates it according to user settings (with while loop)
+ */
+int set_game();
 
 #endif /* SETTING_H_ */

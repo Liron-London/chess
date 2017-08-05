@@ -1,0 +1,16 @@
+london
+1. fix array_list.h and array_list.c
+2. game.c - the rest 
+3. game.h fix definitions for pieces enum
+4. file handler - create c file
+
+gal
+1. settings.c 
+2. game_command.c
+3. game.c - 
+	a. is_check
+	b. print board
+
+both
+1. read about minimax algo
+2. read about SDL
