@@ -40,17 +40,17 @@ typedef struct sp_array_list_t {
 	int* elements;
 	int actualSize;
 	int maxSize;
-} SPArrayList;
+} array_list;
 
 /**
  * A type used for errors
  */
-typedef enum sp_array_list_message_t {
+typedef enum array_list_message_t {
 	SP_ARRAY_LIST_SUCCESS,
 	SP_ARRAY_LIST_INVALID_ARGUMENT,
 	SP_ARRAY_LIST_FULL,
 	SP_ARRAY_LIST_EMPTY
-} SP_ARRAY_LIST_MESSAGE;
+} ARRAY_LIST_MESSAGE;
 
 /**
  *  Creates an empty array list with the specified maximum capacity.
@@ -59,7 +59,7 @@ typedef enum sp_array_list_message_t {
  *  NULL, if an allocation error occurred or maxSize  <= 0.
  *  An instant of an array list otherwise.
  */
-SPArrayList* spArrayListCreate(int maxSize);
+array_list* array_list_create(int maxSize);
 
 /**
  *	Creates an exact copy of the src array list. Elements in the new copy will
@@ -69,14 +69,14 @@ SPArrayList* spArrayListCreate(int maxSize);
  *	NULL if either an allocation error occurs or src == NULL.
  *	A new copy of the source array list, otherwise.
  */
-SPArrayList* spArrayListCopy(SPArrayList* src);
+array_list* array_list_copy(array_list* src);
 
 /**
  * Frees all memory resources associated with the source array list. If the
  * source array is NULL, then the function does nothing.
  * @param src - the source array list
  */
-void spArrayListDestroy(SPArrayList* src);
+void array_list_destroy(array_list* src);
 
 /**
  * Clears all elements from the source array list. After invoking this function,
@@ -87,7 +87,7 @@ void spArrayListDestroy(SPArrayList* src);
  * SP_ARRAY_LIST_INVALID_ARGUMENT if src == NULL
  * SP_ARRAY_LIST_SUCCESS otherwise
  */
-SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src);
+ARRAY_LIST_MESSAGE array_list_clear(array_list* src);
 
 /**
  * Inserts element at a specified index. The elements residing at and after the
@@ -103,7 +103,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src);
  * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
  * SP_ARRAY_LIST_SUCCESS - otherwise
  */
-SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index);
+ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, int elem, int index);
 
 /**
  * Inserts element at a the beginning of the source element. The elements
@@ -117,7 +117,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index);
  * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
  * SP_ARRAY_LIST_SUCCESS - otherwise
  */
- SP_ARRAY_LIST_MESSAGE spArrayListAddFirst(SPArrayList* src, int elem);
+ ARRAY_LIST_MESSAGE array_list_add_first(array_list* src, int elem);
 
 /**
  * Inserts element at a the end of the source element. If the array list
@@ -130,7 +130,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, int elem, int index);
  * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
  * SP_ARRAY_LIST_SUCCESS - otherwise
  */
-SP_ARRAY_LIST_MESSAGE spArrayListAddLast(SPArrayList* src, int elem);
+ARRAY_LIST_MESSAGE array_list_add_last(array_list* src, int elem);
 
 /**
  * Removes an element from a specified index. The elements residing after the
@@ -145,7 +145,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddLast(SPArrayList* src, int elem);
  * SP_ARRAY_LIST_EMPTY - if the source array list is empty
  * SP_ARRAY_LIST_SUCCESS - otherwise
  */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index);
+ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index);
 
 /**
  * Removes an element from a the beginning of the list.
@@ -159,7 +159,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index);
  * SP_ARRAY_LIST_EMPTY - if the source array list is empty
  * SP_ARRAY_LIST_SUCCESS - otherwise
  */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveFirst(SPArrayList* src);
+ARRAY_LIST_MESSAGE array_list_remove_first(array_list* src);
 
 /**
  * Removes an element from a the end of the list.
