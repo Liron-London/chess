@@ -1,9 +1,11 @@
 CC = gcc
-OBJS = SPMiniMaxNode.o SPMiniMax.o SPFIARGame.o SPArrayList.o SPFIARParser.o SPMainAux.o main.o
-EXEC = SPFIAR
-GAME_TEST_OBJS = SPArrayList.o SPFIARGame.o SPFIARGameUnitTest.o
-ARRAY_LIST_TEST_OBJS = SPArrayListUnitTestTest.o SPArrayList.o
-PARSER_TEST_OBJS = SPFIARParser.o SPFIARParserUnitTest.o
+OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o settings.o main.o
+EXEC = chessprog
+ARRAY_LIST_TEST_OBJS = array_list.o array_list_unit_test.o
+GAME_TEST_OBJS = array_list.o game.o
+GAME_COMMANDS_TEST_OBJS = array_list.o game.o game_commands.o
+FILE_HANDLER_TEST_OBJS = 
+
 MINMAXNode_TEST_OBJ = SPMiniMaxNode.o SPMiniMaxNodeUnitTest.o SPFIARGame.o SPArrayList.o
 MINMAX_TEST_OBJ = SPMiniMaxNode.o SPMiniMax.o SPMiniMaxUnitTest.o SPFIARGame.o SPArrayList.o
 MAINAUX_TEST_OBJS = SPMainAux.o SPArrayList.o SPFIARGame.o SPMiniMax.o SPMiniMaxNode.o
