@@ -1,9 +1,9 @@
-#ifndef SPARRAYLIST_H_
-#define SPARRAYLIST_H_
+#ifndef ARRAYLIST_H_
+#define ARRAYLIST_H_
 #include <stdbool.h>
 
 /**
- * SPArrayList summary:
+ * ArrayList summary:
  *
  * A container that represents a fixed size linked list. The capcity of the list
  * is specified at the creation. The container supports typical list
@@ -36,7 +36,7 @@
  * spArrayListIsFull       - Returns if the array list reached its max capacity.
  * spArrayListIsEmpty      - Returns true if the array list contains no elements.
  */
-typedef struct sp_array_list_t {
+typedef struct array_list_t {
 	int* elements;
 	int actualSize;
 	int maxSize;
@@ -46,10 +46,10 @@ typedef struct sp_array_list_t {
  * A type used for errors
  */
 typedef enum array_list_message_t {
-	SP_ARRAY_LIST_SUCCESS,
-	SP_ARRAY_LIST_INVALID_ARGUMENT,
-	SP_ARRAY_LIST_FULL,
-	SP_ARRAY_LIST_EMPTY
+	ARRAY_LIST_SUCCESS,
+	ARRAY_LIST_INVALID_ARGUMENT,
+	ARRAY_LIST_FULL,
+	ARRAY_LIST_EMPTY
 } ARRAY_LIST_MESSAGE;
 
 /**
@@ -173,7 +173,7 @@ ARRAY_LIST_MESSAGE array_list_remove_first(array_list* src);
  * SP_ARRAY_LIST_EMPTY - if the source array list is empty
  * SP_ARRAY_LIST_SUCCESS - otherwise.
  */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src);
+ARRAY_LIST_MESSAGE array_list_remove_last(array_list* src);
 
 /**
  * Returns the element at the specified index. The function is called
@@ -185,7 +185,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src);
  * Undefined value if either src == NULL or index out of bound.
  * Otherwise, the element at the specified index is returned.
  */
-int spArrayListGetAt(SPArrayList* src, int index);
+int array_list_get_at(array_list* src, int index);
 
 /**
  * Returns the element at the beginning of the list. The function is called
@@ -196,7 +196,7 @@ int spArrayListGetAt(SPArrayList* src, int index);
  * Undefined value if either src == NULL or the list is empty
  * Otherwise, the element at the beginning of the list is returned.
  */
-int spArrayListGetFirst(SPArrayList* src);
+int array_list_get_first(array_list* src);
 
 /**
  * Returns the element at the end of the list. The function is called
@@ -207,7 +207,7 @@ int spArrayListGetFirst(SPArrayList* src);
  * Undefined value if either src == NULL or the list is empty
  * Otherwise, the element at the end of the list is returned.
  */
-int spArrayListGetLast(SPArrayList* src);
+int array_list_get_last(array_list* src);
 
 /**
  * Returns the maximum capacity of the list. The function is called
@@ -218,7 +218,7 @@ int spArrayListGetLast(SPArrayList* src);
  * Undefined value if either src == NULL
  * Otherwise, the maximum capacity of the list is returned.
  */
-int spArrayListMaxCapacity(SPArrayList* src);
+int array_list_max_capacity(array_list* src);
 
 /**
  * Returns the number of elements in the list. The function is called
@@ -229,7 +229,7 @@ int spArrayListMaxCapacity(SPArrayList* src);
  * Undefined value if either src == NULL
  * Otherwise, the number of the elements in the list is returned.
  */
-int spArrayListSize(SPArrayList* src);
+int array_list_size(array_list* src);
 
 /**
  * Returns true if the list is full, that is the number of elements in the list
@@ -240,7 +240,7 @@ int spArrayListSize(SPArrayList* src);
  * than its maximum capacity.
  * Otherwise, true is returned.
  */
-bool spArrayListIsFull(SPArrayList* src);
+bool array_list_is_full(array_list* src);
 
 /**
  * Returns true if the list is empty, that is the number of elements in the list
@@ -250,6 +250,6 @@ bool spArrayListIsFull(SPArrayList* src);
  * false if either src == NULL or the number of elements in the list is not zero.
  * Otherwise, true is returned.
  */
-bool spArrayListIsEmpty(SPArrayList* src);
+bool array_list_is_empty(array_list* src);
 
 #endif
