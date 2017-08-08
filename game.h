@@ -34,7 +34,7 @@ typedef struct location_t {
 
 typedef struct piece_t {
     location* piece_location;
-    PIECE_TYPE;
+    char piece_type;
     int color;
 } piece;
 

@@ -7,6 +7,40 @@
 
 #include "game.h"
 
+game* game_create() {
+	game* newgame = (game*)malloc*sizeof(game);
+	if (newgame == NULL) {
+		free newgame;
+		return NULL;
+	}
+	return game;
+}
+
+game* game_copy(game* cur_game) {
+	if (cur_game == NULL)
+		return NULL;
+	game* copy = (game*)malloc*sizeof(game);
+	if (copy == NULL) {
+		free copy;
+		return NULL;
+	}
+	copy->board = cur_game->board;
+	copy->current_turn = cur_game->current_turn;
+	copy->difficulty = cur_game->difficulty;
+	copy->game_mode = cur_game->game_mode;
+	copy->history = cur_game->history;
+	copy->user_color = cur_game->user_color;
+	return copy;
+}
+
+void game_destroy (game* cur_game) {
+	free(cur_game);
+}
+
+void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
+
+}
+
 void print_board(game* cur_game){
 
 	if (cur_game == NULL)
@@ -121,7 +155,7 @@ bool is_check(game* cur_game, const piece king, const piece* enemy_locs){
 		return false;
 	}
 
-	// finds the loaction of the white king
+	// finds the location of the white king
 	location king_loc = king->piece_location;
 	location enemy_loc;
 
