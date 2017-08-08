@@ -10,11 +10,11 @@ SETTINGS_TEST_OBJ = array_list.o game.o
 
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
 
+
+
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@
-SPFIARGameUnitTest: $(GAME_TEST_OBJS)
-	$(CC) $(GAME_TEST_OBJS) -o $@
-SPArrayListUnitTest: $(ARRAY_LIST_TEST_OBJS)
+array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 SPFIARParser: $(PARSER_TEST_OBJS)
 	$(CC) $(PARSER_TEST_OBJS) -o $@
@@ -26,7 +26,7 @@ SPMainAuxUnitTest: $(MAINAUX_TEST_OBJS)
 	$(CC) $(MAINAUX_TEST_OBJS) -o $@
 SPFIARGameUnitTest.o: SPFIARGameUnitTest.c unit_test_util.h SPArrayList.h SPFIARGame.h
 	$(CC) $(COMP_FLAG) -c $*.c
-SPArrayListUnitTest.o: SPArrayListUnitTest.c SPArrayList.h unit_test_util.h
+array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
 SPFIARParserUnitTest.o: SPFIARParserUnitTest.c SPFIARParser.h unit_test_util.h
 	$(CC) $(COMP_FLAG) -c $*.c
