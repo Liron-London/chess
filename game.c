@@ -13,6 +13,10 @@ game* game_create() {
 		free(newgame);
 		return NULL;
 	}
+	newgame->game_mode = 1;
+	newgame->difficulty = 2;
+	newgame->user_color = 1;
+	newgame->current_turn = 1;
 	return game;
 }
 
