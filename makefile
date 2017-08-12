@@ -18,7 +18,7 @@ $(EXEC): $(OBJS)
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 setting_test: $(SETTINGS_TEST_OBJ)
-	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
+	$(CC) $(SETTINGS_TEST_OBJ) -o $@
 
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
