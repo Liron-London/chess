@@ -34,8 +34,8 @@ int scoring_function(game* game) {
 	}
 
 	//calculate black pieces
-	for (int i = 0; i < 16; i++) {
-		char cur_piece_type = game->blacks[i]->piece_type;
+	for (int j = 0; j < 16; j++) {
+		char cur_piece_type = game->blacks[j]->piece_type;
 		if (cur_piece_type == BLACK_PAWN) {
 			black_sum += 1;
 		}
