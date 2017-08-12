@@ -42,13 +42,15 @@ static bool game_copy_test() {
 
 static bool game_destroy_test() {
 	game* test_game = game_create();
-	printf("before destroy\n");
+	//printf("before destroy\n");
 	game_destroy(test_game);
-	printf("after destroy\n");
-	if (test_game != NULL) {
-		return false;
-	}
-	printf("after check destroy\n");
+	//printf("after destroy\n");
+	return true;
+}
+
+static bool game_print_test() {
+	game* test_game = game_create();
+	print_board(test_game);
 	return true;
 }
 
@@ -65,10 +67,15 @@ int main() {
 	if(success) {
 		printf("Game destroy success\n");
 	}
+	success = game_print_test();
+	if(success) {
+		printf("Game print success\n");
+	}
 	if(!success) {
 		printf("Undetected error\n");
 		return 1;
 	}
+
 	return 0;
 }
 
