@@ -51,12 +51,12 @@ bool is_check(game* cur_game);
 /*
  * checks if a piece threats the kings from diagonal
  */
-bool check_diagonals(game* cur_game, king_loc, enemy_loc);
+bool check_diagonals(game* cur_game, location* king_loc, location* enemy_loc);
 
 /*
  * checks if a piece threats the king from up/down/right/left
  */
-bool check_parallels(game* cur_game, king_loc, enemy_loc);
+bool check_parallels(game* cur_game, location* king_loc,location* enemy_loc);
 
 /*
 * returns a list of all valid moves, needs to call is_check to verify the King's not threatened
