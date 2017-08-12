@@ -55,6 +55,6 @@ int main() {
 	bool success;
 	success = basic_check();
 	if (success)
-		printf("basic settings checks success!\n"); //DEBUG
+		printf("basic settings checks success!\n");
 	return 0;
 }

@@ -96,8 +96,5 @@ Command parse_line(const char* str){
 		command.cmd = DEFAULT_GAME;
 		command.validArg = true;
 	}
-
-
-
-
+	return command;
 }
