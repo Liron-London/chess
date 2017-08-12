@@ -23,7 +23,7 @@ typedef enum {
     PRINT_SETTINGS,
     QUIT,
     START,
-    INVLAID_LINE
+    INVALID_COMMAND
 } command_type;
 
 typedef struct command_t {

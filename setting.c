@@ -34,7 +34,7 @@ Command parse_line(const char* str){
 
 	Command command;
 	command.validArg = false;
-	command.cmd = INVALID_LINE;
+	command.cmd = INVALID_COMMAND;
 
 	// TODO
 	// can the command get ints in case the command is start or quit?
@@ -71,7 +71,7 @@ Command parse_line(const char* str){
 	if (strcmp(command_text, "game_mode") == 0) {
 		command.cmd = GAME_MODE;
 		if (parser_is_int(command_int) == true){
-			command.arg = command_int; // 1 for single player and 2 for two players
+			command.arg = atoi(command_int); // 1 for single player and 2 for two players
 			if (command.arg == 1 || command.arg == 2){
 				command.validArg = true;
 			}
