@@ -306,7 +306,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	}
 
 	// right
-	for (int i=0; i<8; i++){
+	for (char i=0; i<8; i++){
 		if (enemy_loc->row + i > 'H' || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
 			continue;
 		}
@@ -316,7 +316,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	}
 
 	// left
-	for (int i=0; i<8; i++){
+	for (char i=0; i<8; i++){
 		if (enemy_loc->row - i < 'A' || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
 			continue;
 		}
@@ -369,7 +369,7 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 
 		// bishop
 		if (enemy_locs[i].piece_type == BLACK_BISHOP || enemy_locs[i].piece_type == WHITE_BISHOP){
-			if (check_diagonals(cur_game, king->piece_location, *(enemy_locs + i)->piece_location) == true){
+			if (check_diagonals(cur_game, king->piece_location, enemy_locs[i].piece_location) == true){
 				return true;
 			}
 		}
@@ -382,7 +382,7 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 		}
 
 		// queen
-		if (*(enemy_locs + i)->piece_type == BLACK_QUEEN || *(enemy_locs + i)->piece_type == WHITE_QUEEN){
+		if (enemy_locs[i].piece_type == BLACK_QUEEN || enemy_locs[i].piece_type == WHITE_QUEEN){
 			if ((check_parallels(cur_game, king->piece_location, enemy_locs[i].piece_location) == true) ||
 				(check_diagonals(cur_game, king->piece_location, enemy_locs[i].piece_location) == true)){
 				return true;
@@ -390,8 +390,8 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 		}
 
 		// king
-		if (*(enemy_locs + i)->piece_type == BLACK_KING || *(enemy_locs + i)->piece_type == WHITE_KING){
-			if (((king.piece_location->row - (enemy_locs[i].piece_location->row)) < 1 && (king.piece_location->row - (enemy_locs[i].piece_location->row)) > -1) &&
+		if (enemy_locs[i].piece_type == BLACK_KING || enemy_locs[i].piece_type == WHITE_KING){
+			if (((king.piece_location->row - (enemy_locs[i].piece_location->row)) <= A && (king.piece_location->row - (enemy_locs[i].piece_location->row)) >= 'A') &&
 				((king.piece_location->column - (enemy_locs[i].piece_location->column)) < 1 && (king.piece_location->column - (enemy_locs[i].piece_location->column)) > -1)){
 				return true;
 			}
