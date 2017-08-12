@@ -7,7 +7,7 @@ GAME_TEST_OBJS = array_list.o game.o
 GAME_COMMANDS_TEST_OBJS = array_list.o game.o game_commands.o
 FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
-SETTINGS_TEST_OBJ = array_list.o game.o
+SETTINGS_TEST_OBJ = array_list.o game.o setting_unit_test.o
 
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
 
@@ -33,4 +33,4 @@ setting_unit_test.o: game.o setting.o
 
 
 clean:
-	rm -f *.o $(EXEC) $(OBJS)
+	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
