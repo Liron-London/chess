@@ -44,10 +44,11 @@ static bool game_destroy_test() {
 	game* test_game = game_create();
 	printf("before destroy\n");
 	game_destroy(test_game);
+	printf("after destroy\n");
 	if (test_game != NULL) {
 		return false;
 	}
-	printf("after destroy\n");
+	printf("after check destroy\n");
 	return true;
 }
 
