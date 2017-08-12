@@ -2,6 +2,7 @@
 #define GAME_H_INCLUDED
 #include <stdio.h>
 #include "array_list.h"
+#include <stdbool.h>
 
 //Definitions
 #define WHITE_PAWN 'm'
@@ -18,15 +19,6 @@
 #define BLACK_KING 'K'
 #define EMPTY_ENTRY ' '
 
-typedef struct game_t {
-    int game_mode = 1; // 1 = one player mode, 2 = two player mode
-    int difficulty = 2; // between 1-4
-    int user_color = 1; // 0 - black, 1 - white
-    array_list history[6]; // for undo move
-    int current_turn = 1; //0 - PC or player 2, 1 - player one
-    char board[8][8];
-} game;
-
 typedef struct location_t {
     int row;
     char column;
@@ -34,14 +26,37 @@ typedef struct location_t {
 
 typedef struct piece_t {
     location* piece_location;
-    PIECE_TYPE;
+    char piece_type;
     int color;
 } piece;
+
+typedef struct game_t {
+    int game_mode = 1; // 1 = one player mode, 2 = two player mode
+    int difficulty = 2; // between 1-4
+    int user_color = 1; // 0 - black, 1 - white
+    array_list history[6]; // for undo move
+    int current_turn = 1; //0 - PC or player 2, 1 - player one
+    char board[8][8];
+    piece whites[16];
+    piece blacks[16];
+} game;
+
 
 /*
 * checks that the King's not threatened
 */
 bool is_check(game* cur_game);
+
+
+/*
+ * checks if a piece threats the kings from diagonal
+ */
+bool check_diagonals(game* cur_game, king_loc, enemy_loc);
+
+/*
+ * checks if a piece threats the king from up/down/right/left
+ */
+bool check_parallels(game* cur_game, king_loc, enemy_loc);
 
 /*
 * returns a list of all valid moves, needs to call is_check to verify the King's not threatened
