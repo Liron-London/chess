@@ -18,7 +18,7 @@
 #define BLACK_QUEEN 'Q'
 #define WHITE_KING 'k'
 #define BLACK_KING 'K'
-#define EMPTY_ENTRY ' '
+#define EMPTY_ENTRY '_'
 
 typedef struct location_t {
     int row;

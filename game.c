@@ -20,29 +20,35 @@ game* game_create() {
 
 	// initialize board
 	// initialize blacks
-	newgame->board[0][0] = BLACK_ROOK;
-	newgame->board[0][1] = BLACK_KNIGHT;
-	newgame->board[0][2] = BLACK_BISHOP;
-	newgame->board[0][3] = BLACK_QUEEN;
-	newgame->board[0][4] = BLACK_KING;
-	newgame->board[0][5] = BLACK_KNIGHT;
-	newgame->board[0][6] = BLACK_BISHOP;
-	newgame->board[0][7] = BLACK_ROOK;
+	newgame->board[0][0] = WHITE_ROOK;
+	newgame->board[0][1] = WHITE_KNIGHT;
+	newgame->board[0][2] = WHITE_BISHOP;
+	newgame->board[0][3] = WHITE_QUEEN;
+	newgame->board[0][4] = WHITE_KING;
+	newgame->board[0][5] = WHITE_KNIGHT;
+	newgame->board[0][6] = WHITE_BISHOP;
+	newgame->board[0][7] = WHITE_ROOK;
 	for (int i=0; i<8;i++){
-		newgame->board[1][i] = BLACK_PAWN;
+		newgame->board[1][i] = WHITE_PAWN;
 	}
 
 	// initialize whites
-	newgame->board[7][0] = WHITE_ROOK;
-	newgame->board[7][1] = WHITE_KNIGHT;
-	newgame->board[7][2] = WHITE_BISHOP;
-	newgame->board[7][3] = WHITE_QUEEN;
-	newgame->board[7][4] = WHITE_KING;
-	newgame->board[7][5] = WHITE_KNIGHT;
-	newgame->board[7][6] = WHITE_BISHOP;
-	newgame->board[7][7] = WHITE_ROOK;
+	newgame->board[7][0] = BLACK_ROOK;
+	newgame->board[7][1] = BLACK_KNIGHT;
+	newgame->board[7][2] = BLACK_BISHOP;
+	newgame->board[7][3] = BLACK_QUEEN;
+	newgame->board[7][4] = BLACK_KING;
+	newgame->board[7][5] = BLACK_KNIGHT;
+	newgame->board[7][6] = BLACK_BISHOP;
+	newgame->board[7][7] = BLACK_ROOK;
 	for (int i=0; i<8;i++){
-		newgame->board[6][i] = WHITE_PAWN;
+		newgame->board[6][i] = BLACK_PAWN;
+	}
+
+	for (int i=2; i<=5; i++){
+		for (int j=0; j<=7;j++){
+			newgame->board[i][j] = EMPTY_ENTRY;
+		}
 	}
 
 	return newgame;
@@ -250,14 +256,14 @@ void print_board(game* cur_game){
 	if (cur_game == NULL)
 		return ;
 
-	for (int i=8; i>0; i--){
-		printf("  %d|", i);
+	for (int i=7; i>=0; i--){
+		printf("%d|", i);
 		for (int j=0; j<8 ; j++){
 			printf("%c ", cur_game->board[i][j]);
 		}
 		printf("|\n");
 	}
-	printf(" -----------------\n   ");
+	printf("  -----------------\n   ");
 	for (char c = 'A'; c <= 'H'; c++){
 		printf("%c ", c);
 	}
