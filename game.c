@@ -75,6 +75,7 @@ game* game_copy(game* cur_game) {
 }
 
 void game_destroy (game* cur_game) {
+	array_list_destroy(cur_game->history);
 	free(cur_game);
 }
 
