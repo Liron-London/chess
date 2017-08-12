@@ -198,6 +198,8 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
 		return pawn_valid_moves(cur_game, cur_piece);
 	}
+	//tmp line 12.8.17
+	return pawn_valid_moves(cur_game, cur_piece);
 }
 
 void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
