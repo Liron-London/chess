@@ -38,6 +38,10 @@ bool parse_is_int(const char* str);
  */
 Command parse_line(game* cur_game, const char* str);
 
+void print_settings(game* cur_game){
+
+}
+
 /*
  * creates a defualt game updates it according to user settings (with while loop)
  */
