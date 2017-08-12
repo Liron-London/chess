@@ -62,10 +62,11 @@ game* game_copy(game* cur_game) {
 			copy->board[i][j] = cur_game->board[i][j];
 		}
 	}
-	// copying history
+	/* copying history
 	for (int i=0; i<6; i++){
 		copy->history[i] = cur_game->history[i];
 	}
+	*/
 
 	copy->current_turn = cur_game->current_turn;
 	copy->difficulty = cur_game->difficulty;
