@@ -19,18 +19,18 @@
 #define BLACK_KING 'K'
 #define EMPTY_ENTRY ' '
 
-typedef struct location_t {
+typedef struct{
     int row;
     char column;
 } location;
 
-typedef struct piece_t {
+typedef struct{
     location* piece_location;
     char piece_type;
     int color;
 } piece;
 
-typedef struct game_t {
+typedef struct {
     int game_mode = 1; // 1 = one player mode, 2 = two player mode
     int difficulty = 2; // between 1-4
     int user_color = 1; // 0 - black, 1 - white
