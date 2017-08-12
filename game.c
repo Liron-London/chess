@@ -230,7 +230,7 @@ void print_board(game* cur_game){
 		printf("|\n");
 	}
 	printf(" -----------------\n   ");
-	for (char c="A"; c<="H"; c++){
+	for (char c = 'A'; c <= 'H'; c++){
 		printf("%c ", c);
 	}
 }
@@ -307,7 +307,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 
 	// right
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row + i > 8 || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
+		if (enemy_loc->row + i > 'H' || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
@@ -317,7 +317,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 
 	// left
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row - i < 0 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
+		if (enemy_loc->row - i < 'A' || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
@@ -339,10 +339,10 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 
 	for (int i=0; i<16; i++){
 		// putting location into variable for readability
-		enemy_loc = *(enemy_locs + i)->piece_location;
+		enemy_loc = enemy_locs[i].piece_location;
 
 		// black pawn
-		if (*(enemy_locs + i)->piece_type == BLACK_PAWN){
+		if (enemy_locs[i].piece_type == BLACK_PAWN){
 			if ((enemy_loc->column = (king_loc->column) + 1) &&
 					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
 				return true;
@@ -350,7 +350,7 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 		}
 
 		// white pawn
-		if (*(enemy_locs + i)->piece_type == BLACK_PAWN){
+		if (enemy_locs[i].piece_type == BLACK_PAWN){
 			if ((enemy_loc->column = (king_loc->column) - 1) &&
 					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
 				return true;
@@ -358,7 +358,7 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 		}
 
 		// knight
-		if (*(enemy_locs + i)->piece_type == BLACK_KNIGHT || *(enemy_locs + i)->piece_type == WHITE_KNIGHT){
+		if (enemy_locs[i].piece_type == BLACK_KNIGHT || enemy_locs[i].piece_type == WHITE_KNIGHT){
 			if (((enemy_loc->column = (king_loc->column) + 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))) ||
 				((enemy_loc->column = (king_loc->column) - 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1)))||
 				((enemy_loc->row = (king_loc->row) + 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))||
@@ -368,31 +368,31 @@ bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 		}
 
 		// bishop
-		if (*(enemy_locs + i)->piece_type == BLACK_BISHOP || *(enemy_locs + i)->piece_type == WHITE_BISHOP){
+		if (enemy_locs[i].piece_type == BLACK_BISHOP || enemy_locs[i].piece_type == WHITE_BISHOP){
 			if (check_diagonals(cur_game, king->piece_location, *(enemy_locs + i)->piece_location) == true){
 				return true;
 			}
 		}
 
 		// rook
-		if (*(enemy_locs + i)->piece_type == BLACK_ROOK || *(enemy_locs + i)->piece_type == WHITE_ROOK){
-			if (check_parallels(cur_game, king->piece_location, *(enemy_locs + i)->piece_location) == true){
+		if (enemy_locs[i].piece_type == BLACK_ROOK || enemy_locs[i].piece_type == WHITE_ROOK){
+			if (check_parallels(cur_game, king->piece_location, enemy_locs[i].piece_location) == true){
 				return true;
 			}
 		}
 
 		// queen
 		if (*(enemy_locs + i)->piece_type == BLACK_QUEEN || *(enemy_locs + i)->piece_type == WHITE_QUEEN){
-			if ((check_parallels(cur_game, king->piece_location, *(enemy_locs + i)->piece_location) == true) ||
-				(check_diagonals(cur_game, king->piece_location, *(enemy_locs + i)->piece_location) == true)){
+			if ((check_parallels(cur_game, king->piece_location, enemy_locs[i].piece_location) == true) ||
+				(check_diagonals(cur_game, king->piece_location, enemy_locs[i].piece_location) == true)){
 				return true;
 			}
 		}
 
 		// king
 		if (*(enemy_locs + i)->piece_type == BLACK_KING || *(enemy_locs + i)->piece_type == WHITE_KING){
-			if (((king.piece_location->row - (*(enemy_locs + i)->piece_location->row)) < 1 && (king.piece_location->row - (*(enemy_locs + i)->piece_location->row)) > -1) &&
-				((king.piece_location->column - (*(enemy_locs + i)->piece_location->column)) < 1 && (king.piece_location->column - (*(enemy_locs + i)->piece_location->column)) > -1)){
+			if (((king.piece_location->row - (enemy_locs[i].piece_location->row)) < 1 && (king.piece_location->row - (enemy_locs[i].piece_location->row)) > -1) &&
+				((king.piece_location->column - (enemy_locs[i].piece_location->column)) < 1 && (king.piece_location->column - (enemy_locs[i].piece_location->column)) > -1)){
 				return true;
 			}
 		}
