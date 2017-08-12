@@ -130,7 +130,6 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 
 location* bishop_valid_moves(location* valid_locs, game* cur_game, piece* cur_piece) {
 	int i = 0;
-	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
 	int color = cur_piece->color;
@@ -206,10 +205,10 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
 	location valid_locs[64];
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
-		return pawn_valid_moves(cur_game, cur_piece);
+		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
-		return pawn_valid_moves(cur_game, cur_piece);
+		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	//tmp line 12.8.17
 	return pawn_valid_moves(valid_locs, cur_game, cur_piece);
