@@ -17,7 +17,7 @@ game* game_create() {
 	newgame->difficulty = 2;
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
-	return game;
+	return newgame;
 }
 
 game* game_copy(game* cur_game) {
@@ -73,56 +73,56 @@ location* pawn_valid_moves(game* cur_game, piece* cur_piece) {
 	int col = cur_piece->piece_location->column;
 	if (type == WHITE_PAWN) {
 		if (row == 2 && cur_game->board[4][col] == EMPTY_ENTRY) {
-			valid_locs[i]->row = 4;
-			valid_locs[i]->column = col;
+			valid_locs[i].row = 4;
+			valid_locs[i].column = col;
 			i++;
 		}
 		if (row <= 7 && cur_game->board[row + 1][col] == EMPTY_ENTRY) {
-			valid_locs[i]->row = row + 1;
-			valid_locs[i]->column = col;
+			valid_locs[i].row = row + 1;
+			valid_locs[i].column = col;
 			i++;
 		}
 		// if board[i][j] is a capital letter it's a black piece
 		if (row <= 7 && col <= 'G' &&
 				cur_game->board[row+1][col+1] <= 'Z' &&
 				cur_game->board[row+1][col+1] >= 'A') {
-			valid_locs[i]->row = row +1;
-			valid_locs[i]->column = col +1;
+			valid_locs[i].row = row +1;
+			valid_locs[i].column = col +1;
 			i++;
 		}
 		if (row <= 7 && col >= 'B' &&
 				cur_game->board[row+1][col-1] <= 'Z' &&
 				cur_game->board[row+1][col-1] >= 'A') {
-			valid_locs[i]->row = row +1;
-			valid_locs[i]->column = col - 1;
+			valid_locs[i].row = row +1;
+			valid_locs[i].column = col - 1;
 			i++;
 		}
 	}
 
 	if (type == BLACK_PAWN) {
 		if (row == 7 && cur_game->board[5][col] == EMPTY_ENTRY) {
-			valid_locs[i]->row = 5;
-			valid_locs[i]->column = col;
+			valid_locs[i].row = 5;
+			valid_locs[i].column = col;
 			i++;
 		}
 		if (row >= 2 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
-			valid_locs[i]->row = row - 1;
-			valid_locs[i]->column = col;
+			valid_locs[i].row = row - 1;
+			valid_locs[i].column = col;
 			i++;
 		}
 		// if board[i][j] is a lowercase character it's a white piece
 		if (row >= 2 && col >= 'B' &&
 				cur_game->board[row - 1][col - 1] <= 'z' &&
 				cur_game->board[row - 1][col - 1] >= 'a') {
-			valid_locs[i]->row = row -1;
-			valid_locs[i]->column = col -1;
+			valid_locs[i].row = row -1;
+			valid_locs[i].column = col -1;
 			i++;
 		}
 		if (row >= 2 && col <= 'G' &&
 				cur_game->board[row + 1][col - 1] <= 'z' &&
 				cur_game->board[row + 1][col - 1] >= 'a') {
-			valid_locs[i]->row = row +1;
-			valid_locs[i]->column = col - 1;
+			valid_locs[i].row = row +1;
+			valid_locs[i].column = col - 1;
 			i++;
 		}
 	}
@@ -143,8 +143,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	while (next_row <= 8 && next_col <= 8 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
-		valid_locs[i]->row = next_row;
-		valid_locs[i]->column = next_col;
+		valid_locs[i].row = next_row;
+		valid_locs[i].column = next_col;
 		//check capturing
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 				break;
@@ -159,8 +159,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	int next_col = col - 1;
 	while (next_row <= 8 && next_col >= 1 &&
 			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
-		valid_locs[i]->row = next_row;
-		valid_locs[i]->column = next_col;
+		valid_locs[i].row = next_row;
+		valid_locs[i].column = next_col;
 		//check capturing
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
@@ -175,8 +175,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	int next_col = col + 1;
 	while (next_row >= 1 && next_col <= 8 &&
 			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
-		valid_locs[i]->row = next_row;
-		valid_locs[i]->column = next_col;
+		valid_locs[i].row = next_row;
+		valid_locs[i].column = next_col;
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
 		}
@@ -190,8 +190,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	int next_col = col - 1;
 	while (next_row >= 1 && next_col >= 1 &&
 			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
-		valid_locs[i]->row = next_row;
-		valid_locs[i]->column = next_col;
+		valid_locs[i].row = next_row;
+		valid_locs[i].column = next_col;
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
 		}
