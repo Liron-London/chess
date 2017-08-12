@@ -320,7 +320,7 @@ bool is_check(game* cur_game, const piece king, const piece* enemy_locs){
 		return false;
 	}
 
-	// finds the location of the white king
+	// finds the loaction of the white king
 	location king_loc = king->piece_location;
 	location enemy_loc;
 
