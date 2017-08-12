@@ -37,6 +37,169 @@ void game_destroy (game* cur_game) {
 	free(cur_game);
 }
 
+int color_by_type(char piece_type) {
+	if ('A' <= piece_type && piece_type <= 'Z') {
+		return 0;
+	}
+	return 1;
+}
+
+bool check_capturing(char piece_in_next_loc, int color) {
+	if (piece_in_next_loc != EMPTY_ENTRY &&
+			color_by_type(piece_in_next_loc) != color) {
+		return true;
+	}
+	return false;
+}
+
+location* pawn_valid_moves(game* cur_game, piece* cur_piece) {
+	location valid_locs[64];
+	int i = 0;
+	char type = cur_piece->piece_type;
+	int row = cur_piece->piece_location->row;
+	int col = cur_piece->piece_location->column;
+	if (type == WHITE_PAWN) {
+		if (row == 2 && cur_game->board[4][col] == EMPTY_ENTRY) {
+			valid_locs[i]->row = 4;
+			valid_locs[i]->column = col;
+			i++;
+		}
+		if (row <= 7 && cur_game->board[row + 1][col] == EMPTY_ENTRY) {
+			valid_locs[i]->row = row + 1;
+			valid_locs[i]->column = col;
+			i++;
+		}
+		// if board[i][j] is a capital letter it's a black piece
+		if (row <= 7 && col <= 'G' &&
+				cur_game->board[row+1][col+1] <= 'Z' &&
+				cur_game->board[row+1][col+1] >= 'A') {
+			valid_locs[i]->row = row +1;
+			valid_locs[i]->column = col +1;
+			i++;
+		}
+		if (row <= 7 && col >= 'B' &&
+				cur_game->board[row+1][col-1] <= 'Z' &&
+				cur_game->board[row+1][col-1] >= 'A') {
+			valid_locs[i]->row = row +1;
+			valid_locs[i]->column = col - 1;
+			i++;
+		}
+	}
+
+	if (type == BLACK_PAWN) {
+		if (row == 7 && cur_game->board[5][col] == EMPTY_ENTRY) {
+			valid_locs[i]->row = 5;
+			valid_locs[i]->column = col;
+			i++;
+		}
+		if (row >= 2 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
+			valid_locs[i]->row = row - 1;
+			valid_locs[i]->column = col;
+			i++;
+		}
+		// if board[i][j] is a lowercase character it's a white piece
+		if (row >= 2 && col >= 'B' &&
+				cur_game->board[row - 1][col - 1] <= 'z' &&
+				cur_game->board[row - 1][col - 1] >= 'a') {
+			valid_locs[i]->row = row -1;
+			valid_locs[i]->column = col -1;
+			i++;
+		}
+		if (row >= 2 && col <= 'G' &&
+				cur_game->board[row + 1][col - 1] <= 'z' &&
+				cur_game->board[row + 1][col - 1] >= 'a') {
+			valid_locs[i]->row = row +1;
+			valid_locs[i]->column = col - 1;
+			i++;
+		}
+	}
+	return valid_locs;
+}
+
+location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
+	location valid_locs[64];
+	int i = 0;
+	char type = cur_piece->piece_type;
+	int row = cur_piece->piece_location->row;
+	int col = cur_piece->piece_location->column;
+	int color = cur_piece->color;
+
+	//check upwards right
+	int next_row = row + 1;
+	int next_col = col + 1;
+	while (next_row <= 8 && next_col <= 8 &&
+			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+			color_by_type(cur_game->board[next_row][next_col]) != color)) {
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
+		//check capturing
+		if (check_capturing(cur_game->board[next_row][next_col], color)) {
+				break;
+		}
+		i++;
+		next_row++;
+		next_col++;
+	}
+
+	//check upwards left
+	int next_row = row + 1;
+	int next_col = col - 1;
+	while (next_row <= 8 && next_col >= 1 &&
+			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
+		//check capturing
+		if (check_capturing(cur_game->board[next_row][next_col], color)) {
+			break;
+		}
+		i++;
+		next_row++;
+		next_col--;
+	}
+
+	//check downwards right
+	int next_row = row - 1;
+	int next_col = col + 1;
+	while (next_row >= 1 && next_col <= 8 &&
+			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
+		if (check_capturing(cur_game->board[next_row][next_col], color)) {
+			break;
+		}
+		i++;
+		next_row--;
+		next_col++;
+	}
+
+	//check downwards left
+	int next_row = row - 1;
+	int next_col = col - 1;
+	while (next_row >= 1 && next_col >= 1 &&
+			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
+		if (check_capturing(cur_game->board[next_row][next_col], color)) {
+			break;
+		}
+		i++;
+		next_row--;
+		next_col--;
+	}
+	return valid_locs;
+}
+
+
+location* valid_moves(game* cur_game, piece* cur_piece) {
+	char type = cur_piece->piece_type;
+	if (type == WHITE_PAWN || type == BLACK_PAWN) {
+		return pawn_valid_moves(cur_game, cur_piece);
+	}
+	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
+		return pawn_valid_moves(cur_game, cur_piece);
+	}
+}
+
 void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
 
 }
@@ -81,7 +244,7 @@ bool check_diagonals(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->row - i < 0 || enemy_loc->column+ i > 8){
 			continue;
 		}
-		if (enemy_loc->row - i == king_loc->row && enemy_loc->column+ i == king_loc->y){
+		if (enemy_loc->row - i == king_loc->row && enemy_loc->column+ i == king_loc->column){
 			return true;
 		}
 	}
@@ -91,7 +254,7 @@ bool check_diagonals(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->row - i < 0 || enemy_loc->column- i < 0){
 			continue;
 		}
-		if (enemy_loc->row - i == king_loc->row && enemy_loc->column- i == king_loc->y){
+		if (enemy_loc->row - i == king_loc->row && enemy_loc->column- i == king_loc->column){
 			return true;
 		}
 	}
@@ -101,10 +264,11 @@ bool check_diagonals(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->row + i < 8 || enemy_loc->column- i > 0){
 			continue;
 		}
-		if (enemy_loc->row + i == king_loc->row && enemy_loc->column- i == king_loc->y){
+		if (enemy_loc->row + i == king_loc->row && enemy_loc->column- i == king_loc->column){
 			return true;
 		}
 	}
+	return false;
 }
 
 bool check_parallels(game* cur_game, location king_loc, location enemy_loc){
@@ -113,7 +277,7 @@ bool check_parallels(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->column+ i > 8){
 			continue;
 		}
-		if (enemy_loc->column+ i == king_loc->column && enemy_loc->row  == king_loc->x){
+		if (enemy_loc->column+ i == king_loc->column && enemy_loc->row  == king_loc->row){
 			return true;
 		}
 	}
@@ -123,7 +287,7 @@ bool check_parallels(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->column- i < 0){
 			continue;
 		}
-		if (enemy_loc->column- i == king_loc->column&& enemy_loc->row  == king_loc->x){
+		if (enemy_loc->column- i == king_loc->column&& enemy_loc->row  == king_loc->row){
 			return true;
 		}
 	}
@@ -133,7 +297,7 @@ bool check_parallels(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->row + i > 8){
 			continue;
 		}
-		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->y){
+		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
 		}
 	}
@@ -143,10 +307,11 @@ bool check_parallels(game* cur_game, location king_loc, location enemy_loc){
 		if (enemy_loc->row - i < 0){
 			continue;
 		}
-		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->y){
+		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
 		}
 	}
+	return false;
 }
 
 bool is_check(game* cur_game, const piece king, const piece* enemy_locs){
@@ -218,7 +383,6 @@ bool is_check(game* cur_game, const piece king, const piece* enemy_locs){
 				return true;
 			}
 		}
-
-		return false;
 	}
+	return false;
 }
