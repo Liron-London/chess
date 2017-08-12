@@ -21,9 +21,9 @@ static bool verify_game_obj(game* test_game) {
 			printf("Error initializing game history\n");
 			return false;
 		}
-	}
+	}*/
 	return true;
-	*/
+
 }
 
 
