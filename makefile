@@ -22,13 +22,13 @@ setting_unit_test: $(SETTINGS_TEST_OBJ)
 
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
-game.o: game.c game.h array_list.o
+game.o: game.c game.h array_list.c array_list.h 
 	$(CC) $(COMP_FLAG) -c $*.c
 array_list.o: array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
-setting.o: setting.c setting.h game.o
+setting.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
-setting_unit_test.o: game.o setting.o 
+setting_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c    
 	$(CC) $(COMP_FLAG) -c $*.c
 
 
