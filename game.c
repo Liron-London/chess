@@ -8,9 +8,9 @@
 #include "game.h"
 
 game* game_create() {
-	game* newgame = (game*)malloc*sizeof(game);
+	game* newgame = (game*)malloc(sizeof(game));
 	if (newgame == NULL) {
-		free newgame;
+		free(newgame);
 		return NULL;
 	}
 	return game;
@@ -19,9 +19,9 @@ game* game_create() {
 game* game_copy(game* cur_game) {
 	if (cur_game == NULL)
 		return NULL;
-	game* copy = (game*)malloc*sizeof(game);
+	game* copy = (game*)malloc(sizeof(game));
 	if (copy == NULL) {
-		free copy;
+		free(copy);
 		return NULL;
 	}
 	copy->board = cur_game->board;
