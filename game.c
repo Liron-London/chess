@@ -17,6 +17,34 @@ game* game_create() {
 	newgame->difficulty = 2;
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
+
+	// initialize board
+	// initialize blacks
+	newgame->board[0][0] = BLACK_ROOK;
+	newgame->board[0][1] = BLACK_KNIGHT;
+	newgame->board[0][2] = BLACK_BISHOP;
+	newgame->board[0][3] = BLACK_QUEEN;
+	newgame->board[0][4] = BLACK_KING;
+	newgame->board[0][5] = BLACK_KNIGHT;
+	newgame->board[0][6] = BLACK_BISHOP;
+	newgame->board[0][7] = BLACK_ROOK;
+	for (int i=0; i<8;i++){
+		newgame->board[1][i] = BLACK_PAWN;
+	}
+
+	// initialize whites
+	newgame->board[7][0] = WHITE_ROOK;
+	newgame->board[7][1] = WHITE_KNIGHT;
+	newgame->board[7][2] = WHITE_BISHOP;
+	newgame->board[7][3] = WHITE_QUEEN;
+	newgame->board[7][4] = WHITE_KING;
+	newgame->board[7][5] = WHITE_KNIGHT;
+	newgame->board[7][6] = WHITE_BISHOP;
+	newgame->board[7][7] = WHITE_ROOK;
+	for (int i=0; i<8;i++){
+		newgame->board[6][i] = WHITE_PAWN;
+	}
+
 	return newgame;
 }
 
