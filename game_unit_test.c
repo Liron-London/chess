@@ -28,6 +28,7 @@ static bool verify_game_obj(game* test_game) {
 
 static bool game_create_test() {
 	game* test_game = game_create();
+	printf("created game instance\n");
 	return verify_game_obj(test_game);
 }
 
