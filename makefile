@@ -16,6 +16,8 @@ $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
+setting_unit_test: $(SETTINGS_TEST_OBJ)
+	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -23,6 +25,11 @@ game.o: game.c game.h array_list.o
 	$(CC) $(COMP_FLAG) -c $*.c
 array_list.o: array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
+setting.o: setting.c setting.h
+	$(CC) $(COMP_FLAG) -c $*.c
+setting_unit_test.o: game.o setting.o 
+	$(CC) $(COMP_FLAG) -c $*.c
+
 
 clean:
 	rm -f *.o $(EXEC) $(OBJS)
