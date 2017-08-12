@@ -42,10 +42,12 @@ static bool game_copy_test() {
 
 static bool game_destroy_test() {
 	game* test_game = game_create();
+	printf("before destroy\n");
 	game_destroy(test_game);
 	if (test_game != NULL) {
 		return false;
 	}
+	printf("after destroy\n");
 	return true;
 }
 
