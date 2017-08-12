@@ -24,6 +24,18 @@ bool parser_is_int(const char* str){
 	return true;
 }
 
+void print_settings(game* cur_game){
+	printf("SETTINGS:\n");
+	printf("GAME_MODE: %i\n", cur_game->game_mode);
+	printf("DIFFICULTY_LVL: %i\n", cur_game->difficulty);
+	if (cur_game->user_color == 1){
+		printf("USER_CLR: WHITE\n");
+	}
+	else{
+		printf("USER_CLR: BLACK\n");
+	}
+}
+
 Command parse_line(const char* str){
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
