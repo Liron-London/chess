@@ -65,8 +65,7 @@ bool check_capturing(char piece_in_next_loc, int color) {
 	return false;
 }
 
-location* pawn_valid_moves(game* cur_game, piece* cur_piece) {
-	location valid_locs[64];
+location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_piece) {
 	int i = 0;
 	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
@@ -129,17 +128,17 @@ location* pawn_valid_moves(game* cur_game, piece* cur_piece) {
 	return valid_locs;
 }
 
-location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
-	location valid_locs[64];
+location* bishop_valid_moves(location* valid_locs, game* cur_game, piece* cur_piece) {
 	int i = 0;
 	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
 	int color = cur_piece->color;
+	int next_row, next_col;
 
 	//check upwards right
-	int next_row = row + 1;
-	int next_col = col + 1;
+	next_row = row + 1;
+	next_col = col + 1;
 	while (next_row <= 8 && next_col <= 8 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
@@ -155,8 +154,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	}
 
 	//check upwards left
-	int next_row = row + 1;
-	int next_col = col - 1;
+	next_row = row + 1;
+	next_col = col - 1;
 	while (next_row <= 8 && next_col >= 1 &&
 			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
 		valid_locs[i].row = next_row;
@@ -171,8 +170,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	}
 
 	//check downwards right
-	int next_row = row - 1;
-	int next_col = col + 1;
+	next_row = row - 1;
+	next_col = col + 1;
 	while (next_row >= 1 && next_col <= 8 &&
 			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
 		valid_locs[i].row = next_row;
@@ -186,8 +185,8 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 	}
 
 	//check downwards left
-	int next_row = row - 1;
-	int next_col = col - 1;
+	next_row = row - 1;
+	next_col = col - 1;
 	while (next_row >= 1 && next_col >= 1 &&
 			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
 		valid_locs[i].row = next_row;
@@ -205,6 +204,7 @@ location* bishop_valid_moves(game* cur_game, piece* cur_piece) {
 
 location* valid_moves(game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
+	location valid_locs[64];
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
 		return pawn_valid_moves(cur_game, cur_piece);
 	}
@@ -212,7 +212,7 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 		return pawn_valid_moves(cur_game, cur_piece);
 	}
 	//tmp line 12.8.17
-	return pawn_valid_moves(cur_game, cur_piece);
+	return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 }
 
 void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
