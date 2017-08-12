@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include <string.h>
 #include "game.h"
 
 typedef enum {
@@ -22,7 +22,8 @@ typedef enum {
     DEFAULT_GAME,
     PRINT_SETTINGS,
     QUIT,
-    START
+    START,
+    INVLAID_LINE
 } command_type;
 
 typedef struct command_t {

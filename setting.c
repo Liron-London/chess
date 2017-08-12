@@ -6,9 +6,6 @@
  */
 
 #include "setting.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 /*
  * says if a string is number or not
@@ -65,7 +62,7 @@ Command parse_line(const char* str){
 		command.cmd = USER_COLOR;
 		if (parser_is_int(command_int) == true){
 			command.arg = atoi(command_int);
-			if (command_int == 1 || command_int == 2){
+			if (command.arg == 1 || command.arg == 2){
 				command.validArg = true;
 			}
 		}
@@ -75,7 +72,7 @@ Command parse_line(const char* str){
 		command.cmd = GAME_MODE;
 		if (parser_is_int(command_int) == true){
 			command.arg = command_int; // 1 for single player and 2 for two players
-			if (command_int == 1 || command_int == 2){
+			if (command.arg == 1 || command.arg == 2){
 				command.validArg = true;
 			}
 		}
@@ -86,7 +83,7 @@ Command parse_line(const char* str){
 		// TODO - in case we do the bonus we need to change the upper bound
 		if (parser_is_int(command_int) == true){
 			command.arg = atoi(command_int);
-			if (command_int >= 1 && command_int <= 4){
+			if (command.arg >= 1 && command.arg <= 4){
 				command.validArg = true;
 			}
 		}

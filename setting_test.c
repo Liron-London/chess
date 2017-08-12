@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 // TODO -- need to write
-bool basic_check(){
+static bool basic_check(){
 	//game* game = game_create();
 	Command command;
 
