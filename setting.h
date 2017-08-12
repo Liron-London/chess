@@ -37,7 +37,7 @@ bool parse_is_int(const char* str);
 /*
  * get command from user and checks validity of command
  */
-Command parse_line(const char* str);
+Command parse_line(game* game, const char* str);
 
 void print_settings(game* cur_game);
 

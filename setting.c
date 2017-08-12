@@ -36,13 +36,11 @@ void print_settings(game* cur_game){
 	}
 }
 
-Command parse_line(const char* str){
+Command parse_line(game* game, const char* str){
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
-	printf("%s \n", command_text);
 	char* command_int = strtok(NULL, " \t\n");
-	printf("%s \n", command_int);
 
 	Command command;
 	command.validArg = false;
@@ -76,6 +74,7 @@ Command parse_line(const char* str){
 			command.arg = atoi(command_int);
 			if (command.arg == 1 || command.arg == 2){
 				command.validArg = true;
+				game->user_color = command.arg;
 			}
 		}
 	}
@@ -86,6 +85,7 @@ Command parse_line(const char* str){
 			command.arg = atoi(command_int); // 1 for single player and 2 for two players
 			if (command.arg == 1 || command.arg == 2){
 				command.validArg = true;
+				game->user_color = command.arg;
 			}
 		}
 	}
@@ -97,6 +97,7 @@ Command parse_line(const char* str){
 			command.arg = atoi(command_int);
 			if (command.arg >= 1 && command.arg <= 4){
 				command.validArg = true;
+				game->user_color = command.arg;
 			}
 		}
 	}
@@ -104,6 +105,9 @@ Command parse_line(const char* str){
 	if (strcmp(command_text, "default") == 0) {
 		command.cmd = DEFAULT_GAME;
 		command.validArg = true;
+		game->user_color = 1;
+		game->game_mode = 1;
+		game->difficulty = 2;
 	}
 	return command;
 }
