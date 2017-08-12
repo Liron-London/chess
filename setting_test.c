@@ -11,37 +11,37 @@
 
 // TODO -- need to write
 bool basic_check(){
-	game* game = game_create();
+	//game* game = game_create();
 	Command command;
 
-	command = parse_line(game, "start");
+	command = parse_line("start");
 	if (command.validArg == false){
 		printf("problem with start");
 		return  false;
 	}
 
-	command = parse_line(game, "quit");
+	command = parse_line("quit");
 	if (command.validArg == false){
 		printf("problem with quit");
 		return false;
 	}
 
 	// checks game mode
-	command = parse_line(game, "game_mode 1");
+	command = parse_line("game_mode 1");
 	if (command.validArg == false || command.arg != 1){
 		printf("problem with start");
 		return false;
 	}
 
 	// checks user color
-	command = parse_line(game, "user_color 1");
+	command = parse_line("user_color 1");
 	if (command.validArg == false || command.arg != 1){
 		printf("problem with user_color");
 		return false;
 	}
 
 	// checks user_color argument
-	command = parse_line(game, "user_color 3");
+	command = parse_line("user_color 3");
 	if (command.validArg == true){
 		printf("problem with user_color");
 		return false;
