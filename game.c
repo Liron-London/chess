@@ -243,42 +243,51 @@ bool check_diagonals(game* cur_game, location* king_loc, location* enemy_loc){
 			return true;
 		}
 
-		if (enemy_loc->row + i > 8 || enemy_loc->column + i > 8){
+		if (enemy_loc->row + i > 8 || enemy_loc->column + i > 'H'){
 			continue;
 		}
 
-		if (cur_game->board[enemy_loc->row + i][enemy_loc->column + i] != EMPTY_ENTRY){
+		if (cur_game->board[enemy_loc->row + i][enemy_loc->column + i - 'A'] != EMPTY_ENTRY){
 			continue;
 		}
 	}
 
 	// up left diagonal
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row - i < 1 || enemy_loc->column+ i > 'H'){
-			continue;
-		}
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column+ i == king_loc->column){
 			return true;
+		}
+		if (enemy_loc->row - i < 1 || enemy_loc->column + i > 'H'){
+			continue;
+		}
+		if (cur_game->board[enemy_loc->row - i][enemy_loc->column + i - 'A'] != EMPTY_ENTRY){
+			continue;
 		}
 	}
 
 	// down left diagonal
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row - i < 1 || enemy_loc->column- i < 1){
+		if (enemy_loc->row - i == king_loc->row && enemy_loc->column - i == king_loc->column){
+			return true;
+		}
+		if (enemy_loc->row - i < 1 || enemy_loc->column- i < 'A'){
 			continue;
 		}
-		if (enemy_loc->row - i == king_loc->row && enemy_loc->column- i == king_loc->column){
-			return true;
+		if (cur_game->board[enemy_loc->row - i][enemy_loc->column - i - 'A'] != EMPTY_ENTRY){
+			continue;
 		}
 	}
 
 	// down right diagonal
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row + i < 8 || enemy_loc->column- i > 0){
+		if (enemy_loc->row + i == king_loc->row && enemy_loc->column - i == king_loc->column){
+			return true;
+		}
+		if (enemy_loc->row + i < 8 || enemy_loc->column- i > 'A'){
 			continue;
 		}
-		if (enemy_loc->row + i == king_loc->row && enemy_loc->column- i == king_loc->column){
-			return true;
+		if (cur_game->board[enemy_loc->row + i][enemy_loc->column - i - 'A'] != EMPTY_ENTRY){
+			continue;
 		}
 	}
 	return false;
@@ -286,8 +295,8 @@ bool check_diagonals(game* cur_game, location* king_loc, location* enemy_loc){
 
 bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	// up
-	for (int i=0; i<8; i++){
-		if (enemy_loc->column+ i > 'H' || cur_game->board[enemy_loc->row][enemy_loc->column + i] != EMPTY_ENTRY){
+	for (char i=0; i<8; i++){
+		if (enemy_loc->column+ i > 'H' || cur_game->board[enemy_loc->row][(int)(enemy_loc->column + i - 'A')] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->column+ i == king_loc->column && enemy_loc->row  == king_loc->row){
@@ -296,8 +305,8 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	}
 
 	// down
-	for (int i=0; i<8; i++){
-		if (enemy_loc->column- i < 'A' || cur_game->board[enemy_loc->row][enemy_loc->column - i] != EMPTY_ENTRY){
+	for (char i=0; i<8; i++){
+		if (enemy_loc->column- i < 'A' || cur_game->board[enemy_loc->row][(int)(enemy_loc->column - i - 'A')] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->column- i == king_loc->column&& enemy_loc->row  == king_loc->row){
