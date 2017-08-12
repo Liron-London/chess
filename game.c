@@ -214,9 +214,8 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 	return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 }
 
-void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
-
-}
+//void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
+//}
 
 void print_board(game* cur_game){
 
@@ -224,15 +223,15 @@ void print_board(game* cur_game){
 		return ;
 
 	for (int i=8; i>0; i--){
-		printf("  %d|"%i);
+		printf("  %d|", i);
 		for (int j=0; j<8 ; j++){
-			printf("%c "%cur_game->board[i][j]);
+			printf("%c ", cur_game->board[i][j]);
 		}
 		printf("|\n");
 	}
 	printf(" -----------------\n   ");
 	for (char c="A"; c<="H"; c++){
-		printf("%c "%c);
+		printf("%c ", c);
 	}
 }
 
@@ -288,7 +287,7 @@ bool check_diagonals(game* cur_game, location* king_loc, location* enemy_loc){
 bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	// up
 	for (int i=0; i<8; i++){
-		if (enemy_loc->column+ i > 8){
+		if (enemy_loc->column+ i > 8 || cur_game->board[enemy_loc->row][enemy_loc->column + i] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->column+ i == king_loc->column && enemy_loc->row  == king_loc->row){
@@ -298,7 +297,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 
 	// down
 	for (int i=0; i<8; i++){
-		if (enemy_loc->column- i < 0){
+		if (enemy_loc->column- i < 0 || cur_game->board[enemy_loc->row][enemy_loc->column - i] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->column- i == king_loc->column&& enemy_loc->row  == king_loc->row){
@@ -308,7 +307,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 
 	// right
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row + i > 8){
+		if (enemy_loc->row + i > 8 || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
@@ -318,7 +317,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 
 	// left
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row - i < 0){
+		if (enemy_loc->row - i < 0 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
 			continue;
 		}
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
@@ -328,7 +327,7 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	return false;
 }
 
-bool is_check(game* cur_game, const piece king, const piece* enemy_locs){
+bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
 
 	if (cur_game == NULL){
 		return false;

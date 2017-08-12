@@ -46,7 +46,7 @@ typedef struct game_t {
 /*
 * checks that the King's not threatened
 */
-bool is_check(game* cur_game);
+bool is_check(game* cur_game, const piece* king, const piece* enemy_locs);
 
 
 /*
@@ -83,7 +83,7 @@ void game_destroy (game* cur_game);
 /*
 * updates the game's board after a valid move
 */
-void set_move(game* cur_game, piece* cur_piece, location* dst_location);
+// void set_move(game* cur_game, piece* cur_piece, location* dst_location);
 
 /*
 * prints the current board (in console mode)
