@@ -23,7 +23,7 @@ typedef enum {
     PRINT_SETTINGS,
     QUIT,
     START,
-    INVLAID_LINE
+    INVALID_COMMAND
 } command_type;
 
 typedef struct command_t {
@@ -39,8 +39,7 @@ bool parse_is_int(const char* str);
  */
 Command parse_line(const char* str);
 
-//void print_settings(game* cur_game){
-//}
+void print_settings(game* cur_game);
 
 /*
  * creates a default game updates it according to user settings (with while loop)

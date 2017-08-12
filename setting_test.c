@@ -11,7 +11,7 @@
 
 // TODO -- need to write
 static bool basic_check(){
-	//game* game = game_create();
+	game* game = game_create();
 	Command command;
 
 	command = parse_line("start");
@@ -29,7 +29,7 @@ static bool basic_check(){
 	// checks game mode
 	command = parse_line("game_mode 1");
 	if (command.validArg == false || command.arg != 1){
-		printf("problem with start");
+		printf("problem with game mode");
 		return false;
 	}
 
@@ -46,6 +46,7 @@ static bool basic_check(){
 		printf("problem with user_color");
 		return false;
 	}
+	print_settings(game);
 
 	return true;
 }
