@@ -1,5 +1,6 @@
 #ifndef GAME_H_INCLUDED
 #define GAME_H_INCLUDED
+
 #include <stdio.h>
 #include "array_list.h"
 #include <stdbool.h>
@@ -19,23 +20,23 @@
 #define BLACK_KING 'K'
 #define EMPTY_ENTRY ' '
 
-typedef struct{
+typedef struct location_t {
     int row;
     char column;
 } location;
 
-typedef struct{
+typedef struct piece_t {
     location* piece_location;
     char piece_type;
     int color;
 } piece;
 
-typedef struct {
-    int game_mode = 1; // 1 = one player mode, 2 = two player mode
-    int difficulty = 2; // between 1-4
-    int user_color = 1; // 0 - black, 1 - white
+typedef struct game_t {
+    int game_mode; // 1 = one player mode, 2 = two player mode
+    int difficulty; // between 1-4
+    int user_color; // 0 - black, 1 - white
     array_list history[6]; // for undo move
-    int current_turn = 1; //0 - PC or player 2, 1 - player one
+    int current_turn; //0 - PC or player 2, 1 - player one
     char board[8][8];
     piece whites[16];
     piece blacks[16];
