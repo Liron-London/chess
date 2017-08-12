@@ -1,6 +1,6 @@
 CC = gcc
 OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o settings.o main.o
-TEST_OBJS = setting_test.o array_list_unit_test.o game_test.o
+TEST_OBJS = setting_test.o array_list_unit_test.o game_unit_test.o 
 EXEC = chessprog
 ARRAY_LIST_TEST_OBJS = array_list.o array_list_unit_test.o
 GAME_TEST_OBJS = array_list.o game.o
@@ -21,7 +21,7 @@ array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 setting_test: $(SETTINGS_TEST_OBJ)
 	$(CC) $(SETTINGS_TEST_OBJ) -o $@
 game_unit_test: $(SETTINGS_TEST_OBJ)
-	$(CC) $(SETTINGS_TEST_OBJ) -o $@
+	$(CC) $(GAME_TEST_OBJ) -o $@
 
 
 
