@@ -17,7 +17,7 @@ static bool verify_game_obj(game* test_game) {
 	}
 	//test history
 	for (int i = 0; i < 6; i++) {
-		if (test_game->history[i] != 0) {
+		if (test_game->history->elements[i] != 0) {
 			printf("Error initializing game history\n");
 			return false;
 		}
