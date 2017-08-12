@@ -85,7 +85,7 @@ Command parse_line(game* game, const char* str){
 			command.arg = atoi(command_int); // 1 for single player and 2 for two players
 			if (command.arg == 1 || command.arg == 2){
 				command.validArg = true;
-				game->user_color = command.arg;
+				game->game_mode = command.arg;
 			}
 		}
 	}
@@ -97,7 +97,7 @@ Command parse_line(game* game, const char* str){
 			command.arg = atoi(command_int);
 			if (command.arg >= 1 && command.arg <= 4){
 				command.validArg = true;
-				game->user_color = command.arg;
+				game->difficulty = command.arg;
 			}
 		}
 	}
