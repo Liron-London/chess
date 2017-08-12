@@ -23,16 +23,25 @@ game* game_create() {
 game* game_copy(game* cur_game) {
 	if (cur_game == NULL)
 		return NULL;
-	game* copy = (game*)malloc(sizeof(game));
+	game* copy = game_create();
 	if (copy == NULL) {
 		free(copy);
 		return NULL;
 	}
-	copy->board = cur_game->board;
+	// copying board
+	for (int i=0; i<8; i++){
+		for (int j=0; j<8; j++){
+			copy->board[i][j] = cur_game->board[i][j];
+		}
+	}
+	// copying history
+	for (int i=0; i<6; i++){
+		copy->history[i] = cur_game->history[i];
+	}
+
 	copy->current_turn = cur_game->current_turn;
 	copy->difficulty = cur_game->difficulty;
 	copy->game_mode = cur_game->game_mode;
-	copy->history = cur_game->history;
 	copy->user_color = cur_game->user_color;
 	return copy;
 }
