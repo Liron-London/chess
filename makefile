@@ -20,24 +20,21 @@ array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 setting_test: $(SETTINGS_TEST_OBJ)
 	$(CC) $(SETTINGS_TEST_OBJ) -o $@
-game_unit_test: $(SETTINGS_TEST_OBJ)
+game_unit_test: $(GAME_TEST_OBJ)
 	$(CC) $(GAME_TEST_OBJ) -o $@
-
-
 
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
-game.o: game.c game.h array_list.c array_list.h 
+game.o: game.c game.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 array_list.o: array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 setting.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
-setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c    
+setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
 game_unit_test.o = game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
-
 
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
