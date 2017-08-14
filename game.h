@@ -29,6 +29,7 @@ typedef struct piece_t {
     location* piece_location;
     char piece_type;
     int color;
+    int alive; //0 - piece was captured, 1 - piece is alive
 } piece;
 
 typedef struct game_t {

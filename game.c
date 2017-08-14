@@ -19,7 +19,7 @@ game* game_create() {
 	newgame->current_turn = 1;
 
 	// initialize board
-	// initialize blacks
+	// initialize whites
 	newgame->board[0][0] = WHITE_ROOK;
 	newgame->board[0][1] = WHITE_KNIGHT;
 	newgame->board[0][2] = WHITE_BISHOP;
@@ -32,7 +32,7 @@ game* game_create() {
 		newgame->board[1][i] = WHITE_PAWN;
 	}
 
-	// initialize whites
+	// initialize blacks
 	newgame->board[7][0] = BLACK_ROOK;
 	newgame->board[7][1] = BLACK_KNIGHT;
 	newgame->board[7][2] = BLACK_BISHOP;
@@ -50,7 +50,50 @@ game* game_create() {
 			newgame->board[i][j] = EMPTY_ENTRY;
 		}
 	}
+	//initializing game.blacks and game.whites
+	newgame->whites[0].piece_type = WHITE_ROOK;
+	newgame->whites[1].piece_type = WHITE_KNIGHT;
+	newgame->whites[2].piece_type = WHITE_BISHOP;
+	newgame->whites[3].piece_type = WHITE_QUEEN;
+	newgame->whites[4].piece_type = WHITE_KING;
+	newgame->whites[5].piece_type = WHITE_KNIGHT;
+	newgame->whites[6].piece_type = WHITE_BISHOP;
+	newgame->whites[7].piece_type = WHITE_ROOK;
+	for (int i=8; i<15;i++){
+		newgame->whites[i].piece_type = WHITE_PAWN;
+	}
+	for (int i = 0; i < 16; i++) {
+		newgame->whites[i].alive = 1;
+		newgame->whites[i].color = 1;
+		newgame->whites[i].piece_location->column = i;
+		if (newgame->whites[i].piece_type != WHITE_PAWN) {
+			newgame->whites[i].piece_location->row = 0;
+		} else {
+			newgame->whites[i].piece_location->row = 1;
+		}
+	}
 
+	newgame->blacks[0].piece_type = BLACK_ROOK;
+	newgame->blacks[1].piece_type = BLACK_KNIGHT;
+	newgame->blacks[2].piece_type = BLACK_BISHOP;
+	newgame->blacks[3].piece_type = BLACK_QUEEN;
+	newgame->blacks[4].piece_type = BLACK_KING;
+	newgame->blacks[5].piece_type = BLACK_KNIGHT;
+	newgame->blacks[6].piece_type = BLACK_BISHOP;
+	newgame->blacks[7].piece_type = BLACK_ROOK;
+	for (int i=8; i<15;i++){
+		newgame->blacks[i].piece_type = BLACK_PAWN;
+	}
+	for (int i = 0; i < 16; i++) {
+		newgame->blacks[i].alive = 1;
+		newgame->blacks[i].color = 0;
+		newgame->blacks[i].piece_location->column = i;
+		if (newgame->blacks[i].piece_type != BLACK_PAWN) {
+			newgame->blacks[i].piece_location->row = 7;
+		} else {
+			newgame->blacks[i].piece_location->row = 6;
+		}
+	}
 	return newgame;
 }
 
@@ -106,6 +149,12 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
+	const location* king_loc;
+	if (cur_piece->color == 1) {
+		king_loc = cur_game->whites[4]->piece_location;
+	} else {
+		king_loc = cur_game->blacks[4]->piece_location;
+	}
 	if (type == WHITE_PAWN) {
 		if (row == 2 && cur_game->board[4][col] == EMPTY_ENTRY) {
 			valid_locs[i].row = 4;
@@ -192,7 +241,8 @@ location* bishop_valid_moves(location* valid_locs, game* cur_game, piece* cur_pi
 	next_row = row + 1;
 	next_col = col - 1;
 	while (next_row <= 8 && next_col >= 1 &&
-			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
+			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+			(color_by_type(cur_game->board[next_row][next_col]) != color))) {
 		valid_locs[i].row = next_row;
 		valid_locs[i].column = next_col;
 		//check capturing
@@ -208,7 +258,8 @@ location* bishop_valid_moves(location* valid_locs, game* cur_game, piece* cur_pi
 	next_row = row - 1;
 	next_col = col + 1;
 	while (next_row >= 1 && next_col <= 8 &&
-			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
+			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i].row = next_row;
 		valid_locs[i].column = next_col;
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
@@ -223,7 +274,8 @@ location* bishop_valid_moves(location* valid_locs, game* cur_game, piece* cur_pi
 	next_row = row - 1;
 	next_col = col - 1;
 	while (next_row >= 1 && next_col >= 1 &&
-			cur_game->board[next_row][next_col] == EMPTY_ENTRY) {
+			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i].row = next_row;
 		valid_locs[i].column = next_col;
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
@@ -236,6 +288,42 @@ location* bishop_valid_moves(location* valid_locs, game* cur_game, piece* cur_pi
 	return valid_locs;
 }
 
+location* rook_valid_moves(location* valid_locs, game* cur_game, piece* cur_piece) {
+	int i = 0;
+	int row = cur_piece->piece_location->row;
+	int col = cur_piece->piece_location->column;
+	int color = cur_piece->color;
+	int next_row, next_col;
+
+	//check upwards
+	next_row = row + 1;
+	next_col = col;
+	while (next_row <= 8 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+			color_by_type(cur_game->board[next_row][next_col]) != color)) {
+		valid_locs[i].row = next_row;
+		valid_locs[i].column = next_col;
+		if (check_capturing(cur_game->board[next_row][next_col], color)) {
+			break;
+		}
+		i++;
+		next_row++;
+	}
+
+	//check downwards
+		next_row = row - 1;
+		next_col = col;
+		while (next_row >= 1 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+				color_by_type(cur_game->board[next_row][next_col]) != color)) {
+			valid_locs[i].row = next_row;
+			valid_locs[i].column = next_col;
+			if (check_capturing(cur_game->board[next_row][next_col], color)) {
+				break;
+			}
+			i++;
+			next_row--;
+		}
+	return valid_locs;
+}
 
 location* valid_moves(game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
@@ -372,14 +460,13 @@ bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
 	return false;
 }
 
-bool is_check(game* cur_game, const piece* king, const piece* enemy_locs){
+bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs){
 
 	if (cur_game == NULL){
 		return false;
 	}
 
 	// finds the location of the white king
-	location* king_loc = king->piece_location;
 	location* enemy_loc;
 
 	for (int i=0; i<16; i++){
