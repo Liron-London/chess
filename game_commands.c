@@ -14,7 +14,7 @@ Gamecommand game_command_parse_line(const char* str){
 	location* target;
 	move* cur_move;
 
-	Gamecommand game_command;
+	Gamecommand* game_command;
 
 	// char* command_int = strtok(NULL, " \t\n");
 
