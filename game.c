@@ -364,7 +364,7 @@ void print_board(game* cur_game){
 	}
 }
 
-bool check_diagonals(game* cur_game, location* king_loc, location* enemy_loc){
+bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up right diagonal
 	for (int i=0; i<8; i++){
 
@@ -422,7 +422,7 @@ bool check_diagonals(game* cur_game, location* king_loc, location* enemy_loc){
 	return false;
 }
 
-bool check_parallels(game* cur_game, location* king_loc, location* enemy_loc){
+bool check_parallels(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up
 	for (char i=0; i<8; i++){
 		if (enemy_loc->column+ i > 'H' || cur_game->board[enemy_loc->row][(int)(enemy_loc->column + i - 'A')] != EMPTY_ENTRY){
