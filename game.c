@@ -148,12 +148,13 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	int i = 0;
 	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
-	int col = cur_piece->piece_location->column;
+	char col = cur_piece->piece_location->column;
+
 	const location* king_loc;
 	if (cur_piece->color == 1) {
-		king_loc = cur_game->whites[4]->piece_location;
+		king_loc = cur_game->whites[4].piece_location;
 	} else {
-		king_loc = cur_game->blacks[4]->piece_location;
+		king_loc = cur_game->blacks[4].piece_location;
 	}
 	if (type == WHITE_PAWN) {
 		if (row == 2 && cur_game->board[4][col] == EMPTY_ENTRY) {
@@ -210,6 +211,10 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 			i++;
 		}
 	}
+	if (king_loc == NULL){
+		printf("Gal added this line - king loc was not in use and it caused errors");
+	}
+
 	return valid_locs;
 }
 
