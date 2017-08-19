@@ -36,8 +36,8 @@ Gamecommand game_command_parse_line(const char* str){
 		target.column = strtok(str_copy, "<,>")[0];
 
 		//TODO -- need to verify that locations are intialized well
-		game_command.move->source = source;
-		game_command.move->dest = target;
+		game_command.move.source = source;
+		game_command.move.dest = target;
 		game_command.validArg = true;
 
 		return game_command;
