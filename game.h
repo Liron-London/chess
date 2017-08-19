@@ -53,7 +53,6 @@ typedef struct move_t {
 */
 bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs);
 
-
 /*
  * checks if a piece threats the kings from diagonal
  */
@@ -78,7 +77,6 @@ game* game_create();
 * creates a copy of the game object
 */
 game* game_copy(game* cur_game);
-#endif // GAME_H_INCLUDED
 
 /*
 * destroys the game and frees all game-related memory resources
@@ -95,3 +93,11 @@ void set_move(game* cur_game, move* cur_move);
 * prints the current board (in console mode)
 */
 void print_board(game* cur_game);
+
+void change_turn(game* cur_game);
+
+bool is_valid_move(game* cur_game, move* cur_move);
+
+void move_piece(game* cur_game, move* cur_move, piece* cur_piece);
+
+#endif // GAME_H_INCLUDED

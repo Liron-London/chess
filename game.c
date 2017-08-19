@@ -7,6 +7,12 @@
 
 #include "game.h"
 
+/*
+ * TODO
+ * (1) need to change the size of the valid_moves array to 29 and initialize it to defuat locations (will make all checks much easier)
+ * (2)
+ */
+
 game* game_create() {
 	game* newgame = (game*)malloc(sizeof(game));
 	if (newgame == NULL) {
@@ -343,9 +349,6 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 	return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 }
 
-//void set_move(game* cur_game, piece* cur_piece, location* dst_location) {
-//}
-
 void print_board(game* cur_game){
 
 	if (cur_game == NULL)
@@ -362,6 +365,83 @@ void print_board(game* cur_game){
 	for (char c = 'A'; c <= 'H'; c++){
 		printf("%c ", c);
 	}
+}
+
+// change the turn
+void change_turn(game* cur_game){
+	if (cur_game->current_turn == 0){
+		cur_game->current_turn = 1;
+	}
+	else{
+		cur_game->current_turn = 0;
+	}
+}
+
+// assuming that a move is legal - update the board, change the turn.
+void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
+	// change the turn
+	change_turn(cur_game);
+
+	// update the piece location
+	cur_piece->piece_location = cur_move->dest;
+
+	// update the board
+	cur_game->board[cur_move->source->row][(int)(cur_move->source->column - 'A')] = EMPTY_ENTRY;
+	cur_game->board[cur_move->dest->row][(int)(cur_move->dest->column - 'A')] = cur_piece->piece_type;
+}
+
+// given a move and a board says if the move is legal or not
+bool is_valid_move(game* cur_game, move* cur_move){
+	int color;
+	char source = cur_game[cur_move->source->row][(int)(cur_move->source->column-'A')];
+	location valid_locs[64]; // list of all the valid location of the relevant piece
+
+	// source is empty
+	if (source == EMPTY_ENTRY){
+		return false;
+	}
+
+	// update the color of the piece in the source
+	if (source < 'z'){
+		color = 1;
+	}
+	else{
+		color = 0;
+	}
+
+	// source is enemy piece
+	if (cur_game->current_turn - color != 0){
+		return false;
+	}
+
+	// update valid_moves
+	if (color == 1){
+		for (int i=0; i<16; i++){
+			if (cur_game->blacks[i]->piece_type == source){
+				valid_locs = valid_moves(cur_game, cur_game->blacks[i]);
+				break;
+			}
+		}
+	}
+
+	if (color == 0){
+		for (int i=0; i<16; i++){
+			if (cur_game->whites[i]->piece_type == source){
+				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
+				break;
+			}
+		}
+	}
+
+	// if cur_move->dest is one of the possible moves, return true
+	for (int i=0; i<64; i++){
+		if (valid_locs[i]->row == cur_move->dest->row && valid_locs[i]->column == cur_move->dest->column){
+			return true;
+		}
+	}
+
+	return false;
+
 }
 
 bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_loc){

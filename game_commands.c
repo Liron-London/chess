@@ -6,23 +6,20 @@
  */
 #include "game_commands.h"
 
+/* TODO -
+ * there is a memory leak in this function - need to free locations in the end of use
+ * in move, need to make sure that the input is legal
+ *
+*/
 Gamecommand game_command_parse_line(const char* str){
-	printf("In the function\n");
-
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
 
-	printf("got text\n");
 	printf("%s\n", command_text);
 
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
-
-	source->row = -1;
-	source->column = '-';
-	target->row = -1;
-	target->column = '-';
 
 	Gamecommand game_command;
 	game_command.validArg = false;
@@ -34,30 +31,26 @@ Gamecommand game_command_parse_line(const char* str){
 		// need to be checked
 		game_command.cmd = MOVE;
 
-		printf("start\n");
 		source->row = atoi(strtok(NULL, "<,"));
-		printf("phase1\n");
-		printf("first arg is: %d\n", source->row);
+//		printf("phase1\n");
+//		printf("first arg is: %d\n", source->row);
 		source->column = strtok(NULL, "<,>")[0];
-		printf("phase2\n");
-		printf("second arg is: %c\n", source->column);
+//		printf("phase2\n");
+//		printf("second arg is: %c\n", source->column);
 
 		char* command_text = strtok(NULL, " \t\n");
-		printf("%s\n", command_text);
+//		printf("%s\n", command_text);
 
 		target->row = atoi(strtok(NULL, "<,>"));
-		printf("phase3\n");
-		printf("third arg is: %d\n", target->row);
+//		printf("phase3\n");
+//		printf("third arg is: %d\n", target->row);
 		target->column = strtok(NULL, "<,>")[0];
-		printf("phase4\n");
-		printf("forth arg is: %c\n", target->column);
+//		printf("phase4\n");
+//		printf("forth arg is: %c\n", target->column);
 
-		//TODO -- need to verify that locations are intialized well
 		game_command.move->source = source;
 		game_command.move->dest = target;
 		game_command.validArg = true;
-
-		printf("almost done!\n");
 
 		return game_command;
 	}
@@ -94,7 +87,40 @@ Gamecommand game_command_parse_line(const char* str){
 	}
 	return game_command;
 }
+// called when the command "start" is pressed in settings
+int game_play(game* game){
+	Gamecommand game_command;
+	const char command_str[1024]; // assuming that the command is no longer the 1024 chars
+	piece* cur_piece;
 
+	while (1){
+		printf("please choose a command"); // need to be changed
+		scanf("%s%[^\n]", command_str);
+		game_command = game_command_parse_line(command_str);
 
+		// QUIT
+		if (game_command->validArg == true && game_command->cmd == GAME_QUIT){
+			return 1;
+		}
+
+		//SAVE
+		if (game_command->validArg == true && game_command->cmd == SAVE){
+			// TODO - complete this function
+			return 1;
+		}
+
+		// MOVE
+		if (game_command->validArg == true && game_command->cmd == MOVE){
+			// check if valid move
+			if (is_valid_move(game, game_command->move) == true){
+
+			}
+
+			// update history
+			return 1;
+		}
+
+	}
+}
 
 
