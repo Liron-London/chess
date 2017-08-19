@@ -17,10 +17,10 @@ static bool basic_check(){
 	printf("WTF IS GOING ON\n");
 
 	game_command = game_command_parse_line("move <2, A> to <3, B>");
-	printf("%d", game_command.move->source->row);
-	printf("%c", game_command.move->source->column);
-	printf("%d", game_command.move->dest->row);
-	printf("%c", game_command.move->dest->column);
+	printf("%d\n", game_command.move->source->row);
+	printf("%c\n", game_command.move->source->column);
+	printf("%d\n", game_command.move->dest->row);
+	printf("%c\n", game_command.move->dest->column);
 
 	return true;
 }
