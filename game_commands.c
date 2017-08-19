@@ -30,10 +30,15 @@ Gamecommand game_command_parse_line(const char* str){
 		// need to be checked
 		game_command.cmd = MOVE;
 
+		printf("start");
 		source->row = atoi(strtok(str_copy, "<,>"));
+		printf("phase1");
 		source->column = strtok(str_copy, "<,>")[0];
+		printf("phase2");
 		target->row = atoi(strtok(str_copy, "<,>"));
+		printf("phase3");
 		target->column = strtok(str_copy, "<,>")[0];
+		printf("phase4");
 
 		//TODO -- need to verify that locations are intialized well
 		game_command.move->source = source;
