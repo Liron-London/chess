@@ -528,8 +528,8 @@ bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs)
 
 		// king
 		if (enemy_locs[i].piece_type == BLACK_KING || enemy_locs[i].piece_type == WHITE_KING){
-			if (((king->piece_location->row - (enemy_locs[i].piece_location->row)) < 1 && (king->piece_location->row - (enemy_locs[i].piece_location->row)) > 0) &&
-				((king->piece_location->column - (enemy_locs[i].piece_location->column)) < 'A' && (king->piece_location->column - (enemy_locs[i].piece_location->column)) >= 'A')){
+			if (((king_loc->row - (enemy_locs[i].piece_location->row)) < 1 && (king_loc->row - (enemy_locs[i].piece_location->row)) > 0) &&
+				((king_loc->column - (enemy_locs[i].piece_location->column)) < 'A' && (king_loc->column - (enemy_locs[i].piece_location->column)) >= 'A')){
 				return true;
 			}
 		}
