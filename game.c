@@ -393,7 +393,7 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move){
 	int color;
-	char source = cur_game[cur_move->source->row][(int)(cur_move->source->column-'A')];
+	char source = cur_game->board[cur_move->source->row][(int)(cur_move->source->column-'A')];
 	location valid_locs[64]; // list of all the valid location of the relevant piece
 
 	// source is empty
@@ -417,8 +417,8 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			if (cur_game->blacks[i]->piece_type == source){
-				valid_locs = valid_moves(cur_game, cur_game->blacks[i]);
+			if (cur_game->blacks[i].piece_type == source){
+				valid_locs = valid_moves(cur_game, &(cur_game->blacks[i]));
 				break;
 			}
 		}
@@ -426,8 +426,8 @@ bool is_valid_move(game* cur_game, move* cur_move){
 
 	if (color == 0){
 		for (int i=0; i<16; i++){
-			if (cur_game->whites[i]->piece_type == source){
-				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
+			if (cur_game->whites[i].piece_type == source){
+				valid_locs = valid_moves(cur_game, &(cur_game->whites[i]));
 				break;
 			}
 		}
@@ -435,7 +435,7 @@ bool is_valid_move(game* cur_game, move* cur_move){
 
 	// if cur_move->dest is one of the possible moves, return true
 	for (int i=0; i<64; i++){
-		if (valid_locs[i]->row == cur_move->dest->row && valid_locs[i]->column == cur_move->dest->column){
+		if (valid_locs[i].row == cur_move->dest->row && valid_locs[i].column == cur_move->dest->column){
 			return true;
 		}
 	}
