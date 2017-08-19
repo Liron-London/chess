@@ -35,20 +35,20 @@ Gamecommand game_command_parse_line(const char* str){
 		game_command.cmd = MOVE;
 
 		printf("start\n");
-		source->row = atoi(strtok(str_copy, "<,"));
+		source->row = atoi(strtok(NULL, "<,"));
 		printf("phase1\n");
 		printf("first arg is: %d\n", source->row);
-		source->column = strtok(str_copy, "<,>")[0];
+		source->column = strtok(NULL, "<,>")[0];
 		printf("phase2\n");
 		printf("second arg is: %c\n", source->column);
-		target->row = atoi(strtok(str_copy, "<,>"));
+		target->row = atoi(strtok(NULL, "<,>"));
 
-		char* command_text = strtok(str_copy, " \t\n");
+		char* command_text = strtok(NULL, " \t\n");
 		printf("%s\n", command_text);
 
 		printf("phase3\n");
 		printf("third arg is: %d\n", target->row);
-		target->column = strtok(str_copy, "<,>")[0];
+		target->column = strtok(NULL, "<,>")[0];
 		printf("phase4\n");
 		printf("forth arg is: %c\n", target->column);
 
