@@ -14,6 +14,8 @@ static bool basic_check(){
 	// game* game = game_create();
 	Gamecommand game_command;
 
+	printf("WTF IS GOING ON??!!")
+
 	game_command = game_command_parse_line("move <2, A> to <3, B>");
 	printf("%d", game_command.move->source->row);
 	printf("%c", game_command.move->source->column);
