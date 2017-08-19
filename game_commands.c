@@ -13,6 +13,11 @@ Gamecommand game_command_parse_line(const char* str){
 	location* source;
 	location* target;
 
+	source->row=-1;
+	source->column='-';
+	target->row=-1;
+	target->column='-';
+
 	Gamecommand game_command;
 	game_command.validArg = false;
 
