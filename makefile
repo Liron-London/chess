@@ -34,6 +34,8 @@ array_list.o: array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 setting.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
+game_commands.o: game.c game.h array_list.c array_list.h
+
 setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
 game_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h
