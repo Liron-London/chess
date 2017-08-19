@@ -157,27 +157,27 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 		king_loc = cur_game->blacks[4].piece_location;
 	}
 	if (type == WHITE_PAWN) {
-		if ((row == 2) && (cur_game->board[4][col] == EMPTY_ENTRY)) {
+		if (row == 2 && cur_game->board[4][(int)(col-'A')] == EMPTY_ENTRY) {
 			valid_locs[i].row = 4;
 			valid_locs[i].column = col;
 			i++;
 		}
-		if (row <= 7 && cur_game->board[row + 1][col] == EMPTY_ENTRY) {
+		if (row <= 7 && cur_game->board[row + 1][(int)(col-'A')] == EMPTY_ENTRY) {
 			valid_locs[i].row = row + 1;
 			valid_locs[i].column = col;
 			i++;
 		}
 		// if board[i][j] is a capital letter it's a black piece
 		if (row <= 7 && col <= 'G' &&
-				cur_game->board[row+1][col+1] <= 'Z' &&
-				cur_game->board[row+1][col+1] >= 'A') {
+				cur_game->board[row+1][(int)(col-'A')+1] <= 'Z' &&
+				cur_game->board[row+1][(int)(col-'A')+1] >= 'A') {
 			valid_locs[i].row = row +1;
 			valid_locs[i].column = col +1;
 			i++;
 		}
 		if (row <= 7 && col >= 'B' &&
-				cur_game->board[row+1][col-1] <= 'Z' &&
-				cur_game->board[row+1][col-1] >= 'A') {
+				cur_game->board[row+1][(int)(col-'A')-1] <= 'Z' &&
+				cur_game->board[row+1][(int)(col-'A')-1] >= 'A') {
 			valid_locs[i].row = row +1;
 			valid_locs[i].column = col - 1;
 			i++;
@@ -506,22 +506,22 @@ bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs)
 
 		// bishop
 		if (enemy_locs[i].piece_type == BLACK_BISHOP || enemy_locs[i].piece_type == WHITE_BISHOP){
-			if (check_diagonals(cur_game, king->piece_location, enemy_locs[i].piece_location) == true){
+			if (check_diagonals(cur_game, king_loc, enemy_locs[i].piece_location) == true){
 				return true;
 			}
 		}
 
 		// rook
 		if (enemy_locs[i].piece_type == BLACK_ROOK || enemy_locs[i].piece_type == WHITE_ROOK){
-			if (check_parallels(cur_game, king->piece_location, enemy_locs[i].piece_location) == true){
+			if (check_parallels(cur_game, king_loc, enemy_locs[i].piece_location) == true){
 				return true;
 			}
 		}
 
 		// queen
 		if (enemy_locs[i].piece_type == BLACK_QUEEN || enemy_locs[i].piece_type == WHITE_QUEEN){
-			if ((check_parallels(cur_game, king->piece_location, enemy_locs[i].piece_location) == true) ||
-				(check_diagonals(cur_game, king->piece_location, enemy_locs[i].piece_location) == true)){
+			if ((check_parallels(cur_game, king_loc, enemy_locs[i].piece_location) == true) ||
+				(check_diagonals(cur_game, king_loc, enemy_locs[i].piece_location) == true)){
 				return true;
 			}
 		}
