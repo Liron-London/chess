@@ -41,11 +41,11 @@ Gamecommand game_command_parse_line(const char* str){
 		source->column = strtok(NULL, "<,>")[0];
 		printf("phase2\n");
 		printf("second arg is: %c\n", source->column);
-		target->row = atoi(strtok(NULL, "<,>"));
 
 		char* command_text = strtok(NULL, " \t\n");
 		printf("%s\n", command_text);
 
+		target->row = atoi(strtok(NULL, "<,>"));
 		printf("phase3\n");
 		printf("third arg is: %d\n", target->row);
 		target->column = strtok(NULL, "<,>")[0];
