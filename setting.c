@@ -6,6 +6,7 @@
  */
 
 #include "setting.h"
+#include "game.h"
 
 /*
  * says if a string is number or not

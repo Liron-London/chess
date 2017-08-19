@@ -10,6 +10,7 @@ MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o
 
+
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
 
 
@@ -22,6 +23,8 @@ setting_test: $(SETTINGS_TEST_OBJ)
 	$(CC) $(SETTINGS_TEST_OBJ) -o $@
 game_unit_test: $(GAME_TEST_OBJ)
 	$(CC) $(GAME_TEST_OBJ) -o $@
+game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
+	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@ 
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -35,6 +38,7 @@ setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h sett
 	$(CC) $(COMP_FLAG) -c $*.c
 game_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
+game_command_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h game_command.h game_command.c
 
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
