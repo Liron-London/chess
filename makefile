@@ -38,7 +38,7 @@ setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h sett
 	$(CC) $(COMP_FLAG) -c $*.c
 game_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
-game_command_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_command.c
+game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_command.c
 
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
