@@ -157,7 +157,7 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 		king_loc = cur_game->blacks[4].piece_location;
 	}
 	if (type == WHITE_PAWN) {
-		if (row == 2 && cur_game->board[4][col] == EMPTY_ENTRY) {
+		if (row == 2 && (char)(cur_game->board[4][col]) == EMPTY_ENTRY) {
 			valid_locs[i].row = 4;
 			valid_locs[i].column = col;
 			i++;
