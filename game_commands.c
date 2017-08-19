@@ -7,9 +7,13 @@
 #include "game_commands.h"
 
 Gamecommand game_command_parse_line(const char* str){
+	printf("In the function\n");
+
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
+
+	printf("got text\n");
 
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
@@ -22,7 +26,6 @@ Gamecommand game_command_parse_line(const char* str){
 	Gamecommand game_command;
 	game_command.validArg = false;
 
-
 	// char* command_int = strtok(NULL, " \t\n");
 
 
@@ -30,15 +33,15 @@ Gamecommand game_command_parse_line(const char* str){
 		// need to be checked
 		game_command.cmd = MOVE;
 
-		printf("start");
+		printf("start\n");
 		source->row = atoi(strtok(str_copy, "<,>"));
-		printf("phase1");
+		printf("phase1\n");
 		source->column = strtok(str_copy, "<,>")[0];
-		printf("phase2");
+		printf("phase2\n");
 		target->row = atoi(strtok(str_copy, "<,>"));
-		printf("phase3");
+		printf("phase3\n");
 		target->column = strtok(str_copy, "<,>")[0];
-		printf("phase4");
+		printf("phase4\n");
 
 		//TODO -- need to verify that locations are intialized well
 		game_command.move->source = source;
