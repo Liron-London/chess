@@ -30,7 +30,7 @@ Gamecommand game_command_parse_line(const char* str){
 	// char* command_int = strtok(NULL, " \t\n");
 
 
-	if (strcmp(command_text, "move") == true){
+	if (strcmp(command_text, "move") == 0){
 		// need to be checked
 		game_command.cmd = MOVE;
 
@@ -52,31 +52,31 @@ Gamecommand game_command_parse_line(const char* str){
 		return game_command;
 	}
 
-	if (strcmp(command_text, "quit") == true){
+	if (strcmp(command_text, "quit") == 0){
 		game_command.cmd = GAME_QUIT;
 		game_command.validArg = true;
 		return game_command;
 	}
 
-	if (strcmp(command_text, "undo") == true){
+	if (strcmp(command_text, "undo") == 0){
 		game_command.cmd = UNDO;
 		game_command.validArg = true;
 		return game_command;
 	}
 
-	if (strcmp(command_text, "reset") == true){
+	if (strcmp(command_text, "reset") == 0){
 		game_command.cmd = RESET;
 		game_command.validArg = true;
 		return game_command;
 	}
 
-	if (strcmp(command_text, "reset") == true){
+	if (strcmp(command_text, "reset") == 0){
 		game_command.cmd = RESET;
 		game_command.validArg = true;
 		return game_command;
 	}
 
-	if (strcmp(command_text, "save") == true){
+	if (strcmp(command_text, "save") == 0){
 		//need to complete saving mode
 		game_command.cmd = SAVE;
 		game_command.validArg = true;
