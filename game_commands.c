@@ -14,6 +14,8 @@ Gamecommand game_command_parse_line(const char* str){
 	location* target;
 
 	Gamecommand game_command;
+	game_command.validArg = false;
+
 
 	// char* command_int = strtok(NULL, " \t\n");
 
@@ -65,8 +67,7 @@ Gamecommand game_command_parse_line(const char* str){
 		game_command.validArg = true;
 		return game_command;
 	}
-
-
+	return game_command;
 }
 
 
