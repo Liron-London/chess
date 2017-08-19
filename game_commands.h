@@ -10,9 +10,9 @@
 
 #include "game.h"
 #include <string.h>
-#include <stdio>
+#include <stdio.h>
 #include <stdbool.h>
-
+#include <stdlib.h>
 
 typedef enum {
     MOVE,
