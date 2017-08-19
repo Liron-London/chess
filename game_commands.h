@@ -18,6 +18,15 @@ typedef enum {
     QUIT
 } game_command_type;
 
+typedef struct game_command_t {
+	game_command_type cmd;
+    bool validArg; //is set to true if the line contains a valid argument
+    int arg;
+} game_command;
+
+/*
+ * for move - check if the command is valid and call set_move
+ */
 Command game_parse_line(const char* str);
 
 /*

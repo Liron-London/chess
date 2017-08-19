@@ -42,6 +42,10 @@ typedef struct game_t {
     piece blacks[16];
 } game;
 
+typedef struct move_t {
+	location* source;
+	location* dest;
+}move;
 
 /*
 * checks that the King's not threatened
@@ -81,9 +85,10 @@ game* game_copy(game* cur_game);
 void game_destroy (game* cur_game);
 
 /*
+* called by game_parse_line
 * updates the game's board after a valid move
 */
-void set_move(game* cur_game, piece* cur_piece, location* dst_location);
+void set_move(game* cur_game, move* cur_move);
 
 /*
 * prints the current board (in console mode)
