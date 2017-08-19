@@ -57,6 +57,8 @@ Gamecommand game_command_parse_line(const char* str){
 		game_command.move->dest = target;
 		game_command.validArg = true;
 
+		printf('almost done!\n');
+
 		return game_command;
 	}
 
