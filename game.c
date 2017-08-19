@@ -394,7 +394,7 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 bool is_valid_move(game* cur_game, move* cur_move){
 	int color;
 	char source = cur_game->board[cur_move->source->row][(int)(cur_move->source->column-'A')];
-	location valid_locs[64]; // list of all the valid location of the relevant piece
+	location* valid_locs; // list of all the valid location of the relevant piece
 
 	// source is empty
 	if (source == EMPTY_ENTRY){
