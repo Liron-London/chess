@@ -35,13 +35,14 @@ array_list.o: array_list.c array_list.h
 setting.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 game_commands.o: game.c game.h array_list.c array_list.h
-	$(CC) $(COMP_FLAG) -c $*.c
+$(CC) $(COMP_FLAG) -c $*.c
 
 setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
 game_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_commands.c
+	$(CC) $(COMP_FLAG) -c $*.c
 
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
