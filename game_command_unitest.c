@@ -28,6 +28,7 @@ static bool basic_check(){
 int main() {
 	bool success;
 	success = basic_check();
+	printf("before last if");
 	if (success)
 		printf("basic game_commands checks success!\n");
 	return 0;

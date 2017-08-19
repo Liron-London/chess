@@ -9,7 +9,7 @@
 #include "game.h"
 #include <stdbool.h>
 
-// TODO -- need to write
+// TODO -- need to expend
 static bool basic_check(){
 	game* game = game_create();
 	Command command;
