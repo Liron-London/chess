@@ -25,7 +25,7 @@ typedef enum {
 typedef struct game_command_t {
 	game_command_type cmd;
     bool validArg; //is set to true if the line contains a valid argument
-    move move;
+    move* move;
 } Gamecommand;
 
 /*
