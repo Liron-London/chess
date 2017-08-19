@@ -19,6 +19,8 @@ static bool basic_check(){
 	printf("%c", game_command.move->source->column);
 	printf("%d", game_command.move->dest->row);
 	printf("%c", game_command.move->dest->column);
+
+	return true;
 }
 
 int main() {
