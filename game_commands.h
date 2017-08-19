@@ -9,6 +9,10 @@
 #define GAME_COMMANDS_H_
 
 #include "game.h"
+#include <string.h>
+#include <stdio>
+#include <stdbool.h>
+
 
 typedef enum {
     MOVE,
