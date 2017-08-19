@@ -11,19 +11,20 @@
 
 
 static bool basic_check(){
-	game* game = game_create();
+	// game* game = game_create();
 	Gamecommand game_command;
 
 	game_command = game_command_parse_line("move <2, A> to <3, B>");
-	printf("%d", game_command->move->source->row);
-	printf("%c", game_command->move->source->column);
-	printf("%d", game_command->move->dest->row);
-	printf("%c", game_command->move->dest->column);
+	printf("%d", game_command.move->source->row);
+	printf("%c", game_command.move->source->column);
+	printf("%d", game_command.move->dest->row);
+	printf("%c", game_command.move->dest->column);
+}
 
 int main() {
 	bool success;
 	success = basic_check();
 	if (success)
-		printf("basic settings checks success!\n");
+		printf("basic game_commands checks success!\n");
 	return 0;
 }
