@@ -14,6 +14,7 @@ Gamecommand game_command_parse_line(const char* str){
 	char* command_text = strtok(str_copy, " \t\n");
 
 	printf("got text\n");
+	printf("%s\n", command_text);
 
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
