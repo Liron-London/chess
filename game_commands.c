@@ -12,7 +12,6 @@ Gamecommand game_command_parse_line(const char* str){
 	char* command_text = strtok(str_copy, " \t\n");
 	location* source;
 	location* target;
-	move* cur_move;
 
 	Gamecommand game_command;
 
