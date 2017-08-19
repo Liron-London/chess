@@ -14,10 +14,10 @@ Gamecommand game_command_parse_line(const char* str){
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
 
-	source.row = -1;
-	source.column = '-';
-	target.row = -1;
-	target.column = '-';
+	source->row = -1;
+	source->column = '-';
+	target->row = -1;
+	target->column = '-';
 
 	Gamecommand game_command;
 	game_command.validArg = false;
@@ -30,10 +30,10 @@ Gamecommand game_command_parse_line(const char* str){
 		// need to be checked
 		game_command.cmd = MOVE;
 
-		source.row = atoi(strtok(str_copy, "<,>"));
-		source.column = strtok(str_copy, "<,>")[0];
-		target.row = atoi(strtok(str_copy, "<,>"));
-		target.column = strtok(str_copy, "<,>")[0];
+		source->row = atoi(strtok(str_copy, "<,>"));
+		source->column = strtok(str_copy, "<,>")[0];
+		target->row = atoi(strtok(str_copy, "<,>"));
+		target->column = strtok(str_copy, "<,>")[0];
 
 		//TODO -- need to verify that locations are intialized well
 		game_command->move->source = source;
