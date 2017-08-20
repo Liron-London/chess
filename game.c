@@ -444,6 +444,9 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	char source = cur_game->board[cur_move->source->row][(int)(cur_move->source->column-'A')];
 	location* valid_locs; // list of all the valid location of the relevant piece
 
+	printf("dest move row is %d\n", cur_move->source->row);
+	printf("dest move col is %c\n", cur_move->source->column);
+
 	printf("source is: %c\n", source);
 
 	// source is empty
