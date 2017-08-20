@@ -215,7 +215,7 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	 */
 	if (type == WHITE_PAWN) {
 		if (row == 1 && cur_game->board[2][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[3][(int)(col-'A')] == EMPTY_ENTRY) {
-			game* tmp_copy = game_copy(game);
+			game* tmp_copy = game_copy(cur_game);
 			move* tmp_move = malloc(sizeof(move));
 			location* s = malloc(sizeof(location));
 			location* t = malloc(sizeof(location));
