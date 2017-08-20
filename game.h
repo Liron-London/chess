@@ -59,7 +59,7 @@ piece* create_piece();
 /*
 * checks that the King's not threatened
 */
-bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs);
+bool is_check(game* cur_game);
 
 /*
  * checks if a piece threats the kings from diagonal

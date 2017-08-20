@@ -450,11 +450,6 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	char source = cur_game->board[cur_move->source->row][(int)(cur_move->source->column-'A')];
 	location* valid_locs; // list of all the valid location of the relevant piece
 
-	//printf("dest move row is %d\n", cur_move->source->row);
-	//printf("dest move col is %c\n", cur_move->source->column);
-
-	//printf("source is: %c\n", source);
-
 	// source is empty
 	if (source == EMPTY_ENTRY){
 		return false;
@@ -468,9 +463,6 @@ bool is_valid_move(game* cur_game, move* cur_move){
 		color = 0;
 	}
 
-	//printf("color is: %d\n", color);
-	//printf("current_turn: %d\n", cur_game->current_turn);
-
 	// source is enemy piece
 	if (cur_game->current_turn - color != 0){
 		return false;
@@ -479,13 +471,9 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			//printf("piece type is %c \n", cur_game->whites[i]->piece_type);
-			//printf("piece loc row is %d \n", cur_game->whites[i]->piece_location->row);
-			//printf("piece loc col is %c \n", cur_game->whites[i]->piece_location->column);
 			if (cur_game->whites[i]->piece_type == source &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
-				printf("made it! (whites)\n");
 				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
 				break;
 			}
@@ -616,21 +604,32 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 	return false;
 }
 
-bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs){
-
+// if it's white's turn, white king cannot be threatened by a black piece, the opposite if it's black's turn
+bool is_check(game* cur_game){
 	if (cur_game == NULL){
 		return false;
 	}
+	location* king_loc;
+	piece** enemies;
 
-	// finds the location of the white king
-	location* enemy_loc;
+	// white turn
+	if (cur_game->current_turn == 1){
+		king_loc = cur_game->whites[4]->piece_location;
+		enemies = cur_game->blacks;
+	}
+	// black turn
+	else{
+		king_loc = cur_game->blacks[4]->piece_location;
+		enemies = cur_game->whites;
+	}
 
 	for (int i=0; i<16; i++){
 		// putting location into variable for readability
-		enemy_loc = enemy_locs[i].piece_location;
+		location* enemy_loc = enemies[i]->piece_location;
+		char enemy_type = enemies[i]->piece_type;
 
 		// black pawn
-		if (enemy_locs[i].piece_type == BLACK_PAWN){
+		if (enemy_type == BLACK_PAWN){
 			if ((enemy_loc->column = (king_loc->column) + 1) &&
 					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
 				return true;
@@ -638,7 +637,7 @@ bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs)
 		}
 
 		// white pawn
-		if (enemy_locs[i].piece_type == BLACK_PAWN){
+		if (enemy_type == WHITE_PAWN){
 			if ((enemy_loc->column = (king_loc->column) - 1) &&
 					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
 				return true;
@@ -646,7 +645,7 @@ bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs)
 		}
 
 		// knight
-		if (enemy_locs[i].piece_type == BLACK_KNIGHT || enemy_locs[i].piece_type == WHITE_KNIGHT){
+		if (enemy_type == BLACK_KNIGHT || enemy_type == WHITE_KNIGHT){
 			if (((enemy_loc->column = (king_loc->column) + 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))) ||
 				((enemy_loc->column = (king_loc->column) - 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1)))||
 				((enemy_loc->row = (king_loc->row) + 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))||
@@ -656,31 +655,31 @@ bool is_check(game* cur_game, const location* king_loc, const piece* enemy_locs)
 		}
 
 		// bishop
-		if (enemy_locs[i].piece_type == BLACK_BISHOP || enemy_locs[i].piece_type == WHITE_BISHOP){
-			if (check_diagonals(cur_game, king_loc, enemy_locs[i].piece_location) == true){
+		if (enemy_type == BLACK_BISHOP || enemy_type == WHITE_BISHOP){
+			if (check_diagonals(cur_game, king_loc, enemy_loc) == true){
 				return true;
 			}
 		}
 
 		// rook
-		if (enemy_locs[i].piece_type == BLACK_ROOK || enemy_locs[i].piece_type == WHITE_ROOK){
-			if (check_parallels(cur_game, king_loc, enemy_locs[i].piece_location) == true){
+		if (enemy_type == BLACK_ROOK || enemy_type == WHITE_ROOK){
+			if (check_parallels(cur_game, king_loc, enemy_loc) == true){
 				return true;
 			}
 		}
 
 		// queen
-		if (enemy_locs[i].piece_type == BLACK_QUEEN || enemy_locs[i].piece_type == WHITE_QUEEN){
-			if ((check_parallels(cur_game, king_loc, enemy_locs[i].piece_location) == true) ||
-				(check_diagonals(cur_game, king_loc, enemy_locs[i].piece_location) == true)){
+		if (enemy_type == BLACK_QUEEN || enemy_type == WHITE_QUEEN){
+			if ((check_parallels(cur_game, king_loc, enemy_loc) == true) ||
+				(check_diagonals(cur_game, king_loc, enemy_loc) == true)){
 				return true;
 			}
 		}
 
 		// king
-		if (enemy_locs[i].piece_type == BLACK_KING || enemy_locs[i].piece_type == WHITE_KING){
-			if (((king_loc->row - (enemy_locs[i].piece_location->row)) < 1 && (king_loc->row - (enemy_locs[i].piece_location->row)) > 0) &&
-				((king_loc->column - (enemy_locs[i].piece_location->column)) < 'A' && (king_loc->column - (enemy_locs[i].piece_location->column)) >= 'A')){
+		if (enemy_type == BLACK_KING || enemy_type == WHITE_KING){
+			if (((king_loc->row - (enemy_loc->row)) < 1 && (king_loc->row - (enemy_loc->row)) > 0) &&
+				((king_loc->column - (enemy_loc->column)) < 'A' && (king_loc->column - (enemy_loc->column)) >= 'A')){
 				return true;
 			}
 		}
