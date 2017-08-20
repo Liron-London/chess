@@ -77,7 +77,7 @@ game* game_create() {
 	for (int i=8; i<16;i++){
 		newgame->whites[i].piece_type = WHITE_PAWN;
 		newgame->whites[0].alive = 1;
-		printf('aaaaaaaaa\n');
+		printf("aaaaaaaaa\n");
 	}
 	printf("phase1\n");
 
