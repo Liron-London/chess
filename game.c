@@ -75,6 +75,7 @@ game* game_create() {
 	printf("phase1\n");
 
 	for (int i = 0; i < 16; i++) {
+		printf("%d\n", i);
 		newgame->whites[i].alive = 1;
 		newgame->whites[i].color = 1;
 		newgame->whites[i].piece_location->column = i;
