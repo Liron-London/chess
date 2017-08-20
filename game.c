@@ -123,8 +123,6 @@ game* game_create() {
 		}
 	}
 
-
-	printf("phase2\n");
 	newgame->blacks[0]->piece_type = BLACK_ROOK;
 	newgame->blacks[1]->piece_type = BLACK_KNIGHT;
 	newgame->blacks[2]->piece_type = BLACK_BISHOP;
