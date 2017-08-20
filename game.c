@@ -77,17 +77,15 @@ game* game_create() {
 	for (int i=8; i<16;i++){
 		newgame->whites[i].piece_type = WHITE_PAWN;
 		newgame->whites[0].alive = 1;
-		printf("aaaaaaaaa\n");
 	}
 	printf("phase1\n");
 
 	for (int j=0; j < 16; j++) {
 		printf("%d\n", j);
-		newgame->whites[0].alive = 1;
 		printf("%d\n", newgame->whites[j].alive);
 		printf("%c\n", newgame->whites[j].piece_type);
 		newgame->whites[j].alive = 1;
-		printf("A\n");
+		printf("%c\n", (char)(j) + 'A');
 		newgame->whites[j].piece_location->column = (char)(j) + 'A';
 		printf("C\n");
 		if (newgame->whites[j].piece_type != WHITE_PAWN) {
