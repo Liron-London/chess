@@ -28,13 +28,6 @@ static bool verify_game_obj(game* test_game) {
 
 }
 
-static bool move_pawns_check(){
-	game* game = game_create();
-	Gamecommand game_command = game_command_parse_line("move <2,B> to <2,C>");
-	move_piece(game, game_command->move, game->whites[8]);
-	return true;
-}
-
 static bool game_create_test() {
 	game* test_game = game_create();
 	printf("created game instance\n");
@@ -59,6 +52,14 @@ static bool game_destroy_test() {
 static bool game_print_test() {
 	game* test_game = game_create();
 	print_board(test_game);
+	return true;
+}
+
+static bool move_pawns_check(){
+	game* game = game_create();
+	print_board()
+	Gamecommand game_command = game_command_parse_line("move <2,B> to <2,C>");
+	move_piece(game, game_command.move, &(game->whites[8]));
 	return true;
 }
 
