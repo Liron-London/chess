@@ -24,6 +24,8 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
+	printf("basic vars were initialized well\n");
+
 	// initialize board
 	// initialize whites
 	newgame->board[0][0] = WHITE_ROOK;
@@ -50,6 +52,8 @@ game* game_create() {
 	for (int i=0; i<8;i++){
 		newgame->board[6][i] = BLACK_PAWN;
 	}
+
+	printf("initalize empty places\n");
 
 	for (int i=2; i<=5; i++){
 		for (int j=0; j<=7;j++){
