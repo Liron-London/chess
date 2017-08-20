@@ -14,6 +14,10 @@
 */
 Gamecommand* game_command_parse_line(const char* str){
 	char* str_copy = malloc(strlen(str) + 1);
+	if (str_copy == NULL){
+		free(str_copy);
+		return NULL:
+	}
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
 
@@ -27,7 +31,6 @@ Gamecommand* game_command_parse_line(const char* str){
 
 	// char* command_int = strtok(NULL, " \t\n");
 
-
 	if (strcmp(command_text, "move") == 0){
 		// need to be checked
 		game_command->cmd = MOVE;
@@ -37,7 +40,7 @@ Gamecommand* game_command_parse_line(const char* str){
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
-		printf("%s\n", command_text);
+		printf("command is: %s\n", command_text);
 
 		target->row = atoi(strtok(NULL, "<,>"));
 		target->column = strtok(NULL, "<,>")[0];
@@ -45,6 +48,7 @@ Gamecommand* game_command_parse_line(const char* str){
 		game_command->move->source = source;
 		game_command->move->dest = target;
 		game_command->validArg = true;
+		printf("Done with move!");
 
 		return game_command;
 	}
