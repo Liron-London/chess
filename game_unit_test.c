@@ -94,6 +94,24 @@ static bool move_pawns_check_2(){
 }
 
 
+static bool move_pawns_check_3(){
+	printf("test2");
+	game* game = game_create();
+	print_board(game);
+	Gamecommand* game_command = malloc(sizeof(game_command));
+	printf("command created successfully\n");
+	game_command = game_command_parse_line("move <2,B> to <5,B>");
+	printf("%d\n",game_command->move->source->row);
+	bool test = is_valid_move(game, game_command->move);
+	if (test != false){
+		printf("Bug in is_valid_2\n");
+		return NULL;
+	}
+	free(game_command);
+	return true;
+}
+
+
 
 int main() {
 	printf("start checking...\n");
@@ -123,6 +141,12 @@ int main() {
 	if(success) {
 		printf("Game print success\n");
 	}
+
+	success = move_pawns_check_3();
+	if(success) {
+		printf("Game print success\n");
+	}
+
 
 	if(!success) {
 		printf("Undetected error\n");
