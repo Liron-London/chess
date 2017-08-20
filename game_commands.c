@@ -11,7 +11,7 @@
  * in move, need to make sure that the input is legal
  *
 */
-Gamecommand game_command_parse_line(const char* str){
+Gamecommand* game_command_parse_line(const char* str){
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
@@ -21,81 +21,75 @@ Gamecommand game_command_parse_line(const char* str){
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
 
-	Gamecommand game_command;
-	game_command.validArg = false;
+	Gamecommand* game_command;
+	game_command->validArg = false;
 
 	// char* command_int = strtok(NULL, " \t\n");
 
 
 	if (strcmp(command_text, "move") == 0){
 		// need to be checked
-		game_command.cmd = MOVE;
+		game_command->cmd = MOVE;
 
 		source->row = atoi(strtok(NULL, "<,"));
-//		printf("phase1\n");
-//		printf("first arg is: %d\n", source->row);
 		source->column = strtok(NULL, "<,>")[0];
-//		printf("phase2\n");
-//		printf("second arg is: %c\n", source->column);
 
+		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
-//		printf("%s\n", command_text);
+		printf("%s\n", command_text);
 
 		target->row = atoi(strtok(NULL, "<,>"));
-//		printf("phase3\n");
-//		printf("third arg is: %d\n", target->row);
 		target->column = strtok(NULL, "<,>")[0];
-//		printf("phase4\n");
-//		printf("forth arg is: %c\n", target->column);
 
-		game_command.move->source = source;
-		game_command.move->dest = target;
-		game_command.validArg = true;
+		game_command->move->source = source;
+		game_command->move->dest = target;
+		game_command->validArg = true;
 
 		return game_command;
 	}
 
 	if (strcmp(command_text, "quit") == 0){
-		game_command.cmd = GAME_QUIT;
-		game_command.validArg = true;
+		game_command->cmd = GAME_QUIT;
+		game_command->validArg = true;
 		return game_command;
 	}
 
 	if (strcmp(command_text, "undo") == 0){
-		game_command.cmd = UNDO;
-		game_command.validArg = true;
+		game_command->cmd = UNDO;
+		game_command->validArg = true;
 		return game_command;
 	}
 
 	if (strcmp(command_text, "reset") == 0){
-		game_command.cmd = RESET;
-		game_command.validArg = true;
+		game_command->cmd = RESET;
+		game_command->validArg = true;
 		return game_command;
 	}
 
 	if (strcmp(command_text, "reset") == 0){
-		game_command.cmd = RESET;
-		game_command.validArg = true;
+		game_command->cmd = RESET;
+		game_command->validArg = true;
 		return game_command;
 	}
 
 	if (strcmp(command_text, "save") == 0){
 		//need to complete saving mode
-		game_command.cmd = SAVE;
-		game_command.validArg = true;
+		game_command->cmd = SAVE;
+		game_command->validArg = true;
 		return game_command;
 	}
 	return game_command;
 }
+
 // called when the command "start" is pressed in settings
 int game_play(game* game){
-	Gamecommand game_command;
+	Gamecommand* game_command;
 	const char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
 
 	while (1){
 		printf("please choose a command"); // need to be changed
-		scanf("%s%[^\n]", command_str);
+		scanf("%s", command_str);
 		game_command = game_command_parse_line(command_str);
 
 		// QUIT
@@ -113,7 +107,7 @@ int game_play(game* game){
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
 			if (is_valid_move(game, game_command->move) == true){
-
+				printf("valid move");
 			}
 
 			// update history

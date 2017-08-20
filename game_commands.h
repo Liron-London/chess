@@ -31,7 +31,7 @@ typedef struct game_command_t {
 /*
  * for move - check if the command is valid and call set_move
  */
-Gamecommand game_command_parse_line(const char* str);
+Gamecommand* game_command_parse_line(const char* str);
 
 /*
  * called right after user entered the command "START" and manges the game
