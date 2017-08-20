@@ -50,6 +50,12 @@ typedef struct move_t {
 	location* dest;
 }move;
 
+
+/*
+ * create an "empty" piece
+ */
+piece create_piece();
+
 /*
 * checks that the King's not threatened
 */

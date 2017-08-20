@@ -13,6 +13,29 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initalized as location* but needed to be location[64]
  */
 
+piece create_piece(){
+	piece piece = (piece*)malloc(sizeof(*piece));
+	if (piece == NULL){
+		free(piece);
+		return NULL;
+	}
+	piece.alive = 1;
+	piece.color = 0;
+	piece.piece_location = (location*)(malloc(sizeof(location)));
+
+	// default values
+	piece.piece_location->row = -1;
+	piece.piece_location->column = 'Z';
+	if (piece.piece_location == NULL){
+			free(piece.piece_location);
+			free(piece);
+			return NULL;
+		}
+	// initial it to EMPTY ENTRY
+	piece.piece_type = EMPTY_ENTRY;
+	return piece;
+}
+
 game* game_create() {
 	game* newgame = (game*)malloc(sizeof(game));
 	if (newgame == NULL) {
@@ -26,6 +49,22 @@ game* game_create() {
 
 	newgame->whites = (piece*)(malloc(16 * sizeof(piece)));
 	newgame->blacks = (piece*)(malloc(16 * sizeof(piece)));
+
+	// initaliz new pieces
+	for (int i=0; i<16; i++){
+		newgame->whites[i] = create_piece();
+		if (newgame->whites[i] == NULL){
+			free(newgame->whites[i]);
+			free(newgame);
+			return NULL;
+		}
+		newgame->blacks[i] = create_piece();
+		if (newgame->blacks[i] == NULL){
+			free(newgame->blacks[i]);
+			free(newgame);
+			return NULL;
+		}
+	}
 
 	printf("basic vars were initialized well\n");
 
