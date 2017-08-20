@@ -47,8 +47,8 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
-	newgame->whites = (piece*)(malloc(16 * sizeof(piece)));
-	newgame->blacks = (piece*)(malloc(16 * sizeof(piece)));
+	newgame->whites = malloc(16 * sizeof(piece));
+	newgame->blacks = malloc(16 * sizeof(piece));
 
 	// initialize new pieces
 	for (int i=0; i<16; i++){
@@ -125,34 +125,34 @@ game* game_create() {
 		printf("%c\n", (char)(j) + 'A');
 		newgame->whites[j]->piece_location->column = (char)((char)(j) + 'A');
 		printf("C\n");
-		if (newgame->whites[j].piece_type != WHITE_PAWN) {
-			newgame->whites[j].piece_location->row = 0;
+		if (newgame->whites[j]->piece_type != WHITE_PAWN) {
+			newgame->whites[j]->piece_location->row = 0;
 		} else {
-			newgame->whites[j].piece_location->row = 1;
+			newgame->whites[j]->piece_location->row = 1;
 		}
 	}
 
 
 	printf("phase2\n");
-	newgame->blacks[0].piece_type = BLACK_ROOK;
-	newgame->blacks[1].piece_type = BLACK_KNIGHT;
-	newgame->blacks[2].piece_type = BLACK_BISHOP;
-	newgame->blacks[3].piece_type = BLACK_QUEEN;
-	newgame->blacks[4].piece_type = BLACK_KING;
-	newgame->blacks[5].piece_type = BLACK_KNIGHT;
-	newgame->blacks[6].piece_type = BLACK_BISHOP;
-	newgame->blacks[7].piece_type = BLACK_ROOK;
+	newgame->blacks[0]->piece_type = BLACK_ROOK;
+	newgame->blacks[1]->piece_type = BLACK_KNIGHT;
+	newgame->blacks[2]->piece_type = BLACK_BISHOP;
+	newgame->blacks[3]->piece_type = BLACK_QUEEN;
+	newgame->blacks[4]->piece_type = BLACK_KING;
+	newgame->blacks[5]->piece_type = BLACK_KNIGHT;
+	newgame->blacks[6]->piece_type = BLACK_BISHOP;
+	newgame->blacks[7]->piece_type = BLACK_ROOK;
 	for (int i=8; i<15;i++){
-		newgame->blacks[i].piece_type = BLACK_PAWN;
+		newgame->blacks[i]->piece_type = BLACK_PAWN;
 	}
 	for (int i = 0; i < 16; i++) {
-		newgame->blacks[i].alive = 1;
-		newgame->blacks[i].color = 0;
-		newgame->blacks[i].piece_location->column = i;
-		if (newgame->blacks[i].piece_type != BLACK_PAWN) {
-			newgame->blacks[i].piece_location->row = 7;
+		newgame->blacks[i]->alive = 1;
+		newgame->blacks[i]->color = 0;
+		newgame->blacks[i]->piece_location->column = i;
+		if (newgame->blacks[i]->piece_type != BLACK_PAWN) {
+			newgame->blacks[i]->piece_location->row = 7;
 		} else {
-			newgame->blacks[i].piece_location->row = 6;
+			newgame->blacks[i]->piece_location->row = 6;
 		}
 	}
 
