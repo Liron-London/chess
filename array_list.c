@@ -1,4 +1,5 @@
 #include "array_list.h"
+#include "game_commands.h"
 #include <stdio.h>
 #include <stdlib.h>
 

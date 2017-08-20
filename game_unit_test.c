@@ -15,6 +15,7 @@ static bool verify_game_obj(game* test_game) {
 		printf("Error initializing new game\n");
 		return false;
 	}
+
 	/*test history
 	for (int i = 0; i < 6; i++) {
 		if (test_game->history->elements[i] != 0) {
@@ -22,10 +23,17 @@ static bool verify_game_obj(game* test_game) {
 			return false;
 		}
 	}*/
+
 	return true;
 
 }
 
+static bool move_pawns_check(){
+	game* game = game_create();
+	Gamecommand game_command = game_command_parse_line("move <2,B> to <2,C>");
+	move_piece(game, game_command->move, game->whites[8]);
+	return true;
+}
 
 static bool game_create_test() {
 	game* test_game = game_create();
@@ -71,6 +79,13 @@ int main() {
 	if(success) {
 		printf("Game print success\n");
 	}
+
+	success = move_pawns_check();
+	if(success) {
+		printf("Game print success\n");
+	}
+
+
 	if(!success) {
 		printf("Undetected error\n");
 		return 1;

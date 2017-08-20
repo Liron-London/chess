@@ -10,7 +10,7 @@
 /*
  * TODO
  * (1) need to change the size of the valid_moves array to 29 and initialize it to defuat locations (will make all checks much easier)
- * (2)
+ * (2) in Is_valid_move there might be a memory leak in valid_locs (initalized as location* but needed to be location[64]
  */
 
 game* game_create() {
