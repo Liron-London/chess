@@ -14,7 +14,7 @@
  */
 
 piece* create_piece(){
-	piece* piece = (piece*) (malloc(sizeof(*piece)));
+	piece* piece = malloc(sizeof(piece));
 	if (piece == NULL){
 		free(piece);
 		return NULL;
@@ -218,9 +218,9 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 
 	const location* king_loc;
 	if (cur_piece->color == 1) {
-		king_loc = cur_game->whites[4].piece_location;
+		king_loc = cur_game->whites[4]->piece_location;
 	} else {
-		king_loc = cur_game->blacks[4].piece_location;
+		king_loc = cur_game->blacks[4]->piece_location;
 	}
 	if (type == WHITE_PAWN) {
 		if (row == 2 && cur_game->board[4][(int)(col-'A')] == EMPTY_ENTRY) {
@@ -477,8 +477,8 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			if (cur_game->blacks[i].piece_type == source){
-				valid_locs = valid_moves(cur_game, &(cur_game->blacks[i]));
+			if (cur_game->blacks[i]->piece_type == source){
+				valid_locs = valid_moves(cur_game, cur_game->blacks[i]);
 				break;
 			}
 		}
@@ -486,8 +486,8 @@ bool is_valid_move(game* cur_game, move* cur_move){
 
 	if (color == 0){
 		for (int i=0; i<16; i++){
-			if (cur_game->whites[i].piece_type == source){
-				valid_locs = valid_moves(cur_game, &(cur_game->whites[i]));
+			if (cur_game->whites[i]->piece_type == source){
+				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
 				break;
 			}
 		}
