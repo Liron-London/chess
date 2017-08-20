@@ -61,7 +61,7 @@ static bool move_pawns_check(){
 	print_board(game);
 	Gamecommand* game_command = malloc(sizeof(game_command));
 	game_command = game_command_parse_line("move <2,B> to <2,C>");
-	move_piece(game, game_command.move, &(game->whites[8]));
+	move_piece(game, game_command->move, &(game->whites[8]));
 	print_board(game);
 	free(game_command);
 	return true;
