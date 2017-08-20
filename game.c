@@ -405,7 +405,7 @@ void print_board(game* cur_game){
 	for (int i=8; i>=1; i--){
 		printf("%d|", i);
 		for (int j=0; j<8 ; j++){
-			printf("%c ", cur_game->board[i][j]);
+			printf("%c ", cur_game->board[i-1][j]);
 		}
 		printf("|\n");
 	}
