@@ -65,7 +65,7 @@ static bool move_pawns_check(){
 	printf("%d\n",game_command->move->source->row);
 	bool test = is_valid_move(game, game_command->move);
 	if (test != true){
-		printf("Bug in is_valid");
+		printf("Bug in is_valid\n");
 		return NULL;
 	}
 

@@ -470,7 +470,10 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			if (cur_game->whites[i]->piece_type == source){
+			if (cur_game->whites[i]->piece_type == source &&
+					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
+					cur_game->whites[i]->piece_location->column == cur_move->source->column){
+				printf("made it! (whites)\n");
 				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
 				break;
 			}
@@ -479,7 +482,10 @@ bool is_valid_move(game* cur_game, move* cur_move){
 
 	if (color == 0){
 		for (int i=0; i<16; i++){
-			if (cur_game->blacks[i]->piece_type == source){
+			if (cur_game->blacks[i]->piece_type == source &&
+					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
+					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
+				printf("made it! (whites)\n");
 				valid_locs = valid_moves(cur_game, cur_game->blacks[i]);
 				break;
 			}
