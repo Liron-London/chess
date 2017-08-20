@@ -24,8 +24,8 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
-	newgame->whites = calloc(16, sizeof(piece));
-	newgame->blacks = calloc(16, sizeof(piece));
+	newgame->whites = (piece)calloc(16, sizeof(piece));
+	newgame->blacks = (piece)calloc(16, sizeof(piece));
 
 	printf("basic vars were initialized well\n");
 
@@ -64,57 +64,57 @@ game* game_create() {
 		}
 	}
 	//initializing game.blacks and game.whites
-	newgame->whites[0]->piece_type = WHITE_ROOK;
-	newgame->whites[1]->piece_type = WHITE_KNIGHT;
-	newgame->whites[2]->piece_type = WHITE_BISHOP;
-	newgame->whites[3]->piece_type = WHITE_QUEEN;
-	newgame->whites[4]->piece_type = WHITE_KING;
-	newgame->whites[5]->piece_type = WHITE_KNIGHT;
-	newgame->whites[6]->piece_type = WHITE_BISHOP;
-	newgame->whites[7]->piece_type = WHITE_ROOK;
+	newgame->whites[0].piece_type = WHITE_ROOK;
+	newgame->whites[1].piece_type = WHITE_KNIGHT;
+	newgame->whites[2].piece_type = WHITE_BISHOP;
+	newgame->whites[3].piece_type = WHITE_QUEEN;
+	newgame->whites[4].piece_type = WHITE_KING;
+	newgame->whites[5].piece_type = WHITE_KNIGHT;
+	newgame->whites[6].piece_type = WHITE_BISHOP;
+	newgame->whites[7].piece_type = WHITE_ROOK;
 	for (int i=8; i<15;i++){
-		newgame->whites[i]->piece_type = WHITE_PAWN;
+		newgame->whites[i].piece_type = WHITE_PAWN;
 	}
 
 	printf("phase1\n");
 
 	for (int i = 0; i < 16; i++) {
 		printf("%d\n", i);
-		printf("%d\n", newgame->whites[i]->alive);
-		newgame->whites[i]->alive = 1;
+		printf("%d\n", newgame->whites[i].alive);
+		newgame->whites[i].alive = 1;
 		printf("A");
-		newgame->whites[i]->color = 1;
+		newgame->whites[i].color = 1;
 		printf("B");
-		newgame->whites[i]->piece_location->column = (char)(i) + 'A';
+		newgame->whites[i].piece_location->column = (char)(i) + 'A';
 		printf("C");
-		if (newgame->whites[i]->piece_type != WHITE_PAWN) {
-			newgame->whites[i]->piece_location->row = 0;
+		if (newgame->whites[i].piece_type != WHITE_PAWN) {
+			newgame->whites[i].piece_location->row = 0;
 		} else {
-			newgame->whites[i]->piece_location->row = 1;
+			newgame->whites[i].piece_location->row = 1;
 		}
 	}
 
 
 	printf("phase2\n");
-	newgame->blacks[0]->piece_type = BLACK_ROOK;
-	newgame->blacks[1]->piece_type = BLACK_KNIGHT;
-	newgame->blacks[2]->piece_type = BLACK_BISHOP;
-	newgame->blacks[3]->piece_type = BLACK_QUEEN;
-	newgame->blacks[4]->piece_type = BLACK_KING;
-	newgame->blacks[5]->piece_type = BLACK_KNIGHT;
-	newgame->blacks[6]->piece_type = BLACK_BISHOP;
-	newgame->blacks[7]->piece_type = BLACK_ROOK;
+	newgame->blacks[0].piece_type = BLACK_ROOK;
+	newgame->blacks[1].piece_type = BLACK_KNIGHT;
+	newgame->blacks[2].piece_type = BLACK_BISHOP;
+	newgame->blacks[3].piece_type = BLACK_QUEEN;
+	newgame->blacks[4].piece_type = BLACK_KING;
+	newgame->blacks[5].piece_type = BLACK_KNIGHT;
+	newgame->blacks[6].piece_type = BLACK_BISHOP;
+	newgame->blacks[7].piece_type = BLACK_ROOK;
 	for (int i=8; i<15;i++){
-		newgame->blacks[i]->piece_type = BLACK_PAWN;
+		newgame->blacks[i].piece_type = BLACK_PAWN;
 	}
 	for (int i = 0; i < 16; i++) {
-		newgame->blacks[i]->alive = 1;
-		newgame->blacks[i]->color = 0;
-		newgame->blacks[i]->piece_location->column = i;
-		if (newgame->blacks[i]->piece_type != BLACK_PAWN) {
-			newgame->blacks[i]->piece_location->row = 7;
+		newgame->blacks[i].alive = 1;
+		newgame->blacks[i].color = 0;
+		newgame->blacks[i].piece_location->column = i;
+		if (newgame->blacks[i].piece_type != BLACK_PAWN) {
+			newgame->blacks[i].piece_location->row = 7;
 		} else {
-			newgame->blacks[i]->piece_location->row = 6;
+			newgame->blacks[i].piece_location->row = 6;
 		}
 	}
 
