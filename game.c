@@ -211,17 +211,20 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 		king_loc = cur_game->blacks[4]->piece_location;
 	}
 	if (type == WHITE_PAWN) {
-		if (row == 2 && cur_game->board[4][(int)(col-'A')] == EMPTY_ENTRY) {
-			valid_locs[i].row = 4;
+		if (row == 1 && cur_game->board[2][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[3][(int)(col-'A')] == EMPTY_ENTRY) {
+			// TODO -- need to add is_check check before we add something to valid_locs
+			valid_locs[i].row = 3;
 			valid_locs[i].column = col;
 			i++;
 		}
 		if (row <= 7 && cur_game->board[row + 1][(int)(col-'A')] == EMPTY_ENTRY) {
+			// TODO -- need to add is_check check before we add something to valid_locs
 			valid_locs[i].row = row + 1;
 			valid_locs[i].column = col;
 			i++;
 		}
 		// if board[i][j] is a capital letter it's a black piece
+		// TODO -- need to add is_check check before we add something to valid_locs
 		if (row <= 7 && col <= 'G' &&
 				cur_game->board[row+1][(int)(col-'A')+1] <= 'Z' &&
 				cur_game->board[row+1][(int)(col-'A')+1] >= 'A') {
@@ -229,6 +232,7 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 			valid_locs[i].column = col +1;
 			i++;
 		}
+		// TODO -- need to add is_check check before we add something to valid_locs
 		if (row <= 7 && col >= 'B' &&
 				cur_game->board[row+1][(int)(col-'A')-1] <= 'Z' &&
 				cur_game->board[row+1][(int)(col-'A')-1] >= 'A') {
@@ -239,11 +243,13 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	}
 
 	if (type == BLACK_PAWN) {
-		if (row == 7 && cur_game->board[5][(int)(col-'A')] == EMPTY_ENTRY) {
+		// TODO -- need to add is_check check before we add something to valid_locs
+		if (row == 7 && cur_game->board[6][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[5][(int)(col-'A')] == EMPTY_ENTRY) {
 			valid_locs[i].row = 5;
 			valid_locs[i].column = col;
 			i++;
 		}
+		// TODO -- need to add is_check check before we add something to valid_locs
 		if (row >= 2 && cur_game->board[row - 1][(int)(col-'A')] == EMPTY_ENTRY) {
 			valid_locs[i].row = row - 1;
 			valid_locs[i].column = col;
@@ -473,9 +479,9 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			printf("piece type is %c \n", cur_game->whites[i]->piece_type);
-			printf("piece loc row is %d \n", cur_game->whites[i]->piece_location->row);
-			printf("piece loc col is %c \n", cur_game->whites[i]->piece_location->column);
+			//printf("piece type is %c \n", cur_game->whites[i]->piece_type);
+			//printf("piece loc row is %d \n", cur_game->whites[i]->piece_location->row);
+			//printf("piece loc col is %c \n", cur_game->whites[i]->piece_location->column);
 			if (cur_game->whites[i]->piece_type == source &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
