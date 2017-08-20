@@ -210,12 +210,31 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	} else {
 		king_loc = cur_game->blacks[4]->piece_location;
 	}
+	/*
+	 * BAD EXAMPLE -- TODO - Need to write consturctors and destructors for location and move!!!
+	 */
 	if (type == WHITE_PAWN) {
 		if (row == 1 && cur_game->board[2][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[3][(int)(col-'A')] == EMPTY_ENTRY) {
-			// TODO -- need to add is_check check before we add something to valid_locs
-			valid_locs[i].row = 3;
-			valid_locs[i].column = col;
-			i++;
+			game* tmp_copy = game_copy(game);
+			move* tmp_move = malloc(sizeof(move));
+			location* s = malloc(sizeof(location));
+			location* t = malloc(sizeof(location));
+
+			s = cur_piece->piece_location;
+			t->row = 3;
+			t->column = col;
+			tmp_move->source = s;
+			tmp_move->dest = t;
+			move_piece(tmp_copy, tmp_move, cur_piece);
+			if (is_check(tmp_copy) == false){
+				valid_locs[i].row = 3;
+				valid_locs[i].column = col;
+				i++;
+			}
+			free(t);
+			free(s);
+			free(tmp_move);
+			free(tmp_copy);
 		}
 		if (row <= 7 && cur_game->board[row + 1][(int)(col-'A')] == EMPTY_ENTRY) {
 			// TODO -- need to add is_check check before we add something to valid_locs
