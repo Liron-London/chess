@@ -16,7 +16,7 @@ Gamecommand* game_command_parse_line(const char* str){
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
 		free(str_copy);
-		return NULL:
+		return NULL;
 	}
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
