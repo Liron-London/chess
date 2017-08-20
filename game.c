@@ -87,9 +87,9 @@ game* game_create() {
 		printf("%d\n", newgame->whites[j].alive);
 		printf("%c\n", newgame->whites[j].piece_type);
 		//newgame->whites[j].alive = 1;
-		printf("A");
+		printf("A\n");
 		newgame->whites[j].piece_location->column = (char)(j) + 'A';
-		printf("C");
+		printf("C\n");
 		if (newgame->whites[j].piece_type != WHITE_PAWN) {
 			newgame->whites[j].piece_location->row = 0;
 		} else {
