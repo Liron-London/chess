@@ -24,8 +24,8 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
-	newgame->whites = (piece)calloc(16, sizeof(piece));
-	newgame->blacks = (piece)calloc(16, sizeof(piece));
+	newgame->whites = malloc(16 * sizeof(piece));
+	newgame->blacks = malloc(16 * sizeof(piece));
 
 	printf("basic vars were initialized well\n");
 
