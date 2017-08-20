@@ -13,7 +13,7 @@
 static bool basic_check(){
 	// game* game = game_create();
 	return true;
-	Gamecommand game_command;
+	Gamecommand* game_command;
 
 	printf("WTF IS GOING ON\n");
 
