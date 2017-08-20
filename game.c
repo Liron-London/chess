@@ -13,26 +13,26 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initalized as location* but needed to be location[64]
  */
 
-piece create_piece(){
-	piece piece = malloc(sizeof(*piece));
+piece* create_piece(){
+	piece* piece = (piece*) (malloc(sizeof(*piece)));
 	if (piece == NULL){
 		free(piece);
 		return NULL;
 	}
-	piece.alive = 1;
-	piece.color = 0;
-	piece.piece_location = (location*)(malloc(sizeof(location)));
+	piece->alive = 1;
+	piece->color = 0;
+	piece->piece_location = (location*)(malloc(sizeof(location)));
 
 	// default values
-	piece.piece_location->row = -1;
-	piece.piece_location->column = 'Z';
-	if (piece.piece_location == NULL){
-			free(piece.piece_location);
+	piece->piece_location->row = -1;
+	piece->piece_location->column = 'Z';
+	if (piece->piece_location == NULL){
+			free(piece->piece_location);
 			free(piece);
 			return NULL;
 		}
 	// initial it to EMPTY ENTRY
-	piece.piece_type = EMPTY_ENTRY;
+	piece->piece_type = EMPTY_ENTRY;
 	return piece;
 }
 
@@ -50,7 +50,7 @@ game* game_create() {
 	newgame->whites = (piece*)(malloc(16 * sizeof(piece)));
 	newgame->blacks = (piece*)(malloc(16 * sizeof(piece)));
 
-	// initaliz new pieces
+	// initialize new pieces
 	for (int i=0; i<16; i++){
 		newgame->whites[i] = create_piece();
 		if (newgame->whites[i] == NULL){
@@ -103,29 +103,27 @@ game* game_create() {
 		}
 	}
 	//initializing game.blacks and game.whites
-	newgame->whites[0].piece_type = WHITE_ROOK;
-	newgame->whites[0].alive = 1;
-	newgame->whites[1].piece_type = WHITE_KNIGHT;
-	newgame->whites[2].piece_type = WHITE_BISHOP;
-	newgame->whites[3].piece_type = WHITE_QUEEN;
-	newgame->whites[4].piece_type = WHITE_KING;
-	newgame->whites[5].piece_type = WHITE_KNIGHT;
-	newgame->whites[6].piece_type = WHITE_BISHOP;
-	newgame->whites[7].piece_type = WHITE_ROOK;
-	newgame->whites[0].alive = 1;
+	newgame->whites[0]->piece_type = WHITE_ROOK;
+	newgame->whites[1]->piece_type = WHITE_KNIGHT;
+	newgame->whites[2]->piece_type = WHITE_BISHOP;
+	newgame->whites[3]->piece_type = WHITE_QUEEN;
+	newgame->whites[4]->piece_type = WHITE_KING;
+	newgame->whites[5]->piece_type = WHITE_KNIGHT;
+	newgame->whites[6]->piece_type = WHITE_BISHOP;
+	newgame->whites[7]->piece_type = WHITE_ROOK;
+	newgame->whites[0]->alive = 1;
 	for (int i=8; i<16;i++){
-		newgame->whites[i].piece_type = WHITE_PAWN;
-		newgame->whites[0].alive = 1;
+		newgame->whites[i]->piece_type = WHITE_PAWN;
 	}
 	printf("phase1\n");
 
 	for (int j=0; j < 16; j++) {
 		printf("%d\n", j);
-		printf("%d\n", newgame->whites[j].alive);
-		printf("%c\n", newgame->whites[j].piece_type);
-		newgame->whites[j].alive = 1;
+		printf("%d\n", newgame->whites[j]->alive);
+		printf("%c\n", newgame->whites[j]->piece_type);
+		newgame->whites[j]->alive = 1;
 		printf("%c\n", (char)(j) + 'A');
-		newgame->whites[j].piece_location->column = (char)((char)(j) + 'A');
+		newgame->whites[j]->piece_location->column = (char)((char)(j) + 'A');
 		printf("C\n");
 		if (newgame->whites[j].piece_type != WHITE_PAWN) {
 			newgame->whites[j].piece_location->row = 0;

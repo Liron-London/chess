@@ -41,8 +41,8 @@ typedef struct game_t {
     char board[8][8];
     //piece whites[16];
     //piece blacks[16];
-    piece* whites;
-    piece* blacks;
+    piece** whites;
+    piece** blacks;
 } game;
 
 typedef struct move_t {
@@ -54,7 +54,7 @@ typedef struct move_t {
 /*
  * create an "empty" piece
  */
-piece create_piece();
+piece* create_piece();
 
 /*
 * checks that the King's not threatened
