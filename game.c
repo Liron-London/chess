@@ -402,14 +402,14 @@ void print_board(game* cur_game){
 	if (cur_game == NULL)
 		return ;
 
-	for (int i=7; i>=0; i--){
+	for (int i=8; i>=1; i--){
 		printf("%d|", i);
 		for (int j=0; j<8 ; j++){
 			printf("%c ", cur_game->board[i][j]);
 		}
 		printf("|\n");
 	}
-	printf("  -----------------\n   ");
+	printf("  -----------------\n  ");
 	for (char c = 'A'; c <= 'H'; c++){
 		printf("%c ", c);
 	}
