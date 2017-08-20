@@ -56,7 +56,7 @@ static bool game_print_test() {
 	return true;
 }
 
-static bool move_pawns_check(){
+static bool move_pawns_check_1(){
 	game* game = game_create();
 	print_board(game);
 	Gamecommand* game_command = malloc(sizeof(game_command));
@@ -68,12 +68,31 @@ static bool move_pawns_check(){
 		printf("Bug in is_valid\n");
 		return NULL;
 	}
-
 	move_piece(game, game_command->move, game->whites[8]);
 	print_board(game);
 	free(game_command);
 	return true;
 }
+
+static bool move_pawns_check_2(){
+	game* game = game_create();
+	print_board(game);
+	Gamecommand* game_command = malloc(sizeof(game_command));
+	printf("command created successfully\n");
+	game_command = game_command_parse_line("move <2,B> to <4,B>");
+	printf("%d\n",game_command->move->source->row);
+	bool test = is_valid_move(game, game_command->move);
+	if (test != true){
+		printf("Bug in is_valid\n");
+		return NULL;
+	}
+	move_piece(game, game_command->move, game->whites[8]);
+	print_board(game);
+	free(game_command);
+	return true;
+}
+
+
 
 int main() {
 	printf("start checking...\n");
@@ -94,7 +113,12 @@ int main() {
 		printf("Game print success\n");
 	}
 
-	success = move_pawns_check();
+	success = move_pawns_check1();
+	if(success) {
+		printf("Game print success\n");
+	}
+
+	success = move_pawns_check2();
 	if(success) {
 		printf("Game print success\n");
 	}
