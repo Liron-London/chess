@@ -24,25 +24,8 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
-	printf("phase1\n");
-
-	for (int i = 0; i < 16; i++) {
-		printf("%d\n", i);
-		printf("%d\n", newgame->whites[i].alive);
-		newgame->whites[i].alive = 1;
-		printf("A");
-		newgame->whites[i].color = 1;
-		printf("B");
-		newgame->whites[i].piece_location->column = (char)(i) + 'A';
-		printf("C");
-		if (newgame->whites[i].piece_type != WHITE_PAWN) {
-			newgame->whites[i].piece_location->row = 0;
-		} else {
-			newgame->whites[i].piece_location->row = 1;
-		}
-	}
-
-
+	newgame->whites = calloc(16, sizeof(piece));
+	newgame->blacks = calloc(16, sizeof(piece));
 
 	printf("basic vars were initialized well\n");
 
@@ -93,6 +76,24 @@ game* game_create() {
 		newgame->whites[i].piece_type = WHITE_PAWN;
 	}
 
+	printf("phase1\n");
+
+	for (int i = 0; i < 16; i++) {
+		printf("%d\n", i);
+		printf("%d\n", newgame->whites[i].alive);
+		newgame->whites[i].alive = 1;
+		printf("A");
+		newgame->whites[i].color = 1;
+		printf("B");
+		newgame->whites[i].piece_location->column = (char)(i) + 'A';
+		printf("C");
+		if (newgame->whites[i].piece_type != WHITE_PAWN) {
+			newgame->whites[i].piece_location->row = 0;
+		} else {
+			newgame->whites[i].piece_location->row = 1;
+		}
+	}
+
 
 	printf("phase2\n");
 	newgame->blacks[0].piece_type = BLACK_ROOK;
@@ -121,6 +122,7 @@ game* game_create() {
 	return newgame;
 }
 
+//TODO -- need to update according to the changes in game create
 game* game_copy(game* cur_game) {
 	if (cur_game == NULL)
 		return NULL;
@@ -150,6 +152,8 @@ game* game_copy(game* cur_game) {
 
 void game_destroy (game* cur_game) {
 	//array_list_destroy(cur_game->history);
+	free(cur_game->blacks);
+	free(cur_game->whites);
 	free(cur_game);
 }
 
