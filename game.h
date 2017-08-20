@@ -39,8 +39,8 @@ typedef struct game_t {
     //array_list history; // for undo move
     int current_turn; //0 - PC or player 2, 1 - player one
     char board[8][8];
-    piece whites[16];
-    piece blacks[16];
+    piece* whites[16];
+    piece* blacks[16];
 } game;
 
 typedef struct move_t {
