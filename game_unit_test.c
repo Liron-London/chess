@@ -113,12 +113,12 @@ int main() {
 		printf("Game print success\n");
 	}
 
-	success = move_pawns_check1();
+	success = move_pawns_check_1();
 	if(success) {
 		printf("Game print success\n");
 	}
 
-	success = move_pawns_check2();
+	success = move_pawns_check_2();
 	if(success) {
 		printf("Game print success\n");
 	}
