@@ -48,7 +48,7 @@ Gamecommand* game_command_parse_line(const char* str){
 		// need to be checked
 		game_command->cmd = MOVE;
 
-		source->row = atoi(strtok(NULL, "<,"));
+		source->row = atoi(strtok(NULL, "<,")) - 1;
 		source->column = strtok(NULL, "<,>")[0];
 
 		printf("source is: %d, %c\n", source->row, source->column);
@@ -57,7 +57,7 @@ Gamecommand* game_command_parse_line(const char* str){
 		char* command_text = strtok(NULL, " \t\n");
 		printf("command is: %s\n", command_text);
 
-		target->row = atoi(strtok(NULL, "<,"));
+		target->row = atoi(strtok(NULL, "<,")) - 1;
 		target->column = strtok(NULL, "<,>")[0];
 
 		printf("target is: %d, %c\n", target->row, target->column);
