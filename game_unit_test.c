@@ -5,6 +5,7 @@
  *      Author: lironl
  */
 # include "game.h"
+# include "game_commands.h"
 
 static bool verify_game_obj(game* test_game) {
 	//test default fields
