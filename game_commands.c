@@ -9,6 +9,7 @@
 /* TODO -
  * there is a memory leak in this function - need to free locations in the end of use
  * in move, need to make sure that the input is legal
+ * need to free game_command
  *
 */
 Gamecommand* game_command_parse_line(const char* str){
@@ -21,7 +22,7 @@ Gamecommand* game_command_parse_line(const char* str){
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
 
-	Gamecommand* game_command;
+	Gamecommand* game_command = malloc(sizeof(Gamecommand));
 	game_command->validArg = false;
 
 	// char* command_int = strtok(NULL, " \t\n");
