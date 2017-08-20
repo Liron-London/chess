@@ -65,6 +65,7 @@ game* game_create() {
 	}
 	//initializing game.blacks and game.whites
 	newgame->whites[0].piece_type = WHITE_ROOK;
+	newgame->whites[0].alive = 1;
 	newgame->whites[1].piece_type = WHITE_KNIGHT;
 	newgame->whites[2].piece_type = WHITE_BISHOP;
 	newgame->whites[3].piece_type = WHITE_QUEEN;
@@ -82,8 +83,6 @@ game* game_create() {
 		printf("%d\n", i);
 		printf("%d\n", newgame->whites[i].alive);
 		printf("%c\n", newgame->whites[i].piece_type);
-		newgame->whites[i].color = 1;
-		printf("B");
 		newgame->whites[i].alive = 1;
 		printf("A");
 		newgame->whites[i].piece_location->column = (char)(i) + 'A';

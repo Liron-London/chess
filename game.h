@@ -28,7 +28,7 @@ typedef struct location_t {
 typedef struct piece_t {
     location* piece_location;
     char piece_type;
-    char color;
+    int color;
     int alive; //0 - piece was captured, 1 - piece is alive
 } piece;
 
