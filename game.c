@@ -115,7 +115,7 @@ game* game_create() {
 
 	for (int j=0; j < 16; j++) {
 		newgame->whites[j]->alive = 1;
-		newgame->whites[j]->piece_location->column = (char)(j) + 'A';
+		newgame->whites[j]->piece_location->column = (char)(j) - 'A';
 		if (newgame->whites[j]->piece_type != WHITE_PAWN) {
 			newgame->whites[j]->piece_location->row = 'A';
 		} else {
@@ -137,7 +137,7 @@ game* game_create() {
 	for (int i = 0; i < 16; i++) {
 		newgame->blacks[i]->alive = 1;
 		newgame->blacks[i]->color = 0;
-		newgame->blacks[i]->piece_location->column = (char)(i) + 'A';
+		newgame->blacks[i]->piece_location->column = (char)(i) - 'A';
 		if (newgame->blacks[i]->piece_type != BLACK_PAWN) {
 			newgame->blacks[i]->piece_location->row = 'H';
 		} else {
