@@ -19,7 +19,8 @@ typedef enum {
     SAVE,
     UNDO,
     RESET,
-    GAME_QUIT
+    GAME_QUIT,
+    ILLIGAL_COMMAND
 } game_command_type;
 
 typedef struct game_command_t {
@@ -33,6 +34,7 @@ typedef struct game_command_t {
  */
 Gamecommand* game_command_parse_line(const char* str);
 
+Gamecommand* game_command_create();
 /*
  * called right after user entered the command "START" and manges the game
  */

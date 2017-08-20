@@ -6,6 +6,19 @@
  */
 #include "game_commands.h"
 
+Gamecommand* game_command_create(){
+	Gamecommand* game_command = malloc(sizeof(game_command));
+	game_command->validArg = false;
+	game_command->cmd = ILLIGAL_COMMAND;
+	game_command->move = malloc(sizeof(move));
+	if (game_command->move == NULL){
+		free(game_command->move);
+		free(game_command);
+		return NULL;
+	}
+	return game_command;
+}
+
 /* TODO -
  * there is a memory leak in this function - need to free locations in the end of use
  * in move, need to make sure that the input is legal
@@ -26,7 +39,7 @@ Gamecommand* game_command_parse_line(const char* str){
 	location* source = malloc(sizeof(location));
 	location* target = malloc(sizeof(location));;
 
-	Gamecommand* game_command = malloc(sizeof(Gamecommand));
+	Gamecommand* game_command = game_command_create();
 	game_command->validArg = false;
 
 	// char* command_int = strtok(NULL, " \t\n");
