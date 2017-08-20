@@ -51,6 +51,10 @@ Gamecommand* game_command_parse_line(const char* str){
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
+		if (strcmp(command_text, 'to') != 0){
+			// game_command->is_val is false...
+			return game_command;
+		}
 		target->row = atoi(strtok(NULL, "<,")) - 1;
 		target->column = strtok(NULL, "<,>")[0];
 
