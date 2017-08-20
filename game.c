@@ -14,7 +14,7 @@
  */
 
 piece create_piece(){
-	piece piece = (piece*)malloc(sizeof(*piece));
+	piece piece = malloc(sizeof(*piece));
 	if (piece == NULL){
 		free(piece);
 		return NULL;
