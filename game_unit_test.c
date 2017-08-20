@@ -65,7 +65,7 @@ static bool move_pawns_check_1(){
 	printf("%d\n",game_command->move->source->row);
 	bool test = is_valid_move(game, game_command->move);
 	if (test != true){
-		printf("Bug in is_valid\n");
+		printf("Bug in is_valid_1\n");
 		return NULL;
 	}
 	move_piece(game, game_command->move, game->whites[8]);
@@ -75,6 +75,7 @@ static bool move_pawns_check_1(){
 }
 
 static bool move_pawns_check_2(){
+	printf("test2");
 	game* game = game_create();
 	print_board(game);
 	Gamecommand* game_command = malloc(sizeof(game_command));
@@ -83,7 +84,7 @@ static bool move_pawns_check_2(){
 	printf("%d\n",game_command->move->source->row);
 	bool test = is_valid_move(game, game_command->move);
 	if (test != true){
-		printf("Bug in is_valid\n");
+		printf("Bug in is_valid_2\n");
 		return NULL;
 	}
 	move_piece(game, game_command->move, game->whites[8]);
