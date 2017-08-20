@@ -72,6 +72,8 @@ game* game_create() {
 	for (int i=8; i<15;i++){
 		newgame->whites[i].piece_type = WHITE_PAWN;
 	}
+	printf("phase1\n");
+
 	for (int i = 0; i < 16; i++) {
 		newgame->whites[i].alive = 1;
 		newgame->whites[i].color = 1;
@@ -83,6 +85,8 @@ game* game_create() {
 		}
 	}
 
+
+	printf("phase2\n");
 	newgame->blacks[0].piece_type = BLACK_ROOK;
 	newgame->blacks[1].piece_type = BLACK_KNIGHT;
 	newgame->blacks[2].piece_type = BLACK_BISHOP;
