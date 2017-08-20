@@ -68,6 +68,7 @@ static bool move_pawns_check(){
 }
 
 int main() {
+	printf("start checking...\n");
 	bool success = game_create_test();
 	if(success) {
 		printf("Game create success\n");
@@ -89,7 +90,6 @@ int main() {
 	if(success) {
 		printf("Game print success\n");
 	}
-
 
 	if(!success) {
 		printf("Undetected error\n");
