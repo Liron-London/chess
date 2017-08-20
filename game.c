@@ -24,9 +24,29 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
+	printf("phase1\n");
+
+	for (int i = 0; i < 16; i++) {
+		printf("%d\n", i);
+		printf("%d\n", newgame->whites[i].alive);
+		newgame->whites[i].alive = 1;
+		printf("A");
+		newgame->whites[i].color = 1;
+		printf("B");
+		newgame->whites[i].piece_location->column = (char)(i) + 'A';
+		printf("C");
+		if (newgame->whites[i].piece_type != WHITE_PAWN) {
+			newgame->whites[i].piece_location->row = 0;
+		} else {
+			newgame->whites[i].piece_location->row = 1;
+		}
+	}
+
+
+
 	printf("basic vars were initialized well\n");
 
-	// initialize board
+	// initialize board //
 	// initialize whites
 	newgame->board[0][0] = WHITE_ROOK;
 	newgame->board[0][1] = WHITE_KNIGHT;
@@ -71,23 +91,6 @@ game* game_create() {
 	newgame->whites[7].piece_type = WHITE_ROOK;
 	for (int i=8; i<15;i++){
 		newgame->whites[i].piece_type = WHITE_PAWN;
-	}
-	printf("phase1\n");
-
-	for (int i = 0; i < 16; i++) {
-		printf("%d\n", i);
-		printf("%d\n", newgame->whites[i].alive);
-		newgame->whites[i].alive = (int)1;
-		printf("A");
-		newgame->whites[i].color = 1;
-		printf("B");
-		newgame->whites[i].piece_location->column = (char)(i) + 'A';
-		printf("C");
-		if (newgame->whites[i].piece_type != WHITE_PAWN) {
-			newgame->whites[i].piece_location->row = 0;
-		} else {
-			newgame->whites[i].piece_location->row = 1;
-		}
 	}
 
 
