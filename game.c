@@ -66,8 +66,6 @@ game* game_create() {
 		}
 	}
 
-	printf("basic vars were initialized well\n");
-
 	// initialize board //
 	// initialize whites
 	newgame->board[0][0] = WHITE_ROOK;
@@ -95,7 +93,6 @@ game* game_create() {
 		newgame->board[6][i] = BLACK_PAWN;
 	}
 
-	printf("initalize empty places\n");
 
 	for (int i=2; i<=5; i++){
 		for (int j=0; j<=7;j++){
@@ -115,20 +112,14 @@ game* game_create() {
 	for (int i=8; i<16;i++){
 		newgame->whites[i]->piece_type = WHITE_PAWN;
 	}
-	printf("phase1\n");
 
 	for (int j=0; j < 16; j++) {
-		printf("%d\n", j);
-		printf("%d\n", newgame->whites[j]->alive);
-		printf("%c\n", newgame->whites[j]->piece_type);
 		newgame->whites[j]->alive = 1;
-		printf("%c\n", (char)(j) + 'A');
-		newgame->whites[j]->piece_location->column = (char)((char)(j) + 'A');
-		printf("C\n");
+		newgame->whites[j]->piece_location->column = (char)(j) + 'A';
 		if (newgame->whites[j]->piece_type != WHITE_PAWN) {
-			newgame->whites[j]->piece_location->row = 0;
+			newgame->whites[j]->piece_location->row = 'A';
 		} else {
-			newgame->whites[j]->piece_location->row = 1;
+			newgame->whites[j]->piece_location->row = 'B';
 		}
 	}
 
@@ -148,15 +139,14 @@ game* game_create() {
 	for (int i = 0; i < 16; i++) {
 		newgame->blacks[i]->alive = 1;
 		newgame->blacks[i]->color = 0;
-		newgame->blacks[i]->piece_location->column = i;
+		newgame->blacks[i]->piece_location->column = (char)(i) + 'A';
 		if (newgame->blacks[i]->piece_type != BLACK_PAWN) {
-			newgame->blacks[i]->piece_location->row = 7;
+			newgame->blacks[i]->piece_location->row = 'H';
 		} else {
-			newgame->blacks[i]->piece_location->row = 6;
+			newgame->blacks[i]->piece_location->row = 'G';
 		}
 	}
 
-	printf("about to quit\n");
 	return newgame;
 }
 
