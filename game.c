@@ -474,6 +474,8 @@ bool is_valid_move(game* cur_game, move* cur_move){
 	if (color == 1){
 		for (int i=0; i<16; i++){
 			printf("piece type is %c \n", cur_game->whites[i]->piece_type);
+			printf("piece loc row is %d \n", cur_game->whites[i]->piece_location->row);
+			printf("piece loc col is %c \n", cur_game->whites[i]->piece_location->column);
 			if (cur_game->whites[i]->piece_type == source &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
