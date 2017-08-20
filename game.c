@@ -81,19 +81,19 @@ game* game_create() {
 	}
 	printf("phase1\n");
 
-	for (int i = 0; i < 16; i++) {
-		printf("%d\n", i);
+	for (int j=0; j < 16; j++) {
+		printf("%d\n", j);
 		newgame->whites[0].alive = 1;
-		printf("%d\n", newgame->whites[i].alive);
-		printf("%c\n", newgame->whites[i].piece_type);
-		newgame->whites[i].alive = 1;
+		printf("%d\n", newgame->whites[j].alive);
+		printf("%c\n", newgame->whites[j].piece_type);
+		newgame->whites[j].alive = 1;
 		printf("A");
-		newgame->whites[i].piece_location->column = (char)(i) + 'A';
+		newgame->whites[j].piece_location->column = (char)(i) + 'A';
 		printf("C");
-		if (newgame->whites[i].piece_type != WHITE_PAWN) {
-			newgame->whites[i].piece_location->row = 0;
+		if (newgame->whites[j].piece_type != WHITE_PAWN) {
+			newgame->whites[j].piece_location->row = 0;
 		} else {
-			newgame->whites[i].piece_location->row = 1;
+			newgame->whites[j].piece_location->row = 1;
 		}
 	}
 
