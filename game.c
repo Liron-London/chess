@@ -83,6 +83,7 @@ game* game_create() {
 
 	for (int i = 0; i < 16; i++) {
 		printf("%d\n", i);
+		newgame->whites[0].alive = 1;
 		printf("%d\n", newgame->whites[i].alive);
 		printf("%c\n", newgame->whites[i].piece_type);
 		newgame->whites[i].alive = 1;
