@@ -104,6 +104,8 @@ game* game_create() {
 			newgame->blacks[i].piece_location->row = 6;
 		}
 	}
+
+	printf("about to quit\n");
 	return newgame;
 }
 
