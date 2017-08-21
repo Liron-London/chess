@@ -716,6 +716,7 @@ bool is_check(game* cur_game){
 		if (enemy_type == BLACK_PAWN){
 			if ((enemy_loc->column = (king_loc->column) + 1) &&
 					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
+				printf("FAILED BECAUSE OF A BLACK PAWN!");
 				return true;
 			}
 		}
@@ -724,6 +725,7 @@ bool is_check(game* cur_game){
 		if (enemy_type == WHITE_PAWN){
 			if ((enemy_loc->column = (king_loc->column) - 1) &&
 					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
+				printf("FAILED BECAUSE OF A WHITE PAWN!");
 				return true;
 			}
 		}
@@ -734,6 +736,7 @@ bool is_check(game* cur_game){
 				((enemy_loc->column = (king_loc->column) - 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1)))||
 				((enemy_loc->row = (king_loc->row) + 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))||
 				((enemy_loc->row = (king_loc->row) - 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))){
+				printf("FAILED BECAUSE OF A KNIGHT!");
 				return true;
 			}
 		}
@@ -741,6 +744,7 @@ bool is_check(game* cur_game){
 		// bishop
 		if (enemy_type == BLACK_BISHOP || enemy_type == WHITE_BISHOP){
 			if (check_diagonals(cur_game, king_loc, enemy_loc) == true){
+				printf("FAILED BECAUSE OF A BISHOP!");
 				return true;
 			}
 		}
@@ -748,6 +752,7 @@ bool is_check(game* cur_game){
 		// rook
 		if (enemy_type == BLACK_ROOK || enemy_type == WHITE_ROOK){
 			if (check_parallels(cur_game, king_loc, enemy_loc) == true){
+				printf("FAILED BECAUSE OF A ROOK!");
 				return true;
 			}
 		}
@@ -756,6 +761,7 @@ bool is_check(game* cur_game){
 		if (enemy_type == BLACK_QUEEN || enemy_type == WHITE_QUEEN){
 			if ((check_parallels(cur_game, king_loc, enemy_loc) == true) ||
 				(check_diagonals(cur_game, king_loc, enemy_loc) == true)){
+				printf("FAILED BECAUSE OF A QUEEN!");
 				return true;
 			}
 		}
