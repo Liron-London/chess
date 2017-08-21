@@ -737,6 +737,8 @@ bool is_check(game* cur_game){
 				((enemy_loc->row = (king_loc->row) + 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))||
 				((enemy_loc->row = (king_loc->row) - 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))){
 				printf("FAILED BECAUSE OF A KNIGHT!\n");
+				printf("KING LOC IS: ROW: %d COL %c\n", king_loc->row, king_loc->column);
+				printf("KNIGHT LOC IS: ROW: %d COL %c\n", enemy_loc->row, enemy_loc->column);
 				return true;
 			}
 		}
