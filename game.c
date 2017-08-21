@@ -551,6 +551,7 @@ bool is_valid_move(game* cur_game, move* cur_move){
 			if (cur_game->whites[i]->piece_type == source &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
+				printf("made it! (whites)\n");
 				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
 				break;
 			}
@@ -562,7 +563,7 @@ bool is_valid_move(game* cur_game, move* cur_move){
 			if (cur_game->blacks[i]->piece_type == source &&
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
-				printf("made it! (whites)\n");
+				printf("made it! (blacks)\n");
 				valid_locs = valid_moves(cur_game, cur_game->blacks[i]);
 				break;
 			}
