@@ -101,8 +101,8 @@ game* game_create() {
 	newgame->board[0][2] = WHITE_BISHOP;
 	newgame->board[0][3] = WHITE_QUEEN;
 	newgame->board[0][4] = WHITE_KING;
-	newgame->board[0][5] = WHITE_KNIGHT;
-	newgame->board[0][6] = WHITE_BISHOP;
+	newgame->board[0][5] = WHITE_BISHOP;
+	newgame->board[0][6] = WHITE_KNIGHT;
 	newgame->board[0][7] = WHITE_ROOK;
 	for (int i=0; i<8;i++){
 		newgame->board[1][i] = WHITE_PAWN;
@@ -114,8 +114,8 @@ game* game_create() {
 	newgame->board[7][2] = BLACK_BISHOP;
 	newgame->board[7][3] = BLACK_QUEEN;
 	newgame->board[7][4] = BLACK_KING;
-	newgame->board[7][5] = BLACK_KNIGHT;
-	newgame->board[7][6] = BLACK_BISHOP;
+	newgame->board[7][5] = BLACK_BISHOP;
+	newgame->board[7][6] = BLACK_KNIGHT;
 	newgame->board[7][7] = BLACK_ROOK;
 	for (int i=0; i<8;i++){
 		newgame->board[6][i] = BLACK_PAWN;
