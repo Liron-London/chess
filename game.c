@@ -724,8 +724,8 @@ bool is_check(game* cur_game){
 
 		// black pawn
 		if (enemy_type == BLACK_PAWN){
-			if ((enemy_loc->column = (king_loc->column) + 1) &&
-					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
+			if ((enemy_loc->column == (king_loc->column) + 1) &&
+					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
 				printf("FAILED BECAUSE OF A BLACK PAWN!\n");
 				return true;
 			}
@@ -733,8 +733,8 @@ bool is_check(game* cur_game){
 
 		// white pawn
 		if (enemy_type == WHITE_PAWN){
-			if ((enemy_loc->column = (king_loc->column) - 1) &&
-					((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))){
+			if ((enemy_loc->column == (king_loc->column) - 1) &&
+					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
 				printf("FAILED BECAUSE OF A WHITE PAWN!\n");
 				return true;
 			}
@@ -742,10 +742,10 @@ bool is_check(game* cur_game){
 
 		// knight
 		if (enemy_type == BLACK_KNIGHT || enemy_type == WHITE_KNIGHT){
-			if (((enemy_loc->column = (king_loc->column) + 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1))) ||
-				((enemy_loc->column = (king_loc->column) - 2) && ((enemy_loc->row = (king_loc->row) + 1) ||(enemy_loc->row = (king_loc->row) - 1)))||
-				((enemy_loc->row = (king_loc->row) + 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))||
-				((enemy_loc->row = (king_loc->row) - 2) && ((enemy_loc->column = (king_loc->column) + 1) ||(enemy_loc->column = (king_loc->column) - 1)))){
+			if (((enemy_loc->column == (king_loc->column) + 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))) ||
+				((enemy_loc->column == (king_loc->column) - 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1)))||
+				((enemy_loc->row == (king_loc->row) + 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))||
+				((enemy_loc->row == (king_loc->row) - 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))){
 				printf("FAILED BECAUSE OF A KNIGHT!\n");
 				printf("KING LOC IS: ROW: %d COL %c\n", king_loc->row, king_loc->column);
 				printf("KNIGHT LOC IS: ROW: %d COL %c\n", enemy_loc->row, enemy_loc->column);
