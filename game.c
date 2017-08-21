@@ -159,7 +159,7 @@ game* game_create() {
 	newgame->blacks[5]->piece_type = BLACK_KNIGHT;
 	newgame->blacks[6]->piece_type = BLACK_BISHOP;
 	newgame->blacks[7]->piece_type = BLACK_ROOK;
-	for (int i=8; i<15;i++){
+	for (int i=8; i<16;i++){
 		newgame->blacks[i]->piece_type = BLACK_PAWN;
 	}
 	for (int i = 0; i < 16; i++) {
@@ -201,6 +201,10 @@ game* game_copy(game* cur_game) {
 	copy->difficulty = cur_game->difficulty;
 	copy->game_mode = cur_game->game_mode;
 	copy->user_color = cur_game->user_color;
+	for (int i=0; i<16; i++){
+		copy->whites[i] = cur_game->whites[i];
+		copy->blacks[i] = cur_game->blacks[i];
+	}
 	return copy;
 }
 
@@ -698,11 +702,13 @@ bool is_check(game* cur_game){
 
 	// white turn
 	if (cur_game->current_turn == 1){
+		printf("KING IS WHITE\n");
 		king_loc = cur_game->whites[4]->piece_location;
 		enemies = cur_game->blacks;
 	}
 	// black turn
 	else{
+		printf("KING IS BLACK\n");
 		king_loc = cur_game->blacks[4]->piece_location;
 		enemies = cur_game->whites;
 	}
