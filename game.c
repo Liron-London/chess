@@ -227,6 +227,7 @@ bool check_capturing(char piece_in_next_loc, int color) {
 }
 
 location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_piece) {
+	printf("In pawn valid moves\n");
 	int i = 0;
 	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
@@ -240,11 +241,16 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	if (type == WHITE_PAWN) {
 		if (row == 1 && cur_game->board[2][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[3][(int)(col-'A')] == EMPTY_ENTRY) {
 
+			printf("passed the basic checks...\n");
+
 			// make the move on a copy of the board and check if is_check == true
 			tmp_move->dest->row = 3;
 			tmp_move->dest->column = col;
-
 			move_piece(tmp_game, tmp_move, cur_piece);
+
+			printf("TMP_game: \n");
+			print_board(tmp_game);
+
 			if (is_check(tmp_game) == false){
 				valid_locs[i].row = 3;
 				valid_locs[i].column = col;
