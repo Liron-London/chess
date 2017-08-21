@@ -714,6 +714,10 @@ bool is_check(game* cur_game){
 	}
 
 	for (int i=0; i<16; i++){
+		printf("WHITE PIECE LOC IS: ROW: %d COL %c\n", cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
+		printf("BLACK PIECE IS: ROW: %d COL %c\n", cur_game->blacks[i]->piece_location->row, cur_game->blacks[i]->piece_location->column);
+
+
 		// putting location into variable for readability
 		location* enemy_loc = enemies[i]->piece_location;
 		char enemy_type = enemies[i]->piece_type;

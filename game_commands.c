@@ -35,7 +35,7 @@ Gamecommand* game_command_parse_line(const char* str){
 	char* command_text = strtok(str_copy, " \t\n");
 
 	location* source = malloc(sizeof(location));
-	location* target = malloc(sizeof(location));;
+	location* target = malloc(sizeof(location));
 
 	Gamecommand* game_command = game_command_create();
 	game_command->validArg = false;
