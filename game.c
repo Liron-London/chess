@@ -9,9 +9,37 @@
 
 /*
  * TODO
- * (1) need to change the size of the valid_moves array to 29 and initialize it to defuat locations (will make all checks much easier)
- * (2) in Is_valid_move there might be a memory leak in valid_locs (initalized as location* but needed to be location[64]
+ * (1) need to change the size of the valid_moves array to 29 and initialize it to default locations (will make all checks much easier)
+ * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
+
+move* create_move(){
+	move* move = malloc(sizeof(move));
+	if (move == NULL){
+		free(move);
+		return NULL;
+	}
+	move->source = malloc(sizeof(location));
+	if (move->source == NULL){
+		free(move->source);
+		free(move);
+		return NULL;
+	}
+	move->dest = malloc(sizeof(location));
+	if (move->source == NULL){
+		free(move->dest);
+		free(move->source);
+		free(move);
+		return NULL;
+	}
+	return move;
+}
+
+void destroy_move(move* move){
+	free(move->dest);
+	free(move->source);
+	free(move);
+}
 
 piece* create_piece(){
 	piece* piece = malloc(sizeof(piece));
@@ -204,96 +232,126 @@ location* pawn_valid_moves(	location* valid_locs, game* cur_game, piece* cur_pie
 	int row = cur_piece->piece_location->row;
 	char col = cur_piece->piece_location->column;
 
-	const location* king_loc;
-	if (cur_piece->color == 1) {
-		king_loc = cur_game->whites[4]->piece_location;
-	} else {
-		king_loc = cur_game->blacks[4]->piece_location;
-	}
-	/*
-	 * BAD EXAMPLE -- TODO - Need to write consturctors and destructors for location and move!!!
-	 */
+	// those variables will use to check if is_check is false or true
+	game* tmp_game = game_copy(cur_game);
+	move* tmp_move = create_move();
+	tmp_move->source = cur_piece->piece_location; // source_location is always the piece location
+
 	if (type == WHITE_PAWN) {
 		if (row == 1 && cur_game->board[2][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[3][(int)(col-'A')] == EMPTY_ENTRY) {
-			game* tmp_copy = game_copy(cur_game);
-			move* tmp_move = malloc(sizeof(move));
-			location* s = malloc(sizeof(location));
-			location* t = malloc(sizeof(location));
 
-			s = cur_piece->piece_location;
-			t->row = 3;
-			t->column = col;
-			tmp_move->source = s;
-			tmp_move->dest = t;
-			move_piece(tmp_copy, tmp_move, cur_piece);
-			if (is_check(tmp_copy) == false){
+			// make the move on a copy of the board and check if is_check == true
+			tmp_move->dest->row = 3;
+			tmp_move->dest->column = col;
+
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
 				valid_locs[i].row = 3;
 				valid_locs[i].column = col;
 				i++;
 			}
-			free(t);
-			free(s);
-			free(tmp_move);
-			free(tmp_copy);
+			tmp_game = cur_game;
 		}
 		if (row <= 7 && cur_game->board[row + 1][(int)(col-'A')] == EMPTY_ENTRY) {
-			// TODO -- need to add is_check check before we add something to valid_locs
-			valid_locs[i].row = row + 1;
-			valid_locs[i].column = col;
-			i++;
+
+			tmp_move->dest->row = row + 1;
+			tmp_move->dest->column = col;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = row + 1;
+				valid_locs[i].column = col;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
 		// if board[i][j] is a capital letter it's a black piece
-		// TODO -- need to add is_check check before we add something to valid_locs
 		if (row <= 7 && col <= 'G' &&
 				cur_game->board[row+1][(int)(col-'A')+1] <= 'Z' &&
 				cur_game->board[row+1][(int)(col-'A')+1] >= 'A') {
-			valid_locs[i].row = row +1;
-			valid_locs[i].column = col +1;
-			i++;
+
+			tmp_move->dest->row = row + 1;
+			tmp_move->dest->column = col + 1;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = row +1;
+				valid_locs[i].column = col +1;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
-		// TODO -- need to add is_check check before we add something to valid_locs
+
 		if (row <= 7 && col >= 'B' &&
 				cur_game->board[row+1][(int)(col-'A')-1] <= 'Z' &&
 				cur_game->board[row+1][(int)(col-'A')-1] >= 'A') {
-			valid_locs[i].row = row +1;
-			valid_locs[i].column = col - 1;
-			i++;
+
+			tmp_move->dest->row = row + 1;
+			tmp_move->dest->column = col - 1;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = row +1;
+				valid_locs[i].column = col - 1;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
 	}
 
 	if (type == BLACK_PAWN) {
-		// TODO -- need to add is_check check before we add something to valid_locs
 		if (row == 7 && cur_game->board[6][(int)(col-'A')] == EMPTY_ENTRY && cur_game->board[5][(int)(col-'A')] == EMPTY_ENTRY) {
-			valid_locs[i].row = 5;
-			valid_locs[i].column = col;
-			i++;
+			tmp_move->dest->row = 5;
+			tmp_move->dest->column = col;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = 5;
+				valid_locs[i].column = col;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
-		// TODO -- need to add is_check check before we add something to valid_locs
 		if (row >= 2 && cur_game->board[row - 1][(int)(col-'A')] == EMPTY_ENTRY) {
-			valid_locs[i].row = row - 1;
-			valid_locs[i].column = col;
-			i++;
+
+			tmp_move->dest->row = row-1;
+			tmp_move->dest->column = col;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = row - 1;
+				valid_locs[i].column = col;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
 		// if board[i][j] is a lowercase character it's a white piece
 		if (row >= 2 && col >= 'B' &&
 				cur_game->board[row - 1][col - 1] <= 'z' &&
 				cur_game->board[row - 1][col - 1] >= 'a') {
-			valid_locs[i].row = row -1;
-			valid_locs[i].column = col -1;
-			i++;
+			tmp_move->dest->row = row-1;
+			tmp_move->dest->column = col-1;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = row -1;
+				valid_locs[i].column = col -1;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
 		if (row >= 2 && col <= 'G' &&
 				cur_game->board[row + 1][col - 1] <= 'z' &&
 				cur_game->board[row + 1][col - 1] >= 'a') {
-			valid_locs[i].row = row +1;
-			valid_locs[i].column = col - 1;
-			i++;
+			tmp_move->dest->row = row+1;
+			tmp_move->dest->column = col-1;
+			move_piece(tmp_game, tmp_move, cur_piece);
+			if (is_check(tmp_game) == false){
+				valid_locs[i].row = row +1;
+				valid_locs[i].column = col - 1;
+				i++;
+			}
+			tmp_game = cur_game;
 		}
 	}
-	if (king_loc == NULL){
-		printf("Gal added this line - king loc was not in use and it caused errors");
-	}
 
+	// freeing tmp_move and tmp_game
+	free(tmp_move);
+	free(tmp_game);
 	return valid_locs;
 }
 
