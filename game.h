@@ -22,7 +22,7 @@
 
 typedef struct location_t {
     int row;
-    char column;
+    int column;
 } location;
 
 typedef struct piece_t {
@@ -48,7 +48,7 @@ typedef struct game_t {
 typedef struct move_t {
 	location* source;
 	location* dest;
-}move;
+} move;
 
 
 /*
