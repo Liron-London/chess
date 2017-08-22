@@ -230,6 +230,30 @@ bool check_capturing(char piece_in_next_loc, int color) {
 	return false;
 }
 
+/*
+ * creates a copy of the game, performs the move, calls is_check, updates
+ * location array
+ */
+bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece,
+		int next_row, int next_col, int i) {
+	bool valid_move = false;
+	game* tmp_game = game_copy(cur_game);
+	move* tmp_move = create_move();
+	tmp_move->source = cur_piece->piece_location; // source_location is always the piece location
+
+	tmp_move->dest->row = next_row;
+	tmp_move->dest->column = next_col;
+	move_piece(tmp_game, tmp_move, cur_piece);
+	if (is_check(tmp_game) == false) {
+		valid_locs[i].row = next_row;
+		valid_locs[i].column = next_col;
+		valid_move = true;
+	}
+	free(tmp_move);
+	free(tmp_game);
+	return valid_move;
+}
+
 location* pawn_valid_moves(location* valid_locs, game* cur_game, piece* cur_piece) {
 	printf("In pawn valid moves\n");
 	int i = 0;
@@ -249,121 +273,65 @@ location* pawn_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 			printf("passed the basic checks...\n"); // debug
 
 			// make the move on a copy of the board and check if is_check == true
-			tmp_move->dest->row = 3;
-			tmp_move->dest->column = col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-
-			printf("TMP_game: \n"); //debug
-			print_board(tmp_game); //debug
-
-			if (is_check(tmp_game) == false) {
-				valid_locs[i].row = 3;
-				valid_locs[i].column = col;
+			if(is_check_aux(valid_locs, cur_game, cur_piece, 3, col, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 		if (row < 7 && cur_game->board[row + 1][col] == EMPTY_ENTRY) {
-
-			tmp_move->dest->row = row + 1;
-			tmp_move->dest->column = col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false){
-				valid_locs[i].row = row + 1;
-				valid_locs[i].column = col;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 		// if board[i][j] is a capital letter it's a black piece
 		if (row < 7 && col < 7 &&
 				cur_game->board[row + 1][col + 1] <= 'Z' &&
 				cur_game->board[row + 1][col + 1] >= 'A') {
 
-			tmp_move->dest->row = row + 1;
-			tmp_move->dest->column = col + 1;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false) {
-				valid_locs[i].row = row + 1;
-				valid_locs[i].column = col + 1;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col + 1, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 
 		if (row < 7 && col > 0 &&
 				cur_game->board[row + 1][col - 1] <= 'Z' &&
 				cur_game->board[row + 1][col - 1] >= 'A') {
-
-			tmp_move->dest->row = row + 1;
-			tmp_move->dest->column = col - 1;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false){
-				valid_locs[i].row = row + 1;
-				valid_locs[i].column = col - 1;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col - 1, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 	}
 
 	if (type == BLACK_PAWN) {
 		if (row == 7 && cur_game->board[6][col] == EMPTY_ENTRY &&
 				cur_game->board[5][col] == EMPTY_ENTRY) {
-			tmp_move->dest->row = 5;
-			tmp_move->dest->column = col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false){
-				valid_locs[i].row = 5;
-				valid_locs[i].column = col;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, 5, col, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 
 		if (row >= 2 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
-			tmp_move->dest->row = row - 1;
-			tmp_move->dest->column = col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false) {
-				valid_locs[i].row = row - 1;
-				valid_locs[i].column = col;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 		// if board[i][j] is a lowercase character it's a white piece
 		if (row > 0 && col > 0 &&
 				cur_game->board[row - 1][col - 1] <= 'z' &&
 				cur_game->board[row - 1][col - 1] >= 'a') {
-			tmp_move->dest->row = row - 1;
-			tmp_move->dest->column = col - 1;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false){
-				valid_locs[i].row = row - 1;
-				valid_locs[i].column = col - 1;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col - 1, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
+
 		if (row > 0 && col < 7 &&
 				cur_game->board[row - 1][col + 1] <= 'z' &&
 				cur_game->board[row - 1][col + 1] >= 'a') {
-			tmp_move->dest->row = row - 1;
-			tmp_move->dest->column = col + 1;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false){
-				valid_locs[i].row = row - 1;
-				valid_locs[i].column = col + 1;
+			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col + 1, i)) {
 				i++;
 			}
-			tmp_game = cur_game;
 		}
 	}
 
-	// freeing tmp_move and tmp_game
-	free(tmp_move);
-	free(tmp_game);
 	return valid_locs;
 }
 
@@ -449,23 +417,12 @@ location* rook_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 	int color = cur_piece->color;
 	int next_row, next_col;
 
-	game* tmp_game = game_copy(cur_game);
-	move* tmp_move = create_move();
-	tmp_move->source = cur_piece->piece_location; // source_location is always the piece location
-
 	//check upwards
 	next_row = row + 1;
 	next_col = col;
 	while (next_row <= 8 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
-		tmp_move->dest->row = next_row;
-		tmp_move->dest->column = next_col;
-		move_piece(tmp_game, tmp_move, cur_piece);
-		if (is_check(tmp_game) == false) {
-			valid_locs[i].row = next_row;
-			valid_locs[i].column = next_col;
-		}
-		tmp_game = cur_game;
+		is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i);
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
 		}
@@ -478,13 +435,8 @@ location* rook_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 		next_col = col;
 		while (next_row >= 1 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 				color_by_type(cur_game->board[next_row][next_col]) != color)) {
-			tmp_move->dest->row = next_row;
-			tmp_move->dest->column = next_col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false) {
-				valid_locs[i].row = next_row;
-				valid_locs[i].column = next_col;
-			}
+			is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i);
+
 			if (check_capturing(cur_game->board[next_row][next_col], color)) {
 				break;
 			}
@@ -497,13 +449,8 @@ location* rook_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 		next_col = col + 1;
 		while (next_col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 				color_by_type(cur_game->board[next_row][next_col]) != color)) {
-			tmp_move->dest->row = next_row;
-			tmp_move->dest->column = next_col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false) {
-				valid_locs[i].row = next_row;
-				valid_locs[i].column = next_col;
-			}
+			is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i);
+
 			if (check_capturing(cur_game->board[next_row][next_col], color)) {
 				break;
 			}
@@ -516,13 +463,8 @@ location* rook_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 		next_col = col - 1;
 		while (next_col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 				color_by_type(cur_game->board[next_row][next_col]) != color)) {
-			tmp_move->dest->row = next_row;
-			tmp_move->dest->column = next_col;
-			move_piece(tmp_game, tmp_move, cur_piece);
-			if (is_check(tmp_game) == false) {
-				valid_locs[i].row = next_row;
-				valid_locs[i].column = next_col;
-			}
+			is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i);
+
 			if (check_capturing(cur_game->board[next_row][next_col], color)) {
 				break;
 			}
