@@ -15,7 +15,7 @@
 
 piece* location_to_piece(game* game, location* loc){
 	char type = game->board[loc->row][loc->column];
-	if (type == 'EMPTY_ENTRY'){
+	if (type == EMPTY_ENTRY){
 		return NULL;
 	}
 
