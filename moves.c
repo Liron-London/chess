@@ -392,7 +392,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 // need to find a way to prevent the bishop moves from overriding the rook moves
 location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
-	location** new_ptr_to_valid_locs;
+	location* new_ptr_to_valid_locs;
 	for (int i = 0; i < 64; i++) {
 		if (valid_locs[i] == NULL) {
 			new_ptr_to_valid_locs = valid_locs[i];
