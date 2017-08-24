@@ -50,6 +50,7 @@ typedef struct move_t {
 	location* dest;
 } move;
 
+piece* location_to_piece(game* game, location* loc);
 
 /*
  * create an "empty" piece

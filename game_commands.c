@@ -123,7 +123,7 @@ int game_play(game* game){
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
 			if (is_valid_move(game, game_command->move) == true){
-				cur_piece = location_to_piece(game_command->move->source);
+				cur_piece = location_to_piece(game, game_command->move->source);
 				move_piece(game, game_command->move, cur_piece);
 				printf("valid move!\n");
 			}
