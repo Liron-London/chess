@@ -108,7 +108,7 @@ int game_play(game* game){
 	while (1){
 		char* command_str = (char*) malloc(1024*sizeof(char));
 		printf("please choose a command\n"); // need to be changed
-		scanf("%1024[^\n]", command_str);
+		scanf(" %1024[^\n]", command_str);
 		printf("DEBUG: scanf passed\n");
 		printf("DEBUG: text is %s\n", command_str);
 		game_command = game_command_parse_line(command_str);
