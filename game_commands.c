@@ -140,7 +140,7 @@ int game_play(game* game){
 			}
 
 			// update history
-			return 1;
+			// return 1;
 		}
 
 	}
