@@ -411,6 +411,7 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
+	printf("DEBUG: in is_valid_move\n");
 	int color;
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 	location* valid_locs; // list of all the valid location of the relevant piece

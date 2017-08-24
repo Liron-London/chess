@@ -122,6 +122,7 @@ int game_play(game* game){
 		// MOVE
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
+			printf("DEBUG: in the while loop\n");
 			if (is_valid_move(game, game_command->move) == true){
 				printf("DEBUG: is_valid_move is OK\n");
 				cur_piece = location_to_piece(game, game_command->move->source);
