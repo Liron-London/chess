@@ -22,6 +22,35 @@ bool check_capturing(char piece_in_next_loc, int color) {
 }
 
 
+move* create_move(){
+	move* move = malloc(sizeof(move));
+	if (move == NULL){
+		free(move);
+		return NULL;
+	}
+	move->source = malloc(sizeof(location));
+	if (move->source == NULL){
+		free(move->source);
+		free(move);
+		return NULL;
+	}
+	move->dest = malloc(sizeof(location));
+	if (move->source == NULL){
+		free(move->dest);
+		free(move->source);
+		free(move);
+		return NULL;
+	}
+	return move;
+}
+
+void destroy_move(move* move){
+	free(move->dest);
+	free(move->source);
+	free(move);
+}
+
+
 bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int i) {
 	bool valid_move = false;

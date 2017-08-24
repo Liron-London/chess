@@ -19,6 +19,10 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece);
 */
 location* valid_moves(game* cur_game, piece* cur_piece);
 
+move* create_move();
+
+void destroy_move(move* move);
+
 /*
  * creates a copy of the game, performs the move, calls is_check, updates
  * location array

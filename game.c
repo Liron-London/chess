@@ -13,34 +13,6 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
 
-move* create_move(){
-	move* move = malloc(sizeof(move));
-	if (move == NULL){
-		free(move);
-		return NULL;
-	}
-	move->source = malloc(sizeof(location));
-	if (move->source == NULL){
-		free(move->source);
-		free(move);
-		return NULL;
-	}
-	move->dest = malloc(sizeof(location));
-	if (move->source == NULL){
-		free(move->dest);
-		free(move->source);
-		free(move);
-		return NULL;
-	}
-	return move;
-}
-
-void destroy_move(move* move){
-	free(move->dest);
-	free(move->source);
-	free(move);
-}
-
 piece* create_piece(){
 	piece* piece = malloc(sizeof(piece));
 	if (piece == NULL){
