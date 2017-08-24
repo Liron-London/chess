@@ -104,7 +104,7 @@ int game_play(game* game){
 	piece* cur_piece;
 
 	while (1){
-		printf("please choose a command"); // need to be changed
+		printf("please choose a command\n"); // need to be changed
 		scanf("%s", command_str);
 		game_command = game_command_parse_line(command_str);
 
@@ -125,6 +125,7 @@ int game_play(game* game){
 			if (is_valid_move(game, game_command->move) == true){
 				cur_piece = location_to_piece(game, game_command->move->source);
 				move_piece(game, game_command->move, cur_piece);
+				print_board(game);
 				printf("valid move!\n");
 			}
 

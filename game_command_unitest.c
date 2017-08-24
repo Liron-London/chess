@@ -25,6 +25,7 @@ static bool basic_check(){
 
 static bool game_play_check(){
 	game* cur_game = game_create();
+	print_board(cur_game);
 	game_play(cur_game);
 	return true;
 }
