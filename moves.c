@@ -80,8 +80,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	printf("DEBUG: after destroy piece!\n");
 	destroy_move(tmp_move);
 	printf("DEBUG: after destroy move!\n");
-	// game_destroy(tmp_game);
-	// printf("DEBUG: after destroy game!\n");
+	game_destroy(tmp_game);
+	printf("DEBUG: after destroy game!\n");
 	return valid_move;
 }
 
