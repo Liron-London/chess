@@ -30,7 +30,7 @@ piece* copy_piece(piece* cur_piece);
  * creates a copy of the game, performs the move, calls is_check, updates
  * location array
  */
-bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece, int next_row, int next_col, int i);
+bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece, int next_row, int next_col, int i);
 
 /*
  *  given a move and a board says if the move is legal or not

@@ -407,7 +407,7 @@ location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_p
 location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	printf("In king valid moves\n"); //debug
 	int i = 0;
-	char type = cur_piece->piece_type;
+	// char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
 	int color = cur_piece->color;
