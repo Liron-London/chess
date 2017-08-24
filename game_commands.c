@@ -106,7 +106,7 @@ int game_play(game* game){
 	piece* cur_piece;
 
 	while (1){
-		char command_str = malloc(1024*sizeof(char));
+		char* command_str = malloc(1024*sizeof(char));
 		printf("please choose a command\n"); // need to be changed
 		scanf("%1024[^\n]", command_str);
 		printf("DEBUG: scanf passed\n");
