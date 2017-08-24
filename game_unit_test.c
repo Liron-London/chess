@@ -4,8 +4,9 @@
  *  Created on: Aug 12, 2017
  *      Author: lironl
  */
-# include "game.h"
-# include "game_commands.h"
+
+#include "game_commands.h"
+#include "moves.h"
 
 static bool verify_game_obj(game* test_game) {
 	//test default fields
