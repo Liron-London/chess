@@ -367,6 +367,7 @@ bool is_check(game* cur_game){
 	else{
 		printf("KING IS BLACK\n");
 		king_loc = cur_game->blacks[4]->piece_location;
+		printf("DEBUG: king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
 		enemies = cur_game->whites;
 	}
 
@@ -374,7 +375,9 @@ bool is_check(game* cur_game){
 
 		// putting location into variable for readability
 		location* enemy_loc = enemies[i]->piece_location;
+		printf("DEBUG: enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 		char enemy_type = enemies[i]->piece_type;
+		printf("DEBUG: enemy type %c\n",enemy_type);
 
 		// black pawn
 		if (enemy_type == BLACK_PAWN){
