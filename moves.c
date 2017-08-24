@@ -50,17 +50,31 @@ void destroy_move(move* move){
 	free(move);
 }
 
+piece* copy_piece(piece* cur_piece){
+	piece* new_piece = create_piece();
+	new_piece->alive = cur_piece->alive;
+	new_piece->color = cur_piece->color;
+	new_piece->piece_location = cur_piece->piece_location;
+	new_piece->piece_type = cur_piece->piece_type;
+	return new_piece;
+}
+
+void destroy_piece(piece* cur_piece){
+	free(cur_piece->piece_location);
+	free(cur_piece);
+}
 
 bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int i) {
 	bool valid_move = false;
 	game* tmp_game = game_copy(cur_game);
 	move* tmp_move = create_move();
+	piece* tmp_piece = copy_piece(cur_piece);
 	tmp_move->source = cur_piece->piece_location; // source_location is always the piece location
 
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
-	move_piece(tmp_game, tmp_move, cur_piece);
+	move_piece(tmp_game, tmp_move, tmp_piece);
 	if (is_check(tmp_game) == false) {
 		valid_locs[i].row = next_row;
 		valid_locs[i].column = next_col;
@@ -68,6 +82,7 @@ bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece,
 	}
 	free(tmp_move);
 	free(tmp_game);
+	destroy_piece(tmp_piece);
 	return valid_move;
 }
 
@@ -114,14 +129,14 @@ location* pawn_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 	}
 
 	if (type == BLACK_PAWN) {
-		if (row == 7 && cur_game->board[6][col] == EMPTY_ENTRY &&
-				cur_game->board[5][col] == EMPTY_ENTRY) {
-			if (is_check_aux(valid_locs, cur_game, cur_piece, 5, col, i)) {
+		if (row == 6 && cur_game->board[5][col] == EMPTY_ENTRY &&
+				cur_game->board[4][col] == EMPTY_ENTRY) {
+			if (is_check_aux(valid_locs, cur_game, cur_piece, 4, col, i)) {
 				i++;
 			}
 		}
 
-		if (row >= 2 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
+		if (row >= 1 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col, i)) {
 				i++;
 			}
@@ -497,11 +512,12 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
+	printf("DEBUG: in is_valid_move\n");
 	int color;
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 	location* valid_locs; // list of all the valid location of the relevant piece
 
-	printf("DEBUG: ROW IS %d\n COL IS %d\n", cur_move->source->row, cur_move->source->column);
+	printf("DEBUG: ROW IS %d COL IS %d\n", cur_move->source->row, cur_move->source->column);
 
 	// source is empty
 	if (source == EMPTY_ENTRY){
@@ -509,18 +525,17 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	}
 
 	// update the color of the piece in the source
-	if (source < 'z'){
-		color = 1;
-	}
-	else{
-		color = 0;
-	}
+	// color = color_by_type(source);
 
-	// source is enemy piece
+	printf("DEBUG: CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
+	/*
 	if ((cur_game->current_turn == 1 && cur_game->user_color == 0) ||
 			(cur_game->current_turn == 0 && cur_game->user_color == 1)) {
 		return false;
 	}
+	*/
+
+	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 
 	// update valid_moves
 	if (color == 1){
@@ -557,6 +572,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 }
 
 void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
+	printf("DEBUG: in move piece\n");
 	// change the turn
 	change_turn(cur_game);
 

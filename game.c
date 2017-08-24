@@ -14,14 +14,19 @@
  */
 
 piece* location_to_piece(game* game, location* loc){
+	// printf("DEBUG: in location_to_piece\n");
+	printf("DEBUG: location is: ROW %d, COL %d\n", loc->row, loc->column);
 	char type = game->board[loc->row][loc->column];
-	if (type == 'EMPTY_ENTRY'){
+	printf("DEBUG: type is %c\n", type);
+	if (type == EMPTY_ENTRY){
 		return NULL;
 	}
 
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
-			if (game->whites[i]->piece_location == loc){
+			printf("DEBUG: piece location is: ROW %d, COL %d\n", game->whites[i]->piece_location->row, game->whites[i]->piece_location->column);
+			if (game->whites[i]->piece_location->row == loc->row && game->whites[i]->piece_location->column == loc->column){
+				printf("DEBUG: NON-NULL is returned\n");
 				return game->whites[i];
 			}
 		}
@@ -29,11 +34,14 @@ piece* location_to_piece(game* game, location* loc){
 
 	else{
 		for (int i=0; i<16;i++){
-			if (game->blacks[i]->piece_location == loc){
+			if (game->blacks[i]->piece_location->row == loc->row && game->blacks[i]->piece_location->column == loc->column){
+				printf("DEBUG: NON-NULL is returned\n");
 				return game->blacks[i];
 			}
 		}
 	}
+	printf("DEBUG: NULL is returned\n");
+	return NULL;
 }
 
 piece* create_piece(){
@@ -131,7 +139,6 @@ game* game_create() {
 	newgame->whites[5]->piece_type = WHITE_KNIGHT;
 	newgame->whites[6]->piece_type = WHITE_BISHOP;
 	newgame->whites[7]->piece_type = WHITE_ROOK;
-	newgame->whites[0]->alive = 1;
 	for (int i=8; i<16;i++){
 		newgame->whites[i]->piece_type = WHITE_PAWN;
 	}

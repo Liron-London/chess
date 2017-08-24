@@ -5,6 +5,7 @@
  *      Author: Gal
  */
 
+#include "moves.h"
 #include "game_commands.h"
 #include <stdbool.h>
 
@@ -14,17 +15,18 @@ static bool basic_check(){
 	Gamecommand* game_command;
 
 	game_command = game_command_parse_line("move <2,A> to <3,B>");
-	printf("%d\n", game_command.move->source->row);
-	printf("%c\n", game_command.move->source->column);
-	printf("%d\n", game_command.move->dest->row);
-	printf("%c\n", game_command.move->dest->column);
+	printf("%d\n", game_command->move->source->row);
+	printf("%c\n", game_command->move->source->column);
+	printf("%d\n", game_command->move->dest->row);
+	printf("%c\n", game_command->move->dest->column);
 
 	return true;
 }
 
 static bool game_play_check(){
 	game* cur_game = game_create();
-	game_play();
+	print_board(cur_game);
+	game_play(cur_game);
 	return true;
 }
 
