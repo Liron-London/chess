@@ -34,6 +34,7 @@ piece* location_to_piece(game* game, location* loc){
 			}
 		}
 	}
+	return NULL;
 }
 
 piece* create_piece(){
