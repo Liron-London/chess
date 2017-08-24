@@ -141,7 +141,7 @@ int game_play(game* game){
 			}
 
 			else{
-				printf("DEBUG: move is not valid!\n")
+				printf("DEBUG: move is not valid!\n");
 			}
 
 			// update history
