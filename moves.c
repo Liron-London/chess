@@ -50,17 +50,31 @@ void destroy_move(move* move){
 	free(move);
 }
 
+piece* copy_piece(piece* cur_piece){
+	piece* new_piece = create_piece();
+	new_piece->alive = cur_piece->alive;
+	new_piece->color = cur_piece->color;
+	new_piece->piece_location = cur_piece->piece_location;
+	new_piece->piece_type = cur_piece->piece_type;
+	return new_piece;
+}
+
+void destroy_piece(piece* cur_piece){
+	free(cur_piece->piece_location);
+	free(cur_piece);
+}
 
 bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int i) {
 	bool valid_move = false;
 	game* tmp_game = game_copy(cur_game);
 	move* tmp_move = create_move();
+	piece* tmp_piece = copy_piece(cur_piece);
 	tmp_move->source = cur_piece->piece_location; // source_location is always the piece location
 
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
-	move_piece(tmp_game, tmp_move, cur_piece);
+	move_piece(tmp_game, tmp_move, tmp_piece);
 	if (is_check(tmp_game) == false) {
 		valid_locs[i].row = next_row;
 		valid_locs[i].column = next_col;
@@ -68,6 +82,7 @@ bool is_check_aux(location* valid_locs, game* cur_game, piece* cur_piece,
 	}
 	free(tmp_move);
 	free(tmp_game);
+	destroy_piece(tmp_piece);
 	return valid_move;
 }
 

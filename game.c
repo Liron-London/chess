@@ -139,7 +139,6 @@ game* game_create() {
 	newgame->whites[5]->piece_type = WHITE_KNIGHT;
 	newgame->whites[6]->piece_type = WHITE_BISHOP;
 	newgame->whites[7]->piece_type = WHITE_ROOK;
-	newgame->whites[0]->alive = 1;
 	for (int i=8; i<16;i++){
 		newgame->whites[i]->piece_type = WHITE_PAWN;
 	}
