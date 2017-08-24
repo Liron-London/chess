@@ -212,6 +212,10 @@ game* game_copy(game* cur_game) {
 
 void game_destroy (game* cur_game) {
 	//array_list_destroy(cur_game->history);
+	for (int i=0; i<16; i++){
+		destroy_piece(cur_game->whites[i]);
+		destroy_piece(cur_game->blacks[i]);
+	}
 	free(cur_game->blacks);
 	free(cur_game->whites);
 	free(cur_game);
@@ -444,5 +448,6 @@ bool is_check(game* cur_game){
 			}
 		}
 	}
+	printf("DEBUG: check finished correctly\n");
 	return false;
 }
