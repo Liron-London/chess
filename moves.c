@@ -80,9 +80,9 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		valid_locs[i]->column = next_col;
 		valid_move = true;
 	}
-	free(tmp_move);
-	free(tmp_game);
 	destroy_piece(tmp_piece);
+	destroy_move(tmp_move);
+	game_destroy(tmp_game);
 	return valid_move;
 }
 
