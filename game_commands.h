@@ -8,11 +8,11 @@
 #ifndef GAME_COMMANDS_H_
 #define GAME_COMMANDS_H_
 
-#include "game.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "moves.h"
 
 typedef enum {
     MOVE,

@@ -6,16 +6,12 @@
  */
 
 #include "game_commands.h"
-#include "game.h"
 #include <stdbool.h>
-
 
 static bool basic_check(){
 	// game* game = game_create();
 	return true;
 	Gamecommand* game_command;
-
-	printf("WTF IS GOING ON\n");
 
 	game_command = game_command_parse_line("move <2,A> to <3,B>");
 	printf("%d\n", game_command.move->source->row);
