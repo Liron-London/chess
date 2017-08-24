@@ -412,7 +412,7 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
 	int color;
-	char source = cur_game->board[cur_move->source->row][(int)(cur_move->source->column-'A')];
+	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 	location* valid_locs; // list of all the valid location of the relevant piece
 
 	// source is empty
@@ -475,6 +475,6 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 	cur_piece->piece_location = cur_move->dest;
 
 	// update the board
-	cur_game->board[cur_move->source->row][(int)(cur_move->source->column - 'A')] = EMPTY_ENTRY;
-	cur_game->board[cur_move->dest->row][(int)(cur_move->dest->column - 'A')] = cur_piece->piece_type;
+	cur_game->board[cur_move->source->row][cur_move->source->column] = EMPTY_ENTRY;
+	cur_game->board[cur_move->dest->row][cur_move->dest->column] = cur_piece->piece_type;
 }
