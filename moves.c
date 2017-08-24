@@ -78,6 +78,8 @@ location* pawn_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
 
+	printf("DEBUG: ROW IS %d\n COL IS %d\n", row, col);
+
 	if (type == WHITE_PAWN) {
 		if (row == 1 && cur_game->board[2][col] == EMPTY_ENTRY &&
 				cur_game->board[3][col] == EMPTY_ENTRY) {
