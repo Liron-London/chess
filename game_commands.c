@@ -45,7 +45,7 @@ Gamecommand* game_command_parse_line(const char* str){
 	// char* command_int = strtok(NULL, " \t\n");
 
 	if (strcmp(command_text, "move") == 0){
-		// need to be checked
+		printf("DEBUG: detected that command is move\n");
 		game_command->cmd = MOVE;
 
 		cur_move->source->row = atoi(strtok(NULL, "<, ")) - 1;
@@ -53,6 +53,7 @@ Gamecommand* game_command_parse_line(const char* str){
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
+		printf("DEBUG: command_text is: %s\n", command_text);
 		if (strcmp(command_text, "to") != 0){
 			// game_command->is_val is false...
 			return game_command;
