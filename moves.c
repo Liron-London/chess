@@ -76,8 +76,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	tmp_move->dest->column = next_col;
 	move_piece(tmp_game, tmp_move, tmp_piece);
 	if (is_check(tmp_game) == false) {
-		valid_locs[i].row = next_row;
-		valid_locs[i].column = next_col;
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
 		valid_move = true;
 	}
 	free(tmp_move);
@@ -173,8 +173,8 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	while (next_row <= 8 && next_col <= 8 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
-		valid_locs[i].row = next_row;
-		valid_locs[i].column = next_col;
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
 		//check capturing
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 				break;
@@ -190,8 +190,8 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	while (next_row <= 8 && next_col >= 1 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			(color_by_type(cur_game->board[next_row][next_col]) != color))) {
-		valid_locs[i].row = next_row;
-		valid_locs[i].column = next_col;
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
 		//check capturing
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
@@ -207,8 +207,8 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	while (next_row >= 1 && next_col <= 8 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
-		valid_locs[i].row = next_row;
-		valid_locs[i].column = next_col;
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
 		}
@@ -223,8 +223,8 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	while (next_row >= 1 && next_col >= 1 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
-		valid_locs[i].row = next_row;
-		valid_locs[i].column = next_col;
+		valid_locs[i]->row = next_row;
+		valid_locs[i]->column = next_col;
 		if (check_capturing(cur_game->board[next_row][next_col], color)) {
 			break;
 		}
@@ -564,7 +564,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 
 	// if cur_move->dest is one of the possible moves, return true
 	for (int i=0; i<64; i++){
-		if (valid_locs[i].row == cur_move->dest->row && valid_locs[i].column == cur_move->dest->column){
+		if (valid_locs[i]->row == cur_move->dest->row && valid_locs[i]->column == cur_move->dest->column){
 			return true;
 		}
 	}
