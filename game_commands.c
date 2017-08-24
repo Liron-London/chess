@@ -106,7 +106,9 @@ int game_play(game* game){
 	while (1){
 		printf("please choose a command\n"); // need to be changed
 		scanf("%s", command_str);
+		printf("DEBUG: scanf passed\n");
 		game_command = game_command_parse_line(command_str);
+		printf("DEBUG: prase the line!\n");
 
 		// QUIT
 		if (game_command->validArg == true && game_command->cmd == GAME_QUIT){
