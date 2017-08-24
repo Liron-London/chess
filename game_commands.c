@@ -109,6 +109,7 @@ int game_play(game* game){
 		printf("please choose a command\n"); // need to be changed
 		scanf("%s", command_str);
 		printf("DEBUG: scanf passed\n");
+		printf("DEBUG: text is %s\n", command_str);
 		game_command = game_command_parse_line(command_str);
 		printf("DEBUG: prase the line!\n");
 
