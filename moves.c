@@ -80,6 +80,7 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		valid_locs[i]->column = next_col;
 		valid_move = true;
 	}
+	printf("DEBUG: in is_check_aux before destroy!\n");
 	destroy_piece(tmp_piece);
 	destroy_move(tmp_move);
 	game_destroy(tmp_game);
