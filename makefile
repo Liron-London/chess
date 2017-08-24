@@ -8,7 +8,7 @@ GAME_COMMANDS_TEST_OBJS = array_list.o game.o game_commands.o setting.o game_com
 FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o
-GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o
+GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
 
 
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors

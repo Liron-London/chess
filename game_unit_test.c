@@ -94,7 +94,6 @@ static bool move_pawns_check_2(){
 	return true;
 }
 
-
 static bool move_pawns_check_3(){
 	printf("test2");
 	game* game = game_create();
