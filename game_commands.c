@@ -128,7 +128,7 @@ int game_play(game* game){
 		// MOVE
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
-			printf("DEBUG: in the while loop\n");
+			printf("DEBUG: Current turn is: %d\n", game->current_turn);
 			if (is_valid_move(game, game_command->move) == true){
 				printf("DEBUG: is_valid_move is OK\n");
 				cur_piece = location_to_piece(game, game_command->move->source);
@@ -138,6 +138,10 @@ int game_play(game* game){
 				printf("DEBUG: move_piece is OK\n");
 				print_board(game);
 				printf("valid move!\n");
+			}
+
+			else{
+				printf("DEBUG: move is not valid!\n")
 			}
 
 			// update history
