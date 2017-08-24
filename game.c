@@ -115,7 +115,7 @@ game* game_create() {
 
 	for (int j=0; j < 16; j++) {
 		newgame->whites[j]->alive = 1;
-		newgame->whites[j]->piece_location->column = (char)(j%8) + 'A';
+		newgame->whites[j]->piece_location->column = (char)(j%8);
 		if (newgame->whites[j]->piece_type != WHITE_PAWN) {
 			newgame->whites[j]->piece_location->row = 0;
 		} else {
@@ -137,7 +137,7 @@ game* game_create() {
 	for (int i = 0; i < 16; i++) {
 		newgame->blacks[i]->alive = 1;
 		newgame->blacks[i]->color = 0;
-		newgame->blacks[i]->piece_location->column = (char)(i%8) + 'A';
+		newgame->blacks[i]->piece_location->column = (char)(i%8);
 		if (newgame->blacks[i]->piece_type != BLACK_PAWN) {
 			newgame->blacks[i]->piece_location->row = 7;
 		} else {
@@ -226,12 +226,12 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 			return true;
 		}
 
-		if (enemy_loc->row + i > 8 || enemy_loc->column + i > 'H'){
-			continue;
+		if (enemy_loc->row + i > 7 || enemy_loc->column + i > 7){
+			break;
 		}
 
-		if (cur_game->board[enemy_loc->row + i][enemy_loc->column + i - 'A'] != EMPTY_ENTRY){
-			continue;
+		if (cur_game->board[enemy_loc->row + i][enemy_loc->column + i] != EMPTY_ENTRY){
+			break;
 		}
 	}
 
@@ -240,11 +240,11 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column+ i == king_loc->column){
 			return true;
 		}
-		if (enemy_loc->row - i < 1 || enemy_loc->column + i > 'H'){
-			continue;
+		if (enemy_loc->row - i < 0 || enemy_loc->column + i > 7){
+			break;
 		}
-		if (cur_game->board[enemy_loc->row - i][enemy_loc->column + i - 'A'] != EMPTY_ENTRY){
-			continue;
+		if (cur_game->board[enemy_loc->row - i][enemy_loc->column + i] != EMPTY_ENTRY){
+			break;
 		}
 	}
 
@@ -253,11 +253,11 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column - i == king_loc->column){
 			return true;
 		}
-		if (enemy_loc->row - i < 1 || enemy_loc->column- i < 'A'){
-			continue;
+		if (enemy_loc->row - i < 0 || enemy_loc->column- i < 0){
+			break;
 		}
-		if (cur_game->board[enemy_loc->row - i][enemy_loc->column - i - 'A'] != EMPTY_ENTRY){
-			continue;
+		if (cur_game->board[enemy_loc->row - i][enemy_loc->column - i] != EMPTY_ENTRY){
+			break;
 		}
 	}
 
@@ -266,11 +266,11 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column - i == king_loc->column){
 			return true;
 		}
-		if (enemy_loc->row + i < 8 || enemy_loc->column- i > 'A'){
-			continue;
+		if (enemy_loc->row + i > 7 || enemy_loc->column- i < 0){
+			break;
 		}
-		if (cur_game->board[enemy_loc->row + i][enemy_loc->column - i - 'A'] != EMPTY_ENTRY){
-			continue;
+		if (cur_game->board[enemy_loc->row + i][enemy_loc->column - i] != EMPTY_ENTRY){
+			break;
 		}
 	}
 	return false;
@@ -279,8 +279,8 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 bool check_parallels(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up
 	for (char i=0; i<8; i++){
-		if (enemy_loc->column+ i > 'H' || cur_game->board[enemy_loc->row][(int)(enemy_loc->column + i - 'A')] != EMPTY_ENTRY){
-			continue;
+		if (enemy_loc->column+ i > 7 || cur_game->board[enemy_loc->row][enemy_loc->column + i] != EMPTY_ENTRY){
+			break;
 		}
 		if (enemy_loc->column+ i == king_loc->column && enemy_loc->row  == king_loc->row){
 			return true;
@@ -289,8 +289,8 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 
 	// down
 	for (char i=0; i<8; i++){
-		if (enemy_loc->column- i < 'A' || cur_game->board[enemy_loc->row][(int)(enemy_loc->column - i - 'A')] != EMPTY_ENTRY){
-			continue;
+		if (enemy_loc->column- i < 0 || cur_game->board[enemy_loc->row][enemy_loc->column - i] != EMPTY_ENTRY){
+			break;
 		}
 		if (enemy_loc->column- i == king_loc->column&& enemy_loc->row  == king_loc->row){
 			return true;
@@ -299,8 +299,8 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 
 	// right
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row + i > 8 || cur_game->board[enemy_loc->row + i][(int)(enemy_loc->column - 'A')] != EMPTY_ENTRY){
-			continue;
+		if (enemy_loc->row + i > 7 || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
+			break;
 		}
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
@@ -309,8 +309,8 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 
 	// left
 	for (int i=0; i<8; i++){
-		if (enemy_loc->row- i < 1 || cur_game->board[enemy_loc->row - i][(int)(enemy_loc->column - 'A')] != EMPTY_ENTRY){
-			continue;
+		if (enemy_loc->row- i < 1 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
+			break;
 		}
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
@@ -404,8 +404,8 @@ bool is_check(game* cur_game){
 
 		// king
 		if (enemy_type == BLACK_KING || enemy_type == WHITE_KING){
-			if (((king_loc->row - (enemy_loc->row)) < 1 && (king_loc->row - (enemy_loc->row)) > 0) &&
-				((king_loc->column - (enemy_loc->column)) < 'A' && (king_loc->column - (enemy_loc->column)) >= 'A')){
+			if (((king_loc->row - (enemy_loc->row)) <= 1 && (king_loc->row - (enemy_loc->row)) >= -1) &&
+				((king_loc->column - (enemy_loc->column)) <= 1 && (king_loc->column - (enemy_loc->column)) >= -1)){
 				printf("FAILED BECAUSE OF A KING!\n");
 				return true;
 			}
