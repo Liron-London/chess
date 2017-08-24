@@ -398,7 +398,7 @@ location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_p
 			new_ptr_to_valid_locs = valid_locs[i];
 		}
 	}
-	rook_valid_moves(new_ptr_to_valid_locs, cur_game, cur_piece);
+	rook_valid_moves(&new_ptr_to_valid_locs, cur_game, cur_piece);
 	return valid_locs;
 }
 
