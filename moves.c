@@ -286,7 +286,6 @@ location* rook_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 location* knight_valid_moves(location* valid_locs, game* cur_game, piece* cur_piece) {
 	printf("In knight valid moves\n"); //debug
 	int i = 0;
-	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
 	int color = cur_piece->color;
@@ -381,6 +380,7 @@ location* queen_valid_moves(location* valid_locs, game* cur_game, piece* cur_pie
 }
 */
 
+/*
 location* king_valid_moves(location* valid_locs, game* cur_game, piece* cur_piece) {
 	printf("In king valid moves\n"); //debug
 	int i = 0;
@@ -392,6 +392,7 @@ location* king_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 
 	return valid_locs;
 }
+*/
 
 location* valid_moves(game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
