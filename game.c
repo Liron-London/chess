@@ -13,6 +13,29 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
 
+piece* location_to_piece(game* game, location* loc){
+	char type = game->board[loc->row][loc->column];
+	if (type == 'EMPTY_ENTRY'){
+		return NULL;
+	}
+
+	if (type > 'a'){
+		for (int i=0; i<16;i++){
+			if (game->whites[i]->piece_location == loc){
+				return game->whites[i];
+			}
+		}
+	}
+
+	else{
+		for (int i=0; i<16;i++){
+			if (game->blacks[i]->piece_location == loc){
+				return game->blacks[i];
+			}
+		}
+	}
+}
+
 piece* create_piece(){
 	piece* piece = malloc(sizeof(piece));
 	if (piece == NULL){

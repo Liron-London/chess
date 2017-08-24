@@ -101,7 +101,7 @@ Gamecommand* game_command_parse_line(const char* str){
 int game_play(game* game){
 	Gamecommand* game_command;
 	char command_str[1024]; // assuming that the command is no longer the 1024 chars
-	// piece* cur_piece;
+	piece* cur_piece;
 
 	while (1){
 		printf("please choose a command"); // need to be changed
@@ -123,8 +123,9 @@ int game_play(game* game){
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
 			if (is_valid_move(game, game_command->move) == true){
-				// move_piece(game, game_command->move, piece);
-				printf("valid move");
+				cur_piece = location_to_piece(game_command->move->source);
+				move_piece(game, game_command->move, cur_piece);
+				printf("valid move!\n");
 			}
 
 			// update history
