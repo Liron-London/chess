@@ -155,7 +155,7 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 		}
 	}
-
+	printf("finished pawn valid moves!\n");
 	return valid_locs;
 }
 
@@ -491,6 +491,7 @@ location** valid_moves(game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
 	location* valid_locs[64];
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
+		printf("DEBUG: In valid moves!\n");
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
