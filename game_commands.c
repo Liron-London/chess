@@ -102,10 +102,11 @@ Gamecommand* game_command_parse_line(const char* str){
 // called when the command "start" is pressed in settings
 int game_play(game* game){
 	Gamecommand* game_command;
-	char command_str[1024]; // assuming that the command is no longer the 1024 chars
+	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
 
 	while (1){
+		char command_str = malloc(1024*sizeof(char));
 		printf("please choose a command\n"); // need to be changed
 		scanf("%1024[^\n]", command_str);
 		printf("DEBUG: scanf passed\n");
@@ -141,6 +142,7 @@ int game_play(game* game){
 
 			// update history
 			// return 1;
+			free(command_str);
 		}
 
 	}
