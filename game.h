@@ -71,10 +71,6 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
  */
 bool check_parallels(game* cur_game, const location* king_loc, location* enemy_loc);
 
-/*
-* returns a list of all valid moves, needs to call is_check to verify the King's not threatened
-*/
-location* valid_moves(game* cur_game, piece* cur_piece);
 
 /*
 * creates a new the game object (including allocating memory resources)
@@ -103,9 +99,5 @@ void set_move(game* cur_game, move* cur_move);
 void print_board(game* cur_game);
 
 void change_turn(game* cur_game);
-
-bool is_valid_move(game* cur_game, move* cur_move);
-
-void move_piece(game* cur_game, move* cur_move, piece* cur_piece);
 
 #endif // GAME_H_INCLUDED

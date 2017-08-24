@@ -3,7 +3,7 @@ OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o settings.o m
 TEST_OBJS = setting_test.o array_list_unit_test.o game_unit_test.o game_command_unitest.o
 EXEC = chessprog
 ARRAY_LIST_TEST_OBJS = array_list.o array_list_unit_test.o
-GAME_TEST_OBJS = array_list.o game.o
+GAME_TEST_OBJS = array_list.o game.o moves.o
 GAME_COMMANDS_TEST_OBJS = array_list.o game.o game_commands.o setting.o game_command_unitest.o
 FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
@@ -28,6 +28,8 @@ game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
+moves.o: moves.c moves.h game.c game.h
+	$(CC) $(COMP_FLAG) -c $*.c
 game.o: game.c game.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 array_list.o: array_list.c array_list.h
@@ -39,7 +41,7 @@ game_commands.o: game.c game.h array_list.c array_list.h
 
 setting_test.o: game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
-game_unit_test.o: game.c game.h setting.c setting.h array_list.c array_list.h
+game_unit_test.o: game.c game.h moves.c moves.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_commands.c
 	$(CC) $(COMP_FLAG) -c $*.c
