@@ -14,7 +14,8 @@
  */
 
 piece* location_to_piece(game* game, location* loc){
-	printf("DEBUG: in location_to_piece\n");
+	// printf("DEBUG: in location_to_piece\n");
+	printf("DEBUG: location is: ROW %d, COL %d\n", loc->row, loc->column);
 	char type = game->board[loc->row][loc->column];
 	printf("DEBUG: type is %c\n", type);
 	if (type == EMPTY_ENTRY){
@@ -23,6 +24,7 @@ piece* location_to_piece(game* game, location* loc){
 
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
+			printf("DEBUG: piece location is: ROW %d, COL %d\n", game->whites[i]->piece_location->row, game->whites[i]->piece_location->column);
 			if (game->whites[i]->piece_location == loc){
 				printf("DEBUG: NON-NULL is returned\n");
 				return game->whites[i];
