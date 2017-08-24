@@ -482,8 +482,17 @@ location* valid_moves(game* cur_game, piece* cur_piece) {
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
-	//tmp line 12.8.17
-	return pawn_valid_moves(valid_locs, cur_game, cur_piece);
+	if (type == WHITE_ROOK || type == BLACK_ROOK) {
+		return rook_valid_moves(valid_locs, cur_game, cur_piece);
+	}
+	if (type == WHITE_KNIGHT || type == BLACK_KNIGHT) {
+		return knight_valid_moves(valid_locs, cur_game, cur_piece);
+	}
+	if (type == WHITE_QUEEN || type == BLACK_QUEEN) {
+		return queen_valid_moves(valid_locs, cur_game, cur_piece);
+	} else {
+		return king_valid_moves(valid_locs, cur_game, cur_piece);
+	}
 }
 
 // given a move and a board says if the move is legal or not
