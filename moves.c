@@ -490,7 +490,7 @@ location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 
 location** valid_moves(game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
-	location valid_locs[64];
+	location* valid_locs[64];
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
