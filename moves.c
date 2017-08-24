@@ -415,6 +415,8 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 	location* valid_locs; // list of all the valid location of the relevant piece
 
+	printf("DEBUG: ROW IS %d\n COL IS %d\n", row, col);
+
 	// source is empty
 	if (source == EMPTY_ENTRY){
 		return false;
@@ -429,7 +431,8 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	}
 
 	// source is enemy piece
-	if (cur_game->current_turn - color != 0){
+	if ((cur_game->current_turn == 1 && cur_game->user_color == 0) ||
+			(cur_game->current_turn == 0 && cur_game->user_color == 1)) {
 		return false;
 	}
 
