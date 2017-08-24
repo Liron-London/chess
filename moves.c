@@ -449,7 +449,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	}
 	*/
 
-	color = (cur_game->current_turn + cur_game->user_color)%2;
+	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 
 	// update valid_moves
 	if (color == 1){
