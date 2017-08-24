@@ -132,6 +132,7 @@ int game_play(game* game){
 				printf("DEBUG: is_valid_move is OK\n");
 				cur_piece = location_to_piece(game, game_command->move->source);
 				printf("DEBUG: location_to_piece is OK\n");
+				printf("DEBUG: current piece is %c %d %d\n", cur_piece->piece_type, cur_piece->piece_location->row,cur_piece->piece_location->column);
 				move_piece(game, game_command->move, cur_piece);
 				printf("DEBUG: move_piece is OK\n");
 				print_board(game);
