@@ -24,7 +24,7 @@ static bool basic_check(){
 
 static bool game_play_check(){
 	game* cur_game = game_create();
-	game_play();
+	game_play(cur_game);
 	return true;
 }
 
