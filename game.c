@@ -14,7 +14,9 @@
  */
 
 piece* location_to_piece(game* game, location* loc){
+	printf("DEBUG: in location_to_piece %c\n", type);
 	char type = game->board[loc->row][loc->column];
+	printf("DEBUG: type is %c\n", type);
 	if (type == EMPTY_ENTRY){
 		return NULL;
 	}
