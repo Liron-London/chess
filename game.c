@@ -56,7 +56,7 @@ piece* create_piece(){
 
 	// default values
 	piece->piece_location->row = -1;
-	piece->piece_location->column = 'Z';
+	piece->piece_location->column = -1;
 	if (piece->piece_location == NULL){
 			free(piece->piece_location);
 			free(piece);

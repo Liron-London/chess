@@ -573,10 +573,8 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 
 void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 	printf("DEBUG: in move piece\n");
-	// change the turn
 	change_turn(cur_game);
 
-	// update the piece location
 	cur_piece->piece_location = cur_move->dest;
 
 	// update the board
