@@ -25,7 +25,7 @@ piece* location_to_piece(game* game, location* loc){
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
 			printf("DEBUG: piece location is: ROW %d, COL %d\n", game->whites[i]->piece_location->row, game->whites[i]->piece_location->column);
-			if (game->whites[i]->piece_location == loc){
+			if (game->whites[i]->piece_location->row == loc->row && game->whites[i]->piece_location->column == loc->column){
 				printf("DEBUG: NON-NULL is returned\n");
 				return game->whites[i];
 			}
@@ -34,7 +34,7 @@ piece* location_to_piece(game* game, location* loc){
 
 	else{
 		for (int i=0; i<16;i++){
-			if (game->blacks[i]->piece_location == loc){
+			if (game->blacks[i]->piece_location->row == loc->row && game->blacks[i]->piece_location->column == loc->column){
 				printf("DEBUG: NON-NULL is returned\n");
 				return game->blacks[i];
 			}
