@@ -222,6 +222,11 @@ void game_destroy (game* cur_game) {
 }
 
 
+void destroy_piece(piece* cur_piece){
+	free(cur_piece->piece_location);
+	free(cur_piece);
+}
+
 
 void print_board(game* cur_game){
 

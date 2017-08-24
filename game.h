@@ -52,6 +52,8 @@ typedef struct move_t {
 
 piece* location_to_piece(game* game, location* loc);
 
+void destroy_piece(piece* cur_piece);
+
 /*
  * create an "empty" piece
  */

@@ -59,11 +59,6 @@ piece* copy_piece(piece* cur_piece){
 	return new_piece;
 }
 
-void destroy_piece(piece* cur_piece){
-	free(cur_piece->piece_location);
-	free(cur_piece);
-}
-
 bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int i) {
 	bool valid_move = false;
