@@ -129,14 +129,14 @@ location* pawn_valid_moves(location* valid_locs, game* cur_game, piece* cur_piec
 	}
 
 	if (type == BLACK_PAWN) {
-		if (row == 7 && cur_game->board[6][col] == EMPTY_ENTRY &&
-				cur_game->board[5][col] == EMPTY_ENTRY) {
-			if (is_check_aux(valid_locs, cur_game, cur_piece, 5, col, i)) {
+		if (row == 6 && cur_game->board[5][col] == EMPTY_ENTRY &&
+				cur_game->board[4][col] == EMPTY_ENTRY) {
+			if (is_check_aux(valid_locs, cur_game, cur_piece, 4, col, i)) {
 				i++;
 			}
 		}
 
-		if (row >= 2 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
+		if (row >= 1 && cur_game->board[row - 1][col] == EMPTY_ENTRY) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col, i)) {
 				i++;
 			}
