@@ -47,7 +47,7 @@ Gamecommand* game_command_parse_line(const char* str){
 		game_command->cmd = MOVE;
 
 		source->row = atoi(strtok(NULL, "<,")) - 1;
-		source->column = strtok(NULL, "<,>")[0];
+		source->column = strtok(NULL, "<,>")[0] - 'A';
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
@@ -56,7 +56,7 @@ Gamecommand* game_command_parse_line(const char* str){
 			return game_command;
 		}
 		target->row = atoi(strtok(NULL, "<,")) - 1;
-		target->column = strtok(NULL, "<,>")[0];
+		target->column = strtok(NULL, "<,>")[0] - 'A';
 
 		game_command->move->source = source;
 		game_command->move->dest = target;
