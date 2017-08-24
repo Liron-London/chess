@@ -26,7 +26,7 @@ Gamecommand* game_command_create(){
  *
 */
 Gamecommand* game_command_parse_line(const char* str){
-	printf("DEBUG: in parse line\n;);
+	printf("DEBUG: in parse line\n");
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
 		free(str_copy);
