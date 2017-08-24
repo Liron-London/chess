@@ -5,6 +5,7 @@
  *      Author: Gal
  */
 
+#include "moves.h"
 #include "game_commands.h"
 #include <stdbool.h>
 
