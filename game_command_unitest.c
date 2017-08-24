@@ -10,7 +10,7 @@
 
 static bool basic_check(){
 	// game* game = game_create();
-	return true;
+	// return true;
 	Gamecommand* game_command;
 
 	game_command = game_command_parse_line("move <2,A> to <3,B>");
@@ -22,11 +22,18 @@ static bool basic_check(){
 	return true;
 }
 
+static bool game_play_check(){
+	game* cur_game = game_create();
+	game_play();
+	return true;
+}
+
 int main() {
 	bool success;
 	success = basic_check();
 	printf("before last if\n");
 	if (success)
 		printf("basic game_commands checks success!\n");
+	success = game_play_check();
 	return 0;
 }
