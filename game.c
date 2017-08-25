@@ -99,7 +99,7 @@ game* game_create() {
 	newgame->user_color = 1;
 	newgame->current_turn = 1;
 
-	newgame->whites =(piece*) malloc(16 * sizeof(piece*));
+	newgame->whites =(piece**) malloc(16 * sizeof(piece*));
 	if (newgame->whites == NULL){
 		free(newgame->whites);
 		free(newgame);
