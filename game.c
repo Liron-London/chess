@@ -13,6 +13,16 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
 
+piece* copy_piece(piece* cur_piece){
+	piece* new_piece = create_piece();
+	new_piece->alive = cur_piece->alive;
+	new_piece->color = cur_piece->color;
+	new_piece->piece_location->row = cur_piece->piece_location->row;
+	new_piece->piece_location->column = cur_piece->piece_location->column;
+	new_piece->piece_type = cur_piece->piece_type;
+	return new_piece;
+}
+
 piece* location_to_piece(game* game, location* loc){
 	// printf("DEBUG: in location_to_piece\n");
 	printf("DEBUG: location is: ROW %d, COL %d\n", loc->row, loc->column);
@@ -204,8 +214,8 @@ game* game_copy(game* cur_game) {
 	copy->game_mode = cur_game->game_mode;
 	copy->user_color = cur_game->user_color;
 	for (int i=0; i<16; i++){
-		copy->whites[i] = cur_game->whites[i];
-		copy->blacks[i] = cur_game->blacks[i];
+		copy->whites[i] = copy_piece(cur_game->whites[i]);
+		copy->blacks[i] = copy_piece(cur_game->blacks[i]);
 	}
 	return copy;
 }

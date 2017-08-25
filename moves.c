@@ -50,16 +50,6 @@ void destroy_move(move* move){
 	free(move);
 }
 
-piece* copy_piece(piece* cur_piece){
-	piece* new_piece = create_piece();
-	new_piece->alive = cur_piece->alive;
-	new_piece->color = cur_piece->color;
-	new_piece->piece_location->row = cur_piece->piece_location->row;
-	new_piece->piece_location->column = cur_piece->piece_location->column;
-	new_piece->piece_type = cur_piece->piece_type;
-	return new_piece;
-}
-
 bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int index) {
 	printf("DEBUG: NEXT ROW IS: %d, NEXT COL is: %d\n", next_row, next_col);

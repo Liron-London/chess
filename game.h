@@ -52,6 +52,9 @@ typedef struct move_t {
 
 piece* location_to_piece(game* game, location* loc);
 
+
+piece* copy_piece(piece* cur_piece);
+
 void destroy_piece(piece* cur_piece);
 
 /*
