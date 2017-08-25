@@ -65,7 +65,7 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	game* tmp_game = game_copy(cur_game);
 	move* tmp_move = create_move();
 	piece* tmp_piece = copy_piece(cur_piece);
-	tmp_move->source = cur_piece->piece_location; // source_location is always the piece location
+	tmp_move->source = tmp_piece->piece_location; // source_location is always the piece location
 
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
