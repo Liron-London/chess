@@ -94,8 +94,14 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 
 	printf("DEBUG: in is_check_aux before destroy!\n");
 	destroy_piece(tmp_piece);
+	for (int i=0; i<16; i++){
+		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
+	}
 	printf("DEBUG: after destroy piece!\n");
 	destroy_move(tmp_move);
+	for (int i=0; i<16; i++){
+		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
+	}
 	printf("DEBUG: after destroy move!\n");
 	game_destroy(tmp_game);
 	printf("DEBUG: after destroy game!\n");
