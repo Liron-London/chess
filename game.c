@@ -145,6 +145,7 @@ game* game_create() {
 
 	for (int j=0; j < 16; j++) {
 		newgame->whites[j]->alive = 1;
+		newgame->whites[j]->color = 1;
 		newgame->whites[j]->piece_location->column = j%8;
 		if (newgame->whites[j]->piece_type != WHITE_PAWN) {
 			newgame->whites[j]->piece_location->row = 0;
