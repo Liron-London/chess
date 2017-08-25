@@ -55,6 +55,7 @@ location* copy_location(location* loc){
 	location* new_loc = create_location();
 	new_loc->row = loc->row;
 	new_loc->column = loc->column;
+	return new_loc;
 }
 
 void destroy_location(location* loc){
