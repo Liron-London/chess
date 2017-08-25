@@ -44,6 +44,24 @@ piece* location_to_piece(game* game, location* loc){
 	return NULL;
 }
 
+location* create_location(){
+	location* loc = (int)malloc(2*sizeof(int));
+	loc->row = -1;
+	loc->column = -1;
+	return loc;
+}
+
+location* copy_location(location* loc){
+	location* new_loc = create_location();
+	new_loc->row = loc->row;
+	new_loc->column = loc->column;
+}
+
+void destroy_location(location* loc){
+	free(loc);
+}
+
+
 piece* create_piece(){
 	piece* piece = malloc(sizeof(piece));
 	if (piece == NULL){
@@ -53,13 +71,14 @@ piece* create_piece(){
 	piece->alive = 1;
 	piece->color = 0;
 	printf("DEBUG: about to create location!\n");
-	piece->piece_location = (location* ) (malloc(sizeof(location)));
+	piece->piece_location = create_location();
 	printf("DEBUG: location created!\n");
 	// default values
-	piece->piece_location->row = -1;
-	piece->piece_location->column = -1;
+	//piece->piece_location->row = -1;
+	//piece->piece_location->column = -1;
 	if (piece->piece_location == NULL){
-			free(piece->piece_location);
+			//free(piece->piece_location);
+			destroy_location(piece->piece_location);
 			free(piece);
 			return NULL;
 		}
