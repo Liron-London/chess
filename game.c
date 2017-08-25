@@ -194,6 +194,8 @@ game* game_copy(game* cur_game) {
 			copy->board[i][j] = cur_game->board[i][j];
 		}
 	}
+	printf("DEBUG: board copy worked!\n");
+
 	/* copying history
 	for (int i=0; i<6; i++){
 		copy->history[i] = cur_game->history[i];
@@ -207,7 +209,9 @@ game* game_copy(game* cur_game) {
 	for (int i=0; i<16; i++){
 		copy->whites[i] = copy_piece(cur_game->whites[i]);
 		copy->blacks[i] = copy_piece(cur_game->blacks[i]);
+		printf("DEBUG: piece copy worked!\n");
 	}
+	printf("DEBUG: pieces copy worked!\n");
 	return copy;
 }
 
