@@ -99,12 +99,12 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 				cur_game->board[3][col] == EMPTY_ENTRY) {
 
 			printf("passed the basic checks...\n"); // debug
-			/*
+
 			// make the move on a copy of the board and check if is_check == true
 			if(is_check_aux(valid_locs, cur_game, cur_piece, 3, col, i)) {
 				i++;
 			}
-			*/
+
 		}
 		if (row < 7 && cur_game->board[row + 1][col] == EMPTY_ENTRY) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col, i)) {
@@ -506,9 +506,12 @@ location** valid_moves(game* cur_game, piece* cur_piece) {
 	}
 	if (type == WHITE_QUEEN || type == BLACK_QUEEN) {
 		return queen_valid_moves(valid_locs, cur_game, cur_piece);
-	} else {
+	}
+	if (type == WHITE_KING || type == BLACK_KING){
 		return king_valid_moves(valid_locs, cur_game, cur_piece);
 	}
+	printf("DEBUG: ERROR IN VALID MOVES");
+	return NULL;
 }
 
 // given a move and a board says if the move is legal or not
