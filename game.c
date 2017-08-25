@@ -213,10 +213,12 @@ game* game_copy(game* cur_game) {
 void game_destroy (game* cur_game) {
 	//array_list_destroy(cur_game->history);
 	for (int i=15; i>=0; i--){
-		destroy_piece(cur_game->whites[i]);
 		destroy_piece(cur_game->blacks[i]);
 	}
 	free(cur_game->blacks);
+	for (int i=15; i>=0; i--){
+		destroy_piece(cur_game->whites[i]);
+	}
 	free(cur_game->whites);
 	free(cur_game);
 }
