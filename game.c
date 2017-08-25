@@ -115,7 +115,7 @@ game* game_create() {
 	}
 
 	// initialize new pieces
-	/*
+
 	for (int i=0; i<16; i++){
 		newgame->whites[i] = create_piece();
 		if (newgame->whites[i] == NULL){
@@ -129,7 +129,7 @@ game* game_create() {
 			free(newgame);
 			return NULL;
 		}
-	}*/
+	}
 
 	// initialize board //
 	// initialize whites
