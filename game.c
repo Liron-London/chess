@@ -45,7 +45,7 @@ piece* location_to_piece(game* game, location* loc){
 }
 
 location* create_location(){
-	location* loc = (int)malloc(2*sizeof(int));
+	location* loc = malloc(sizeof(location));
 	loc->row = -1;
 	loc->column = -1;
 	return loc;
