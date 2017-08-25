@@ -54,7 +54,8 @@ piece* copy_piece(piece* cur_piece){
 	piece* new_piece = create_piece();
 	new_piece->alive = cur_piece->alive;
 	new_piece->color = cur_piece->color;
-	new_piece->piece_location = cur_piece->piece_location;
+	new_piece->piece_location->row = cur_piece->piece_location->row;
+	new_piece->piece_location->column = cur_piece->piece_location->column;
 	new_piece->piece_type = cur_piece->piece_type;
 	return new_piece;
 }
