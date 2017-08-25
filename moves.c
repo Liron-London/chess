@@ -527,9 +527,12 @@ location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 }
 
 
-location** valid_moves(game* cur_game, piece* cur_piece) {
+location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
-	location* valid_locs[64];
+	//location* valid_locs[64];
+
+	// malloc 64 places for valid_locs
+
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
 		printf("DEBUG: In valid moves!\n");
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
@@ -558,7 +561,13 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	printf("DEBUG: in is_valid_move\n");
 	int color;
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
-	location** valid_locs; // list of all the valid location of the relevant piece
+
+
+	location** valid_locs = calloc(64, sizeof(location*)); // list of all the valid location of the relevant piece
+	for (int i=0; i<64; i++){
+		valid_locs[i] = create_location();
+	}
+
 
 	printf("DEBUG: ROW IS %d COL IS %d\n", cur_move->source->row, cur_move->source->column);
 
@@ -587,7 +596,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
 				printf("made it! (whites)\n");
-				valid_locs = valid_moves(cur_game, cur_game->whites[i]);
+				valid_locs = valid_moves(valid_locs, cur_game, cur_game->whites[i]);
 				break;
 			}
 		}
@@ -599,7 +608,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
 				printf("made it! (blacks)\n");
-				valid_locs = valid_moves(cur_game, cur_game->blacks[i]);
+				valid_locs = valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
 				break;
 			}
 		}
