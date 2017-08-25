@@ -236,12 +236,16 @@ void destroy_piece(piece* cur_piece){
 }
 
 piece* copy_piece(piece* cur_piece){
+	printf("DEBUG: in copy piece\n");
 	piece* new_piece = create_piece();
 	new_piece->alive = cur_piece->alive;
 	new_piece->color = cur_piece->color;
 	new_piece->piece_location->row = cur_piece->piece_location->row;
+	printf("DEBUG: row copy worked\n");
 	new_piece->piece_location->column = cur_piece->piece_location->column;
+	printf("DEBUG: col copy worked\n");
 	new_piece->piece_type = cur_piece->piece_type;
+	printf("DEBUG: OUT!\n");
 	return new_piece;
 }
 
