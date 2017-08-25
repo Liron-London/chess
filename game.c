@@ -52,7 +52,8 @@ piece* create_piece(){
 	}
 	piece->alive = 1;
 	piece->color = 0;
-	piece->piece_location = (location) (malloc(sizeof(location)));
+	printf("DEBUG: about to create location!\n");
+	piece->piece_location = (location* ) (malloc(sizeof(location)));
 
 	// default values
 	piece->piece_location->row = -1;
