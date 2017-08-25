@@ -241,12 +241,12 @@ void game_destroy (game* cur_game) {
 	for (int i=15; i>=0; i--){
 		destroy_piece(cur_game->blacks[i]);
 	}
-	free(cur_game->blacks);
+	//free(cur_game->blacks);
 
 	for (int i=15; i>=0; i--){
 		destroy_piece(cur_game->whites[i]);
 	}
-	free(cur_game->whites);
+	//free(cur_game->whites);
 	free(cur_game);
 }
 
