@@ -21,7 +21,6 @@ bool check_capturing(char piece_in_next_loc, int color) {
 	return false;
 }
 
-
 move* create_move(){
 	move* move = malloc(sizeof(move));
 	if (move == NULL){
@@ -529,9 +528,6 @@ location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 
 location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
-	//location* valid_locs[64];
-
-	// malloc 64 places for valid_locs
 
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
 		printf("DEBUG: In valid moves!\n");
@@ -576,16 +572,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 		return false;
 	}
 
-	// update the color of the piece in the source
-	// color = color_by_type(source);
-
 	printf("DEBUG: CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
-	/*
-	if ((cur_game->current_turn == 1 && cur_game->user_color == 0) ||
-			(cur_game->current_turn == 0 && cur_game->user_color == 1)) {
-		return false;
-	}
-	*/
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 
@@ -609,6 +596,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
 				printf("made it! (blacks)\n");
 				valid_locs = valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
+
 				break;
 			}
 		}
@@ -617,9 +605,19 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	// if cur_move->dest is one of the possible moves, return true
 	for (int i=0; i<64; i++){
 		if (valid_locs[i]->row == cur_move->dest->row && valid_locs[i]->column == cur_move->dest->column){
+
+			for (int i=0; i<64; i++){
+				free(valid_locs[i]);
+			}
+			free(valid_locs);
+
 			return true;
 		}
 	}
+	for (int i=0; i<64; i++){
+		free(valid_locs[i]);
+	}
+	free(valid_locs);
 	return false;
 }
 
