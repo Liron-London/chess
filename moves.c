@@ -55,6 +55,15 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	printf("DEBUG: NEXT ROW IS: %d, NEXT COL is: %d\n", next_row, next_col);
 	bool valid_move = false;
 
+	for (int i=0; i<16; i++){
+		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
+	}
+
+	for (int i=0; i<16; i++){
+		printf("DEBUG: blacks[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->blacks[i]->piece_location->row, cur_game->blacks[i]->piece_location->column);
+	}
+
+
 	game* tmp_game = game_copy(cur_game);
 	printf("DEBUG: copy worked!\n");
 	move* tmp_move = create_move();
@@ -111,7 +120,6 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	for (int i=0; i<16; i++){
 		printf("DEBUG: blacks[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->blacks[i]->piece_location->row, cur_game->blacks[i]->piece_location->column);
 	}
-
 
 	return valid_move;
 }
