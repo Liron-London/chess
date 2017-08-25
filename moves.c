@@ -61,6 +61,7 @@ piece* copy_piece(piece* cur_piece){
 
 bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int i) {
+	printf("DEBUG: NEXT ROW IS: %d, NEXT COL is: %d\n", next_row, next_col);
 	bool valid_move = false;
 	game* tmp_game = game_copy(cur_game);
 	move* tmp_move = create_move();
