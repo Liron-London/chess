@@ -100,7 +100,21 @@ game* game_create() {
 	newgame->current_turn = 1;
 
 	newgame->whites = malloc(16 * sizeof(piece));
+	if (newgame->whites == NULL){
+		free(newgame->whites);
+		free(newgame);
+		return NULL;
+	}
+
 	newgame->blacks = malloc(16 * sizeof(piece));
+	if (newgame->whites == NULL){
+		free(newgame->blacks);
+		free(newgame->whites);
+		free(newgame);
+		return NULL;
+	}
+
+
 
 	// initialize new pieces
 	for (int i=0; i<16; i++){
