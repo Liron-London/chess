@@ -106,4 +106,10 @@ void print_board(game* cur_game);
 
 void change_turn(game* cur_game);
 
+location* create_location();
+
+location* copy_location(location* loc);
+
+void destroy_location(location* loc);
+
 #endif // GAME_H_INCLUDED
