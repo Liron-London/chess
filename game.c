@@ -13,30 +13,29 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
 
-piece* location_to_piece(game* game, location* loc){
+piece* location_to_piece(game* cur_game, location* loc){
 	// printf("DEBUG: in location_to_piece\n");
-	printf("DEBUG: location is: ROW %d, COL %d\n", loc->row, loc->column);
-	char type = game->board[loc->row][loc->column];
-	printf("DEBUG: type is %c\n", type);
+	char type = cur_game->board[loc->row][loc->column];
 	if (type == EMPTY_ENTRY){
 		return NULL;
 	}
 
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
-			printf("DEBUG: piece location is: ROW %d, COL %d\n", game->whites[i]->piece_location->row, game->whites[i]->piece_location->column);
-			if (game->whites[i]->piece_location->row == loc->row && game->whites[i]->piece_location->column == loc->column){
+			printf("DEBUG: piece location is: ROW %d, COL %d\n", cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
+			if (cur_game->whites[i]->piece_location->row == loc->row &&
+					cur_game->whites[i]->piece_location->column == loc->column){
 				printf("DEBUG: NON-NULL is returned\n");
-				return game->whites[i];
+				return cur_game->whites[i];
 			}
 		}
 	}
 
 	else{
 		for (int i=0; i<16;i++){
-			if (game->blacks[i]->piece_location->row == loc->row && game->blacks[i]->piece_location->column == loc->column){
+			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column){
 				printf("DEBUG: NON-NULL is returned\n");
-				return game->blacks[i];
+				return cur_game->blacks[i];
 			}
 		}
 	}
@@ -45,7 +44,7 @@ piece* location_to_piece(game* game, location* loc){
 }
 
 location* create_location(){
-	location* loc = (location*) malloc(sizeof(location));
+	location* loc = malloc(sizeof(location));
 	loc->row = -1;
 	loc->column = -1;
 	return loc;
@@ -63,30 +62,46 @@ void destroy_location(location* loc){
 }
 
 
-piece* create_piece(){
-	piece* piece = malloc(sizeof(piece));
-	if (piece == NULL){
-		free(piece);
+piece* create_piece() {
+	piece* new_piece = malloc(sizeof(piece));
+	if (new_piece == NULL) {
+		free(new_piece);
 		return NULL;
 	}
-	piece->alive = 1;
-	piece->color = 0;
-	printf("DEBUG: about to create location!\n");
-	piece->piece_location = create_location();
-	printf("DEBUG: location created!\n");
+	new_piece->alive = 1;
+	new_piece->color = 0;
+	//printf("DEBUG: about to create location!\n");
+	new_piece->piece_location = create_location();
+	//printf("DEBUG: location created!\n");
 	// default values
 	//piece->piece_location->row = -1;
 	//piece->piece_location->column = -1;
-	if (piece->piece_location == NULL){
+	if (new_piece->piece_location == NULL){
 			//free(piece->piece_location);
-			destroy_location(piece->piece_location);
-			free(piece);
+			destroy_location(new_piece->piece_location);
+			free(new_piece);
 			return NULL;
 		}
 	// initial it to EMPTY ENTRY
-	piece->piece_type = EMPTY_ENTRY;
-	return piece;
+	new_piece->piece_type = EMPTY_ENTRY;
+	return new_piece;
 }
+
+void destroy_piece(piece* cur_piece){
+	free(cur_piece->piece_location);
+	free(cur_piece);
+}
+
+piece* copy_piece(piece* cur_piece){
+	piece* new_piece = create_piece();
+	new_piece->alive = cur_piece->alive;
+	new_piece->color = cur_piece->color;
+	new_piece->piece_location->row = cur_piece->piece_location->row;
+	new_piece->piece_location->column = cur_piece->piece_location->column;
+	new_piece->piece_type = cur_piece->piece_type;
+	return new_piece;
+}
+
 
 game* game_create() {
 	game* newgame = malloc(sizeof(game));
@@ -170,8 +185,8 @@ game* game_create() {
 	newgame->whites[2]->piece_type = WHITE_BISHOP;
 	newgame->whites[3]->piece_type = WHITE_QUEEN;
 	newgame->whites[4]->piece_type = WHITE_KING;
-	newgame->whites[5]->piece_type = WHITE_KNIGHT;
-	newgame->whites[6]->piece_type = WHITE_BISHOP;
+	newgame->whites[5]->piece_type = WHITE_BISHOP;
+	newgame->whites[6]->piece_type = WHITE_KNIGHT;
 	newgame->whites[7]->piece_type = WHITE_ROOK;
 	for (int i=8; i<16;i++){
 		newgame->whites[i]->piece_type = WHITE_PAWN;
@@ -193,8 +208,8 @@ game* game_create() {
 	newgame->blacks[2]->piece_type = BLACK_BISHOP;
 	newgame->blacks[3]->piece_type = BLACK_QUEEN;
 	newgame->blacks[4]->piece_type = BLACK_KING;
-	newgame->blacks[5]->piece_type = BLACK_KNIGHT;
-	newgame->blacks[6]->piece_type = BLACK_BISHOP;
+	newgame->blacks[5]->piece_type = BLACK_BISHOP;
+	newgame->blacks[6]->piece_type = BLACK_KNIGHT;
 	newgame->blacks[7]->piece_type = BLACK_ROOK;
 	for (int i=8; i<16;i++){
 		newgame->blacks[i]->piece_type = BLACK_PAWN;
@@ -228,7 +243,6 @@ game* game_copy(game* cur_game) {
 			copy->board[i][j] = cur_game->board[i][j];
 		}
 	}
-	printf("DEBUG: board copy worked!\n");
 
 	/* copying history
 	for (int i=0; i<6; i++){
@@ -240,12 +254,13 @@ game* game_copy(game* cur_game) {
 	copy->difficulty = cur_game->difficulty;
 	copy->game_mode = cur_game->game_mode;
 	copy->user_color = cur_game->user_color;
+
+	// initialize new pieces
+
 	for (int i=0; i<16; i++){
 		copy->whites[i] = copy_piece(cur_game->whites[i]);
 		copy->blacks[i] = copy_piece(cur_game->blacks[i]);
-		printf("DEBUG: piece copy worked!\n");
 	}
-	printf("DEBUG: pieces copy worked!\n");
 	return copy;
 }
 
@@ -259,30 +274,9 @@ void game_destroy (game* cur_game) {
 	for (int i=15; i>=0; i--){
 		destroy_piece(cur_game->whites[i]);
 	}
-	//free(cur_game->whites);
+	free(cur_game->whites);
+	free(cur_game->blacks);
 	free(cur_game);
-}
-
-
-void destroy_piece(piece* cur_piece){
-	free(cur_piece->piece_location);
-	free(cur_piece);
-}
-
-piece* copy_piece(piece* cur_piece){
-	printf("DEBUG: in copy piece\n");
-	piece* new_piece = create_piece();
-	printf("DEBUG: piece created!\n");
-	new_piece->alive = cur_piece->alive;
-	new_piece->color = cur_piece->color;
-	printf("DEBUG: setting row!\n");
-	new_piece->piece_location->row = cur_piece->piece_location->row;
-	printf("DEBUG: row copy worked\n");
-	new_piece->piece_location->column = cur_piece->piece_location->column;
-	printf("DEBUG: col copy worked\n");
-	new_piece->piece_type = cur_piece->piece_type;
-	printf("DEBUG: OUT!\n");
-	return new_piece;
 }
 
 void print_board(game* cur_game){
@@ -316,6 +310,8 @@ void change_turn(game* cur_game){
 
 bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up right diagonal
+	printf("DEBUG: KING LOC IS: ROW %d, COL %d\n", king_loc->row, king_loc->column);
+	printf("DEBUG: ENEMY LOC IS: ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 	for (int i=0; i<8; i++){
 
 		if ((enemy_loc->row + i == king_loc->row) && (enemy_loc->column + i == king_loc->column)){
@@ -332,7 +328,7 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 	}
 
 	// up left diagonal
-	for (int i=0; i<8; i++){
+	for (int i=1; i<8; i++){
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column+ i == king_loc->column){
 			return true;
 		}
@@ -345,11 +341,11 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 	}
 
 	// down left diagonal
-	for (int i=0; i<8; i++){
+	for (int i=1; i<8; i++){
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column - i == king_loc->column){
 			return true;
 		}
-		if (enemy_loc->row - i < 0 || enemy_loc->column- i < 0){
+		if (enemy_loc->row - i < 0 || enemy_loc->column - i < 0){
 			break;
 		}
 		if (cur_game->board[enemy_loc->row - i][enemy_loc->column - i] != EMPTY_ENTRY){
@@ -358,7 +354,7 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 	}
 
 	// down right diagonal
-	for (int i=0; i<8; i++){
+	for (int i=1; i<8; i++){
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column - i == king_loc->column){
 			return true;
 		}
@@ -374,42 +370,64 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 
 bool check_parallels(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up
-	for (char i=0; i<8; i++){
-		if (enemy_loc->column+ i > 7 || cur_game->board[enemy_loc->row][enemy_loc->column + i] != EMPTY_ENTRY){
+	for (char i=1; i<8; i++){
+		if (enemy_loc->column + i == king_loc->column && enemy_loc->row  == king_loc->row){
+			return true;
+		}
+
+		if (enemy_loc->column + i < 7){
 			break;
 		}
-		if (enemy_loc->column+ i == king_loc->column && enemy_loc->row  == king_loc->row){
-			return true;
+
+
+		if (enemy_loc->column + i > 7 || cur_game->board[enemy_loc->row][enemy_loc->column + i] != EMPTY_ENTRY){
+			break;
 		}
 	}
 
 	// down
-	for (char i=0; i<8; i++){
-		if (enemy_loc->column- i < 0 || cur_game->board[enemy_loc->row][enemy_loc->column - i] != EMPTY_ENTRY){
+	for (char i=1; i<8; i++){
+		if (enemy_loc->column - i == king_loc->column&& enemy_loc->row  == king_loc->row){
+			return true;
+		}
+
+		if (enemy_loc->column - i < 0){
 			break;
 		}
-		if (enemy_loc->column- i == king_loc->column&& enemy_loc->row  == king_loc->row){
-			return true;
+
+
+		if (enemy_loc->column - i < 0 || cur_game->board[enemy_loc->row][enemy_loc->column - i] != EMPTY_ENTRY){
+			break;
 		}
 	}
 
 	// right
-	for (int i=0; i<8; i++){
-		if (enemy_loc->row + i > 7 || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
-			break;
-		}
+	for (int i=1; i<8; i++){
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
+		}
+
+		if (enemy_loc->row + i > 7){
+			break;
+		}
+
+		if (enemy_loc->row + i > 7 || cur_game->board[enemy_loc->row + i][enemy_loc->column] != EMPTY_ENTRY){
+			break;
 		}
 	}
 
 	// left
-	for (int i=0; i<8; i++){
-		if (enemy_loc->row- i < 1 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
-			break;
-		}
+	for (int i=1; i<8; i++){
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
+		}
+
+		if (enemy_loc->row - i < 0){
+			break;
+		}
+
+		if (enemy_loc->row- i < 1 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
+			break;
 		}
 	}
 	return false;
@@ -424,7 +442,11 @@ bool is_check(game* cur_game){
 	piece** enemies;
 
 	// white turn
-	if (cur_game->current_turn == 1){
+	int color = (cur_game->current_turn + cur_game->user_color)%2;
+
+	printf("DEBUG: current turn is %d\n", cur_game->current_turn);
+
+	if (color == 1){
 		printf("KING IS WHITE\n");
 		king_loc = cur_game->whites[4]->piece_location;
 		enemies = cur_game->blacks;
@@ -441,15 +463,15 @@ bool is_check(game* cur_game){
 
 		// putting location into variable for readability
 		location* enemy_loc = enemies[i]->piece_location;
-		printf("DEBUG: enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
+		//printf("DEBUG: enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 		char enemy_type = enemies[i]->piece_type;
-		printf("DEBUG: enemy type %c\n",enemy_type);
+		//printf("DEBUG: enemy type %c\n",enemy_type);
 
 		// black pawn
 		if (enemy_type == BLACK_PAWN){
 			if ((enemy_loc->column == (king_loc->column) + 1) &&
 					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
-				printf("FAILED BECAUSE OF A BLACK PAWN!\n");
+				printf("DEBUG: FAILED BECAUSE OF A BLACK PAWN!\n");
 				return true;
 			}
 		}
@@ -458,7 +480,7 @@ bool is_check(game* cur_game){
 		if (enemy_type == WHITE_PAWN){
 			if ((enemy_loc->column == (king_loc->column) - 1) &&
 					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
-				printf("FAILED BECAUSE OF A WHITE PAWN!\n");
+				printf("DEBUG: FAILED BECAUSE OF A WHITE PAWN!\n");
 				return true;
 			}
 		}
@@ -469,9 +491,9 @@ bool is_check(game* cur_game){
 				((enemy_loc->column == (king_loc->column) - 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1)))||
 				((enemy_loc->row == (king_loc->row) + 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))||
 				((enemy_loc->row == (king_loc->row) - 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))){
-				printf("FAILED BECAUSE OF A KNIGHT!\n");
-				printf("KING LOC IS: ROW: %d COL %c\n", king_loc->row, king_loc->column);
-				printf("KNIGHT LOC IS: ROW: %d COL %c\n", enemy_loc->row, enemy_loc->column);
+				printf("DEBUG: FAILED BECAUSE OF A KNIGHT!\n");
+				printf("DEBUG: KING LOC IS: ROW: %d COL %c\n", king_loc->row, king_loc->column);
+				printf("DEBUG: KNIGHT LOC IS: ROW: %d COL %c\n", enemy_loc->row, enemy_loc->column);
 				return true;
 			}
 		}
@@ -479,7 +501,7 @@ bool is_check(game* cur_game){
 		// bishop
 		if (enemy_type == BLACK_BISHOP || enemy_type == WHITE_BISHOP){
 			if (check_diagonals(cur_game, king_loc, enemy_loc) == true){
-				printf("FAILED BECAUSE OF A BISHOP!\n");
+				printf("DEBUG: FAILED BECAUSE OF A BISHOP!\n");
 				return true;
 			}
 		}
@@ -487,16 +509,17 @@ bool is_check(game* cur_game){
 		// rook
 		if (enemy_type == BLACK_ROOK || enemy_type == WHITE_ROOK){
 			if (check_parallels(cur_game, king_loc, enemy_loc) == true){
-				printf("FAILED BECAUSE OF A ROOK!\n");
+				printf("DEBUG: FAILED BECAUSE OF A ROOK!\n");
 				return true;
 			}
 		}
 
 		// queen
 		if (enemy_type == BLACK_QUEEN || enemy_type == WHITE_QUEEN){
+			printf("DEBUG: QUEEN is ABOUT TO BE CHECKED\n");
 			if ((check_parallels(cur_game, king_loc, enemy_loc) == true) ||
 				(check_diagonals(cur_game, king_loc, enemy_loc) == true)){
-				printf("FAILED BECAUSE OF A QUEEN!\n");
+				printf("DEBUG: FAILED BECAUSE OF A QUEEN!\n");
 				return true;
 			}
 		}
@@ -505,7 +528,7 @@ bool is_check(game* cur_game){
 		if (enemy_type == BLACK_KING || enemy_type == WHITE_KING){
 			if (((king_loc->row - (enemy_loc->row)) <= 1 && (king_loc->row - (enemy_loc->row)) >= -1) &&
 				((king_loc->column - (enemy_loc->column)) <= 1 && (king_loc->column - (enemy_loc->column)) >= -1)){
-				printf("FAILED BECAUSE OF A KING!\n");
+				printf("DEBUG: FAILED BECAUSE OF A KING!\n");
 				return true;
 			}
 		}

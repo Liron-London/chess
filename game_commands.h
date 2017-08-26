@@ -32,15 +32,14 @@ typedef struct game_command_t {
 /*
  * for move - check if the command is valid and call set_move
  */
-Gamecommand* game_command_parse_line(const char* str);
+Gamecommand* game_command_parse_line(char* str);
 
 Gamecommand* game_command_create();
 
+void game_command_destroy(Gamecommand* command);
 /*
  * called right after user entered the command "START" and manages the game
  */
 int game_play(game* game);
-
-
 
 #endif /* GAME_COMMANDS_H_ */

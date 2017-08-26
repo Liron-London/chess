@@ -7,16 +7,24 @@
 #include "game_commands.h"
 
 Gamecommand* game_command_create(){
-	Gamecommand* game_command = malloc(sizeof(game_command));
-	game_command->validArg = false;
-	game_command->cmd = ILLIGAL_COMMAND;
-	game_command->move = malloc(sizeof(move));
-	if (game_command->move == NULL){
-		free(game_command->move);
+	Gamecommand* game_command = malloc(sizeof(Gamecommand));
+	if (game_command == NULL) {
 		free(game_command);
 		return NULL;
 	}
+	game_command->validArg = false;
+	game_command->cmd = ILLIGAL_COMMAND;
+	game_command->move = create_move();
+	if (game_command->move == NULL) {
+		game_command_destroy(game_command);
+		return NULL;
+	}
 	return game_command;
+}
+
+void game_command_destroy(Gamecommand* command) {
+	destroy_move(command->move);
+	free(command);
 }
 
 /* TODO -
@@ -25,8 +33,7 @@ Gamecommand* game_command_create(){
  * need to free game_command
  *
 */
-Gamecommand* game_command_parse_line(const char* str){
-	printf("DEBUG: in parse line\n");
+Gamecommand* game_command_parse_line(char* str){
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
 		free(str_copy);
@@ -35,33 +42,28 @@ Gamecommand* game_command_parse_line(const char* str){
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
 
-	printf("DEBUG: command_text is: %s\n", command_text);
-
-	move* cur_move = create_move();
-
 	Gamecommand* game_command = game_command_create();
 	game_command->validArg = false;
 
 	// char* command_int = strtok(NULL, " \t\n");
 
 	if (strcmp(command_text, "move") == 0){
-		printf("DEBUG: detected that command is move\n");
+		//printf("DEBUG: detected that command is move\n");
 		game_command->cmd = MOVE;
 
-		cur_move->source->row = atoi(strtok(NULL, "<, ")) - 1;
-		cur_move->source->column = strtok(NULL, "<,> ")[0] - 'A';
+		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
+		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
-		printf("DEBUG: command_text is: %s\n", command_text);
+		//printf("DEBUG: command_text is: %s\n", command_text);
 		if (strcmp(command_text, "to") != 0){
 			// game_command->is_val is false...
 			return game_command;
 		}
-		cur_move->dest->row = atoi(strtok(NULL, "<, ")) - 1;
-		cur_move->dest->column = strtok(NULL, "<,> ")[0] - 'A';
+		game_command->move->dest->row = atoi(strtok(NULL, "<, ")) - 1;
+		game_command->move->dest->column = strtok(NULL, "<,> ")[0] - 'A';
 
-		game_command->move = cur_move;
 		game_command->validArg = true;
 		return game_command;
 	}
@@ -146,9 +148,9 @@ int game_play(game* game){
 
 			// update history
 			// return 1;
-			free(command_str);
 		}
-
+		free(command_str);
+		game_command_destroy(game_command);
 	}
 }
 

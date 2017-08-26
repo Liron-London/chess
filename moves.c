@@ -21,54 +21,38 @@ bool check_capturing(char piece_in_next_loc, int color) {
 	return false;
 }
 
-move* create_move(){
-	move* move = malloc(sizeof(move));
-	if (move == NULL){
-		free(move);
+move* create_move() {
+	move* new_move = malloc(sizeof(move));
+	if (new_move == NULL) {
+		free(new_move);
 		return NULL;
 	}
-	move->source = malloc(sizeof(location));
-	if (move->source == NULL){
-		free(move->source);
-		free(move);
+	new_move->source = create_location();
+	if (new_move->source == NULL) {
+		free(new_move);
 		return NULL;
 	}
-	move->dest = malloc(sizeof(location));
-	if (move->source == NULL){
-		free(move->dest);
-		free(move->source);
-		free(move);
+	new_move->dest = create_location();
+	if (new_move->dest == NULL) {
+		destroy_move(new_move);
 		return NULL;
 	}
-	return move;
+	return new_move;
 }
 
-void destroy_move(move* move){
-	free(move->dest);
-	free(move->source);
-	free(move);
+void destroy_move(move* old_move) {
+	destroy_location(old_move->dest);
+	destroy_location(old_move->source);
+	free(old_move);
 }
 
 bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		int next_row, int next_col, int index) {
-	printf("DEBUG: NEXT ROW IS: %d, NEXT COL is: %d\n", next_row, next_col);
 	bool valid_move = false;
 
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-
-	for (int i=0; i<16; i++){
-		printf("DEBUG: blacks[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->blacks[i]->piece_location->row, cur_game->blacks[i]->piece_location->column);
-	}
-
-
 	game* tmp_game = game_copy(cur_game);
-	printf("DEBUG: copy worked!\n");
 	move* tmp_move = create_move();
-	printf("DEBUG: move created!\n");
 	piece* tmp_piece = copy_piece(cur_piece);
-	printf("DEBUG: piece copied!\n");
 
 	tmp_move->source->row = tmp_piece->piece_location->row; // source_location is always the piece location
 	tmp_move->source->column = tmp_piece->piece_location->column;
@@ -76,17 +60,7 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
 
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-
-
 	move_piece(tmp_game, tmp_move, tmp_piece);
-
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-
 
 	if (is_check(tmp_game) == false) {
 		valid_locs[index]->row = next_row;
@@ -94,31 +68,9 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		valid_move = true;
 	}
 
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-
-	printf("DEBUG: in is_check_aux before destroy!\n");
 	destroy_piece(tmp_piece);
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-	printf("DEBUG: after destroy piece!\n");
 	destroy_move(tmp_move);
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-	printf("DEBUG: after destroy move!\n");
 	game_destroy(tmp_game);
-	printf("DEBUG: after destroy game!\n");
-
-	for (int i=0; i<16; i++){
-		printf("DEBUG: whites[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
-	}
-
-	for (int i=0; i<16; i++){
-		printf("DEBUG: blacks[%d] loc is: ROW: %d, COL: %d\n", i, cur_game->blacks[i]->piece_location->row, cur_game->blacks[i]->piece_location->column);
-	}
 
 	return valid_move;
 }
@@ -208,7 +160,7 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	//check upwards right
 	next_row = row + 1;
 	next_col = col + 1;
-	while (next_row <= 8 && next_col <= 8 &&
+	while (next_row <= 7 && next_col <= 7 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i]->row = next_row;
@@ -283,7 +235,7 @@ location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 	//check upwards
 	next_row = row + 1;
 	next_col = col;
-	while (next_row <= 8 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	while (next_row <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -297,7 +249,7 @@ location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 	//check downwards
 		next_row = row - 1;
 		next_col = col;
-		while (next_row >= 1 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+		while (next_row >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 				color_by_type(cur_game->board[next_row][next_col]) != color)) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 				i++;
@@ -349,7 +301,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check upward right (2 up, 1 right)
 	next_row = row + 2;
 	next_col = col + 1;
-	if (row <= 7 && col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row <= 7 && next_col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -359,7 +311,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check upward left (2 up, 1 left)
 	next_row = row + 2;
 	next_col = col - 1;
-	if (row <= 7 && col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row <= 7 && next_col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -369,7 +321,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check right upward (1 up, 2 right)
 	next_row = row + 1;
 	next_col = col + 2;
-	if (row <= 7 && col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row <= 7 && next_col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -379,7 +331,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check left upward (1 up, 2 left)
 	next_row = row + 1;
 	next_col = col - 2;
-	if (row <= 7 && col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row <= 7 && next_col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -389,7 +341,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check downward right (2 down, 1 right)
 	next_row = row - 2;
 	next_col = col + 1;
-	if (row >= 0 && col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row >= 0 && next_col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -399,7 +351,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check downward left (2 down, 1 left)
 	next_row = row - 2;
 	next_col = col - 2;
-	if (row >= 0 && col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row >= 0 && next_col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -409,7 +361,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check right downward (1 down, 2 right)
 	next_row = row - 1;
 	next_col = col + 2;
-	if (row >= 0 && col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row >= 0 && next_col <= 7 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -419,7 +371,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	// check left downward (1 down, 2 left)
 	next_row = row - 1;
 	next_col = col - 2;
-	if (row >= 0 && col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
+	if (next_row >= 0 && next_col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 			i++;
@@ -427,16 +379,17 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	}
 	return valid_locs;
 }
+
 // need to find a way to prevent the bishop moves from overriding the rook moves
 location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
-	location* new_ptr_to_valid_locs;
+	location** new_ptr_to_valid_locs;
 	for (int i = 0; i < 64; i++) {
-		if (valid_locs[i] == NULL) {
-			new_ptr_to_valid_locs = valid_locs[i];
+		if (valid_locs[i]->row == -1 && valid_locs[i]->column == -1) {
+			new_ptr_to_valid_locs = &valid_locs[i];
 		}
 	}
-	rook_valid_moves(&new_ptr_to_valid_locs, cur_game, cur_piece);
+	rook_valid_moves(new_ptr_to_valid_locs, cur_game, cur_piece);
 	return valid_locs;
 }
 
@@ -534,7 +487,7 @@ location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
-		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
+		return bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_ROOK || type == BLACK_ROOK) {
 		return rook_valid_moves(valid_locs, cur_game, cur_piece);
@@ -615,7 +568,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 		}
 	}
 	for (int i=0; i<64; i++){
-		free(valid_locs[i]);
+		destroy_location(valid_locs[i]);
 	}
 	free(valid_locs);
 	return false;
@@ -625,7 +578,8 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 	printf("DEBUG: in move piece\n");
 	change_turn(cur_game);
 
-	cur_piece->piece_location = cur_move->dest;
+	cur_piece->piece_location->row = cur_move->dest->row;
+	cur_piece->piece_location->column = cur_move->dest->column;
 
 	// update the board
 	cur_game->board[cur_move->source->row][cur_move->source->column] = EMPTY_ENTRY;
