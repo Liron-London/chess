@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "game.h"
+#include "game_commands.h"
 
 typedef enum {
     GAME_MODE,
@@ -32,13 +33,26 @@ typedef struct command_t {
     int arg;
 } Command;
 
+
+/*
+ *  prompts the user to enter settings
+ *  calls parse_line
+ */
+void ask_for_settings();
+
+/*
+ * says if a string is number or not
+ */
 bool parse_is_int(const char* str);
 
 /*
- * get command from user and checks validity of command
+ * get command-string from user and checks validity of command
  */
-Command parse_line(game* game, const char* str);
+Command* parse_line(game* game, const char* str, Command* command);
 
+/*
+ * prints the current game settings
+ */
 void print_settings(game* cur_game);
 
 /*

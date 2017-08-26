@@ -35,8 +35,9 @@ typedef struct game_command_t {
 Gamecommand* game_command_parse_line(const char* str);
 
 Gamecommand* game_command_create();
+
 /*
- * called right after user entered the command "START" and manges the game
+ * called right after user entered the command "START" and manages the game
  */
 int game_play(game* game);
 
