@@ -7,6 +7,7 @@
 #include "moves.h"
 
 int main() {
-
+	set_game();
+	return 0;
 }
 

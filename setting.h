@@ -14,6 +14,7 @@
 #include <string.h>
 #include "game.h"
 #include "game_commands.h"
+#include "file_handler.h"
 
 typedef enum {
     GAME_MODE,
@@ -33,12 +34,21 @@ typedef struct command_t {
     int arg;
 } Command;
 
+/*
+ * creates a new command, returns the pointer to it
+ */
+Command* create_command();
+
+/*
+ * destroys a command using free
+ */
+void destroy_command(Command* command);
 
 /*
  *  prompts the user to enter settings
  *  calls parse_line
  */
-void ask_for_settings();
+char* ask_for_settings(char* command_text);
 
 /*
  * says if a string is number or not
@@ -56,7 +66,13 @@ Command* parse_line(game* game, const char* str, Command* command);
 void print_settings(game* cur_game);
 
 /*
+ * prints an error message if the user typed in a level outside of 1-4
+ */
+void print_invalid_difficulty();
+
+/*
  * creates a default game updates it according to user settings (with while loop)
+ * returns 0 if the command exits the settings mode (start, quit, load)
  */
 int set_game();
 

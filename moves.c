@@ -5,6 +5,8 @@
  *      Author: lironl
  */
 #include "moves.h"
+#include "debug.h"
+
 
 int color_by_type(char piece_type) {
 	if ('A' <= piece_type && piece_type <= 'Z') {
@@ -76,19 +78,19 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 }
 
 location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
-	printf("In pawn valid moves\n"); // debug
+	DEBUG("In pawn valid moves\n");
 	int i = 0;
 	char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
 
-	printf("DEBUG: ROW IS %d\n COL IS %d\n", row, col);
+	DEBUG("ROW IS %d\n COL IS %d\n", row, col);
 
 	if (type == WHITE_PAWN) {
 		if (row == 1 && cur_game->board[2][col] == EMPTY_ENTRY &&
 				cur_game->board[3][col] == EMPTY_ENTRY) {
 
-			printf("passed the basic checks...\n"); // debug
+			DEBUG("passed the basic checks...\n");
 
 			// make the move on a copy of the board and check if is_check == true
 			if(is_check_aux(valid_locs, cur_game, cur_piece, 3, col, i)) {
@@ -146,7 +148,7 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 		}
 	}
-	printf("finished pawn valid moves!\n");
+	DEBUG("finished pawn valid moves!\n");
 	return valid_locs;
 }
 
@@ -291,7 +293,7 @@ location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 }
 
 location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
-	printf("In knight valid moves\n"); //debug
+	DEBUG("In knight valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
@@ -396,7 +398,7 @@ location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_p
 
 
 location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
-	printf("In king valid moves\n"); //debug
+	DEBUG("In king valid moves\n");
 	int i = 0;
 	// char type = cur_piece->piece_type;
 	int row = cur_piece->piece_location->row;
@@ -483,7 +485,7 @@ location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	char type = cur_piece->piece_type;
 
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
-		printf("DEBUG: In valid moves!\n");
+		DEBUG("In valid moves!\n");
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
@@ -501,13 +503,13 @@ location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	if (type == WHITE_KING || type == BLACK_KING){
 		return king_valid_moves(valid_locs, cur_game, cur_piece);
 	}
-	printf("DEBUG: ERROR IN VALID MOVES");
+	DEBUG("ERROR IN VALID MOVES");
 	return NULL;
 }
 
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
-	printf("DEBUG: in is_valid_move\n");
+	DEBUG("in is_valid_move\n");
 	int color;
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 
@@ -518,14 +520,14 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	}
 
 
-	printf("DEBUG: ROW IS %d COL IS %d\n", cur_move->source->row, cur_move->source->column);
+	DEBUG("ROW IS %d COL IS %d\n", cur_move->source->row, cur_move->source->column);
 
 	// source is empty
 	if (source == EMPTY_ENTRY){
 		return false;
 	}
 
-	printf("DEBUG: CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
+	DEBUG("CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 
@@ -535,7 +537,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 			if (cur_game->whites[i]->piece_type == source &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
-				printf("made it! (whites)\n");
+				DEBUG("made it! (whites)\n");
 				valid_locs = valid_moves(valid_locs, cur_game, cur_game->whites[i]);
 				break;
 			}
@@ -547,7 +549,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 			if (cur_game->blacks[i]->piece_type == source &&
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
-				printf("made it! (blacks)\n");
+				DEBUG("made it! (blacks)\n");
 				valid_locs = valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
 
 				break;
@@ -575,7 +577,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 }
 
 void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
-	printf("DEBUG: in move piece\n");
+	DEBUG("in move piece\n");
 	change_turn(cur_game);
 
 	cur_piece->piece_location->row = cur_move->dest->row;

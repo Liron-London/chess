@@ -6,6 +6,7 @@
  */
 
 #include "game.h"
+#include "debug.h"
 
 /*
  * TODO
@@ -14,7 +15,7 @@
  */
 
 piece* location_to_piece(game* cur_game, location* loc){
-	// printf("DEBUG: in location_to_piece\n");
+	// DEBUG("in location_to_piece\n");
 	char type = cur_game->board[loc->row][loc->column];
 	if (type == EMPTY_ENTRY){
 		return NULL;
@@ -22,10 +23,10 @@ piece* location_to_piece(game* cur_game, location* loc){
 
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
-			printf("DEBUG: piece location is: ROW %d, COL %d\n", cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
+			DEBUG("piece location is: ROW %d, COL %d\n", cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
 			if (cur_game->whites[i]->piece_location->row == loc->row &&
 					cur_game->whites[i]->piece_location->column == loc->column){
-				printf("DEBUG: NON-NULL is returned\n");
+				DEBUG("NON-NULL is returned\n");
 				return cur_game->whites[i];
 			}
 		}
@@ -34,12 +35,12 @@ piece* location_to_piece(game* cur_game, location* loc){
 	else{
 		for (int i=0; i<16;i++){
 			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column){
-				printf("DEBUG: NON-NULL is returned\n");
+				DEBUG("NON-NULL is returned\n");
 				return cur_game->blacks[i];
 			}
 		}
 	}
-	printf("DEBUG: NULL is returned\n");
+	DEBUG("NULL is returned\n");
 	return NULL;
 }
 
@@ -70,9 +71,9 @@ piece* create_piece() {
 	}
 	new_piece->alive = 1;
 	new_piece->color = 0;
-	//printf("DEBUG: about to create location!\n");
+	//DEBUG("about to create location!\n");
 	new_piece->piece_location = create_location();
-	//printf("DEBUG: location created!\n");
+	//DEBUG("location created!\n");
 	// default values
 	//piece->piece_location->row = -1;
 	//piece->piece_location->column = -1;
@@ -295,6 +296,7 @@ void print_board(game* cur_game){
 	for (char c = 'A'; c <= 'H'; c++){
 		printf("%c ", c);
 	}
+	printf("\n");
 }
 
 // change the turn
@@ -310,8 +312,8 @@ void change_turn(game* cur_game){
 
 bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up right diagonal
-	printf("DEBUG: KING LOC IS: ROW %d, COL %d\n", king_loc->row, king_loc->column);
-	printf("DEBUG: ENEMY LOC IS: ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
+	DEBUG("KING LOC IS: ROW %d, COL %d\n", king_loc->row, king_loc->column);
+	DEBUG("ENEMY LOC IS: ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 	for (int i=0; i<8; i++){
 
 		if ((enemy_loc->row + i == king_loc->row) && (enemy_loc->column + i == king_loc->column)){
@@ -444,18 +446,18 @@ bool is_check(game* cur_game){
 	// white turn
 	int color = (cur_game->current_turn + cur_game->user_color)%2;
 
-	printf("DEBUG: current turn is %d\n", cur_game->current_turn);
+	DEBUG("current turn is %d\n", cur_game->current_turn);
 
 	if (color == 1){
-		printf("KING IS WHITE\n");
+		DEBUG("KING IS WHITE\n");
 		king_loc = cur_game->whites[4]->piece_location;
 		enemies = cur_game->blacks;
 	}
 	// black turn
 	else{
-		printf("KING IS BLACK\n");
+		DEBUG("KING IS BLACK\n");
 		king_loc = cur_game->blacks[4]->piece_location;
-		printf("DEBUG: king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
+		DEBUG("king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
 		enemies = cur_game->whites;
 	}
 
@@ -463,15 +465,15 @@ bool is_check(game* cur_game){
 
 		// putting location into variable for readability
 		location* enemy_loc = enemies[i]->piece_location;
-		//printf("DEBUG: enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
+		//DEBUG("enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 		char enemy_type = enemies[i]->piece_type;
-		//printf("DEBUG: enemy type %c\n",enemy_type);
+		//DEBUG("enemy type %c\n",enemy_type);
 
 		// black pawn
 		if (enemy_type == BLACK_PAWN){
 			if ((enemy_loc->column == (king_loc->column) + 1) &&
 					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
-				printf("DEBUG: FAILED BECAUSE OF A BLACK PAWN!\n");
+				DEBUG("FAILED BECAUSE OF A BLACK PAWN!\n");
 				return true;
 			}
 		}
@@ -480,7 +482,7 @@ bool is_check(game* cur_game){
 		if (enemy_type == WHITE_PAWN){
 			if ((enemy_loc->column == (king_loc->column) - 1) &&
 					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
-				printf("DEBUG: FAILED BECAUSE OF A WHITE PAWN!\n");
+				DEBUG("FAILED BECAUSE OF A WHITE PAWN!\n");
 				return true;
 			}
 		}
@@ -491,9 +493,9 @@ bool is_check(game* cur_game){
 				((enemy_loc->column == (king_loc->column) - 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1)))||
 				((enemy_loc->row == (king_loc->row) + 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))||
 				((enemy_loc->row == (king_loc->row) - 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))){
-				printf("DEBUG: FAILED BECAUSE OF A KNIGHT!\n");
-				printf("DEBUG: KING LOC IS: ROW: %d COL %c\n", king_loc->row, king_loc->column);
-				printf("DEBUG: KNIGHT LOC IS: ROW: %d COL %c\n", enemy_loc->row, enemy_loc->column);
+				DEBUG("FAILED BECAUSE OF A KNIGHT!\n");
+				DEBUG("KING LOC IS: ROW: %d COL %c\n", king_loc->row, king_loc->column);
+				DEBUG("KNIGHT LOC IS: ROW: %d COL %c\n", enemy_loc->row, enemy_loc->column);
 				return true;
 			}
 		}
@@ -501,7 +503,7 @@ bool is_check(game* cur_game){
 		// bishop
 		if (enemy_type == BLACK_BISHOP || enemy_type == WHITE_BISHOP){
 			if (check_diagonals(cur_game, king_loc, enemy_loc) == true){
-				printf("DEBUG: FAILED BECAUSE OF A BISHOP!\n");
+				DEBUG("FAILED BECAUSE OF A BISHOP!\n");
 				return true;
 			}
 		}
@@ -509,17 +511,17 @@ bool is_check(game* cur_game){
 		// rook
 		if (enemy_type == BLACK_ROOK || enemy_type == WHITE_ROOK){
 			if (check_parallels(cur_game, king_loc, enemy_loc) == true){
-				printf("DEBUG: FAILED BECAUSE OF A ROOK!\n");
+				DEBUG("FAILED BECAUSE OF A ROOK!\n");
 				return true;
 			}
 		}
 
 		// queen
 		if (enemy_type == BLACK_QUEEN || enemy_type == WHITE_QUEEN){
-			printf("DEBUG: QUEEN is ABOUT TO BE CHECKED\n");
+			DEBUG("QUEEN is ABOUT TO BE CHECKED\n");
 			if ((check_parallels(cur_game, king_loc, enemy_loc) == true) ||
 				(check_diagonals(cur_game, king_loc, enemy_loc) == true)){
-				printf("DEBUG: FAILED BECAUSE OF A QUEEN!\n");
+				DEBUG("FAILED BECAUSE OF A QUEEN!\n");
 				return true;
 			}
 		}
@@ -528,11 +530,11 @@ bool is_check(game* cur_game){
 		if (enemy_type == BLACK_KING || enemy_type == WHITE_KING){
 			if (((king_loc->row - (enemy_loc->row)) <= 1 && (king_loc->row - (enemy_loc->row)) >= -1) &&
 				((king_loc->column - (enemy_loc->column)) <= 1 && (king_loc->column - (enemy_loc->column)) >= -1)){
-				printf("DEBUG: FAILED BECAUSE OF A KING!\n");
+				DEBUG("FAILED BECAUSE OF A KING!\n");
 				return true;
 			}
 		}
 	}
-	printf("DEBUG: check finished correctly\n");
+	DEBUG("check finished correctly\n");
 	return false;
 }

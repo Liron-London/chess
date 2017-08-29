@@ -5,6 +5,7 @@
  *      Author: Gal
  */
 #include "game_commands.h"
+#include "debug.h"
 
 Gamecommand* game_command_create(){
 	Gamecommand* game_command = malloc(sizeof(Gamecommand));
@@ -48,7 +49,7 @@ Gamecommand* game_command_parse_line(char* str){
 	// char* command_int = strtok(NULL, " \t\n");
 
 	if (strcmp(command_text, "move") == 0){
-		//printf("DEBUG: detected that command is move\n");
+		//DEBUG("detected that command is move\n");
 		game_command->cmd = MOVE;
 
 		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
@@ -56,7 +57,7 @@ Gamecommand* game_command_parse_line(char* str){
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
-		//printf("DEBUG: command_text is: %s\n", command_text);
+		//DEBUG("command_text is: %s\n", command_text);
 		if (strcmp(command_text, "to") != 0){
 			// game_command->is_val is false...
 			return game_command;
@@ -111,10 +112,10 @@ int game_play(game* game){
 		char* command_str = (char*) malloc(1024*sizeof(char));
 		printf("please choose a command\n"); // need to be changed
 		scanf(" %1024[^\n]", command_str);
-		printf("DEBUG: scanf passed\n");
-		printf("DEBUG: text is %s\n", command_str);
+		DEBUG("scanf passed\n");
+		DEBUG("text is %s\n", command_str);
 		game_command = game_command_parse_line(command_str);
-		printf("DEBUG: prase the line!\n");
+		DEBUG("prase the line!\n");
 
 		// QUIT
 		if (game_command->validArg == true && game_command->cmd == GAME_QUIT){
@@ -130,20 +131,20 @@ int game_play(game* game){
 		// MOVE
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
-			printf("DEBUG: Current turn is: %d\n", game->current_turn);
+			DEBUG("Current turn is: %d\n", game->current_turn);
 			if (is_valid_move(game, game_command->move) == true){
-				printf("DEBUG: is_valid_move is OK\n");
+				DEBUG("is_valid_move is OK\n");
 				cur_piece = location_to_piece(game, game_command->move->source);
-				printf("DEBUG: location_to_piece is OK\n");
-				printf("DEBUG: current piece is %c %d %d\n", cur_piece->piece_type, cur_piece->piece_location->row,cur_piece->piece_location->column);
+				DEBUG("location_to_piece is OK\n");
+				DEBUG("current piece is %c %d %d\n", cur_piece->piece_type, cur_piece->piece_location->row,cur_piece->piece_location->column);
 				move_piece(game, game_command->move, cur_piece);
-				printf("DEBUG: move_piece is OK\n");
+				DEBUG("move_piece is OK\n");
 				print_board(game);
-				printf("valid move!\n");
+				DEBUG("valid move!\n");
 			}
 
 			else{
-				printf("DEBUG: move is not valid!\n");
+				DEBUG("move is not valid!\n");
 			}
 
 			// update history

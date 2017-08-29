@@ -1,6 +1,4 @@
 .cproject
 .project
-array_list.o
-array_list_unit_test
-array_list_unit_test.o
-
+*.o
+*_test

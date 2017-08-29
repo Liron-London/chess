@@ -6,8 +6,19 @@
  */
 
 #include "setting.h"
-#include "game.h"
+#include "debug.h"
 
+Command* create_command() {
+	Command* command = malloc(sizeof(Command));
+	command->cmd = INVALID_COMMAND;
+	command->arg = -1;
+	command->validArg = false;
+	return command;
+}
+
+void destroy_command(Command* command) {
+	free(command);
+}
 
 bool parser_is_int(const char* str) {
  char ch;
@@ -35,7 +46,12 @@ void print_settings(game* cur_game){
 	}
 }
 
+void print_invalid_difficulty() {
+	printf("Wrong difficulty level. The value should be between 1 to 5\n");
+}
+
 Command* parse_line(game* game, const char* str, Command* command) {
+
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
@@ -43,7 +59,6 @@ Command* parse_line(game* game, const char* str, Command* command) {
 
 	command->validArg = false;
 	command->cmd = INVALID_COMMAND;
-
 	// TODO
 	// can the command get ints in case the command is start or quit?
 
@@ -57,7 +72,7 @@ Command* parse_line(game* game, const char* str, Command* command) {
 		command->validArg = true;
 	}
 
-	if (strcmp(command_text, "print setting") == 0) {
+	if (strcmp(command_text, "print_setting") == 0) {
 		command->cmd = PRINT_SETTINGS;
 	}
 
@@ -91,11 +106,14 @@ Command* parse_line(game* game, const char* str, Command* command) {
 	if (strcmp(command_text, "difficulty") == 0) {
 		command->cmd = DIFFICULTY;
 		// TODO - in case we do the bonus we need to change the upper bound
-		if (parser_is_int(command_int) == true){
+		if (parser_is_int(command_int) == true) {
 			command->arg = atoi(command_int);
-			if (command->arg >= 1 && command->arg <= 4){
+			if (command->arg >= 1 && command->arg <= 4) {
 				command->validArg = true;
 				game->difficulty = command->arg;
+			}
+			else {
+				print_invalid_difficulty();
 			}
 		}
 	}
@@ -107,30 +125,57 @@ Command* parse_line(game* game, const char* str, Command* command) {
 		game->game_mode = 1;
 		game->difficulty = 2;
 	}
+
 	return command;
 }
 
-void ask_for_settings(game* new_game, Command* command) {
-
-	while(command->cmd != START && command->cmd != QUIT && command->cmd != LOAD) {
-		printf("Specify game setting or type 'start' to begin a game with the current setting:");
-		char* command_text = (char*) malloc(1024*sizeof(char));
-		scanf("%s", command_text);
-		parse_line(new_game, command_text, command);
-	}
-
+char* ask_for_settings(char* command_text) {
+	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
+	scanf(" %1024[^\n]", command_text);
+	return command_text;
 }
 
 int set_game() {
 	game* new_game = game_create();
-	Command* command = (Command*)malloc(sizeof(Command));
-	ask_for_settings(new_game, command);
-	if (command->cmd == START) {
-		game_play(new_game);
+	Command* command = create_command();
+	while(true) {
+
+		char* command_text = malloc(1024 * sizeof(char));
+		ask_for_settings(command_text);
+
+		parse_line(new_game, command_text, command);
+		if (command->cmd == START) {
+			game_play(new_game);
+			return 0;
+		}
+		if (command->cmd == QUIT) {
+			game_destroy(new_game);
+			return 0;
+		}
+		if (command->cmd == GAME_MODE) {
+			//TODO
+			continue;
+		}
+		if (command->cmd == DIFFICULTY) {
+			new_game->difficulty = command->arg;
+		}
+		if (command->cmd == USER_COLOR) {
+			new_game->user_color = command->arg;
+		}
+		if (command->cmd == LOAD) {
+			//TODO
+			continue;
+		}
+		if (command->cmd == DEFAULT_GAME) {
+			continue;
+		}
+		if (command->cmd == PRINT_SETTINGS) {
+			print_settings(new_game);
+		}
+		if (command->cmd == INVALID_COMMAND) {
+
+		}
+		free(command_text);
 	}
-	if (command->cmd == QUIT) {
-		game_destroy(new_game);
-	}
-	free(command);
-	return 1;
+		return 1;
 }

@@ -1,7 +1,7 @@
 #ifndef FILE_HANDLER_H_INCLUDED
 #define FILE_HANDLER_H_INCLUDED
 #include <stdio.h>
-#include <stlib.h>
+#include <stdlib.h>
 #include "game.h"
 #include "setting.h"
 
