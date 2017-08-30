@@ -152,6 +152,31 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 	return valid_locs;
 }
 
+bool is_mate(game* cur_game){
+	piece** pieces;
+	location* valid_locs[64];
+	valid_locs[0] = NULL;
+
+	if (cur_game->current_turn == 0){
+		pieces = cur_game->whites;
+	}
+	else{
+		pieces = cur_game->blacks;
+	}
+
+	for (int i=0; i<16; i++){
+		if (pieces[i]->alive == true){
+			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
+			// if valid_locs[0] is not null it means there is at least one valid move
+			if (valid_locs[0] != NULL){
+				return false;
+			}
+		}
+	}
+	// there are no valid moves, return true
+	return true;
+}
+
 location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	int i = 0;
 	int row = cur_piece->piece_location->row;

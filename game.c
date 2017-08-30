@@ -229,7 +229,7 @@ game* game_create() {
 	return newgame;
 }
 
-//TODO -- need to update according to the changes in game create
+
 game* game_copy(game* cur_game) {
 	if (cur_game == NULL)
 		return NULL;
