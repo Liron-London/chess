@@ -141,6 +141,9 @@ int game_play(game* game){
 				DEBUG("move_piece is OK\n");
 				print_board(game);
 				DEBUG("valid move!\n");
+				if (is_mate(game) == true){
+					printf("player %d wins!", (game->current_turn + game->user_color)%2);
+				}
 			}
 
 			else{

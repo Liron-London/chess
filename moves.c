@@ -155,7 +155,7 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 bool is_mate(game* cur_game){
 	piece** pieces;
 	location* valid_locs[64];
-	valid_locs[0] = NULL;
+	valid_locs[0] = NULL; // set a default value in the first cell in the array
 
 	if (cur_game->current_turn == 0){
 		pieces = cur_game->whites;
