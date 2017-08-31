@@ -74,6 +74,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	destroy_move(tmp_move);
 	game_destroy(tmp_game);
 
+	DEBUG("after is_check_aux func!\n");
+
 	return valid_move;
 }
 
