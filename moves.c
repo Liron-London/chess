@@ -190,6 +190,7 @@ bool is_mate(game* cur_game){
 }
 
 location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+	DEBUG("In bishop valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
@@ -265,6 +266,7 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 }
 
 location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+	DEBUG("In rook valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
 	int col = cur_piece->piece_location->column;
@@ -421,6 +423,7 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 
 // need to find a way to prevent the bishop moves from overriding the rook moves
 location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+	DEBUG("In queen valid moves\n");
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	location** new_ptr_to_valid_locs;
 	for (int i = 0; i < 64; i++) {
