@@ -157,7 +157,8 @@ bool is_mate(game* cur_game){
 	piece** pieces;
 	location** valid_locs = malloc(64*sizeof(location*));
 	DEBUG("in is mate - allocations worked!\n");
-	valid_locs[0] = NULL; // set a default value in the first cell in the array
+	location* tmp_location = create_location();
+	valid_locs[0] = tmp_location; // set a default value in the first cell in the array
 
 	if (cur_game->current_turn == 0){
 		pieces = cur_game->whites;
@@ -173,14 +174,16 @@ bool is_mate(game* cur_game){
 			DEBUG("%d!\n", i);
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
-			if (valid_locs[0] != NULL){
+			if (valid_locs[0] != tmp_location){
 				DEBUG("Not mate\n");
+				free(tmp_location);
 				free(valid_locs);
 				return false;
 			}
 		}
 	}
 	// there are no valid moves, return true
+	free(tmp_location);
 	free(valid_locs);
 	DEBUG("Mate\n");
 	return true;
