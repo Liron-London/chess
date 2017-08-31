@@ -154,7 +154,7 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 
 bool is_mate(game* cur_game){
 	piece** pieces;
-	location* valid_locs[64];
+	location** valid_locs = malloc(64*sizeof(location*));
 	valid_locs[0] = NULL; // set a default value in the first cell in the array
 
 	if (cur_game->current_turn == 0){
@@ -169,11 +169,13 @@ bool is_mate(game* cur_game){
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0] != NULL){
+				free(valid_locs);
 				return false;
 			}
 		}
 	}
 	// there are no valid moves, return true
+	free(valid_locs);
 	return true;
 }
 
