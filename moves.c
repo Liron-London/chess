@@ -183,7 +183,7 @@ bool is_mate(game* cur_game){
 			DEBUG("%d!\n", i);
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
-			if (valid_locs[0] != tmp_location){
+			if (valid_locs[0]->row != -1){
 				DEBUG("Not mate\n");
 				for (int i=0; i<64;i++){
 					free(valid_locs[i]);
