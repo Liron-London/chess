@@ -69,6 +69,7 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		valid_locs[index]->row = next_row;
 		valid_locs[index]->column = next_col;
 		valid_move = true;
+		DEBUG("valid move was found: ROW: %d, COL: %d\n", next_row, next_col);
 	}
 
 	DEBUG("before destroy!\n");
