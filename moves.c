@@ -155,6 +155,7 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 bool is_mate(game* cur_game){
 	piece** pieces;
 	location** valid_locs = malloc(64*sizeof(location*));
+	DEBUG("in is mate - allocations worked!");
 	valid_locs[0] = NULL; // set a default value in the first cell in the array
 
 	if (cur_game->current_turn == 0){
@@ -163,6 +164,8 @@ bool is_mate(game* cur_game){
 	else{
 		pieces = cur_game->blacks;
 	}
+
+	DEBUG("pieces were chosen!");
 
 	for (int i=0; i<16; i++){
 		if (pieces[i]->alive == true){
