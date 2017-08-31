@@ -170,6 +170,7 @@ bool is_mate(game* cur_game){
 
 	for (int i=0; i<16; i++){
 		if (pieces[i]->alive == true){
+			DEBUG("%d!\n", i);
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0] != NULL){
