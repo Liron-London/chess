@@ -35,4 +35,6 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece, int n
  */
 bool is_valid_move(game* cur_game, move* cur_move);
 
+bool is_mate(game* cur_game);
+
 #endif /* MOVES_H_ */
