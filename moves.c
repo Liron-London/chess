@@ -174,6 +174,7 @@ bool is_mate(game* cur_game){
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0] != NULL){
+				DEBUG("Not mate\n");
 				free(valid_locs);
 				return false;
 			}
@@ -181,6 +182,7 @@ bool is_mate(game* cur_game){
 	}
 	// there are no valid moves, return true
 	free(valid_locs);
+	DEBUG("Mate\n");
 	return true;
 }
 
