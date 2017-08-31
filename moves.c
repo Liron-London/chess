@@ -169,7 +169,7 @@ bool is_mate(game* cur_game){
 		valid_locs[i] = create_location();
 	}
 
-	int color = (cur_game->current_turn + cur_game->user_color + 1)%2
+	int color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 
 	if (color == 0){
 		pieces = cur_game->whites;
