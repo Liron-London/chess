@@ -8,7 +8,7 @@
 #include "moves.h"
 #include "game_commands.h"
 #include <stdbool.h>
-
+/*
 static bool basic_check(){
 	// game* game = game_create();
 	// return true;
@@ -22,6 +22,7 @@ static bool basic_check(){
 	game_command_destroy(game_command);
 	return true;
 }
+*/
 
 static bool game_play_check(){
 	game* cur_game = game_create();
@@ -32,10 +33,12 @@ static bool game_play_check(){
 
 int main() {
 	bool success;
-	success = basic_check();
-	printf("before last if\n");
-	if (success)
-		printf("basic game_commands checks success!\n");
+//	success = basic_check();
+//	printf("before last if\n");
+//	if (success)
+//		printf("basic game_commands checks success!\n");
 	success = game_play_check();
+		if (success)
+			printf("game_play test success!\n");
 	return 0;
 }

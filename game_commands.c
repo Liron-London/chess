@@ -5,6 +5,7 @@
  *      Author: Gal
  */
 #include "game_commands.h"
+#include "file_handler.h"
 #include "debug.h"
 
 Gamecommand* game_command_create(){
@@ -20,6 +21,7 @@ Gamecommand* game_command_create(){
 		game_command_destroy(game_command);
 		return NULL;
 	}
+
 	return game_command;
 }
 
@@ -34,7 +36,7 @@ void game_command_destroy(Gamecommand* command) {
  * need to free game_command
  *
 */
-Gamecommand* game_command_parse_line(char* str){
+Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
 		free(str_copy);
@@ -45,9 +47,10 @@ Gamecommand* game_command_parse_line(char* str){
 
 	Gamecommand* game_command = game_command_create();
 	game_command->validArg = false;
-
-	// char* command_int = strtok(NULL, " \t\n");
-
+	//this block prevents the "unused variable" warning for file_name
+	while (file_name) {
+		break;
+	}
 	if (strcmp(command_text, "move") == 0){
 		//DEBUG("detected that command is move\n");
 		game_command->cmd = MOVE;
@@ -87,19 +90,24 @@ Gamecommand* game_command_parse_line(char* str){
 		return game_command;
 	}
 
-	if (strcmp(command_text, "reset") == 0){
-		game_command->cmd = RESET;
-		game_command->validArg = true;
-		return game_command;
-	}
-
-	if (strcmp(command_text, "save") == 0){
-		//need to complete saving mode
+	if (strcmp(command_text, "save") == 0) {
+		strcpy(file_name, strtok(NULL, " \t\n"));
+		//DEBUG("in parse line, file_name is: %s\n", file_name);
 		game_command->cmd = SAVE;
 		game_command->validArg = true;
 		return game_command;
 	}
 	return game_command;
+}
+
+void ask_for_move(game* cur_game) {
+	//player 1's turn, player 1 is white OR player 2's turn, player 1 is black
+	if ((cur_game->current_turn == 1 && cur_game->user_color == 1) ||
+			(cur_game->current_turn == 0 && cur_game->user_color == 0)) {
+		printf("White player - enter your move:\n");
+	} else {
+		printf("Black player - enter your move:\n");
+	}
 }
 
 // called when the command "start" is pressed in settings
@@ -110,11 +118,13 @@ int game_play(game* game){
 
 	while (1){
 		char* command_str = (char*) malloc(1024*sizeof(char));
-		printf("please choose a command\n"); // need to be changed
+		char file_name[256] = "default_game.xml";
+		ask_for_move(game);
 		scanf(" %1024[^\n]", command_str);
 		DEBUG("scanf passed\n");
 		DEBUG("text is %s\n", command_str);
-		game_command = game_command_parse_line(command_str);
+		game_command = game_command_parse_line(command_str, file_name);
+		DEBUG("in game_play, file_name is: %s\n", file_name);
 		DEBUG("prase the line!\n");
 
 		// QUIT
@@ -124,8 +134,7 @@ int game_play(game* game){
 
 		//SAVE
 		if (game_command->validArg == true && game_command->cmd == SAVE){
-			// TODO - complete this function
-			return 1;
+			save_game(game, file_name);
 		}
 
 		// MOVE
@@ -149,13 +158,13 @@ int game_play(game* game){
 			else{
 				DEBUG("move is not valid!\n");
 			}
-
 			// update history
 			// return 1;
 		}
 		free(command_str);
 		game_command_destroy(game_command);
 	}
+return 0;
 }
 
 

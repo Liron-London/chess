@@ -2,3 +2,4 @@
 .project
 *.o
 *_test
+*.xml

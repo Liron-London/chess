@@ -30,9 +30,14 @@ typedef struct game_command_t {
 } Gamecommand;
 
 /*
+ * prints the "XXX player - enter your move" message according to the current turn
+ */
+void ask_for_move(game* cur_game);
+
+/*
  * for move - check if the command is valid and call set_move
  */
-Gamecommand* game_command_parse_line(char* str);
+Gamecommand* game_command_parse_line(char* str, char* file_name);
 
 Gamecommand* game_command_create();
 
