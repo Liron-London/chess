@@ -70,6 +70,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 		valid_locs[index]->column = next_col;
 		valid_move = true;
 		DEBUG("valid move was found: ROW: %d, COL: %d\n", next_row, next_col);
+		DEBUG("piece type is: %d\n", tmp_piece->piece_type);
+		print_board(tmp_game);
 	}
 
 	DEBUG("before destroy!\n");
