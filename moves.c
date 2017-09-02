@@ -63,8 +63,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
 
-	DEBUG("move source is: ROW: %d, COL: %d", tmp_move->source->row,tmp_move->source->column);
-	DEBUG("move dest is: ROW: %d, COL: %d", tmp_move->dest->row,tmp_move->dest->column);
+	DEBUG("move source is: ROW: %d, COL: %d\n", tmp_move->source->row,tmp_move->source->column);
+	DEBUG("move dest is: ROW: %d, COL: %d\n", tmp_move->dest->row,tmp_move->dest->column);
 
 	DEBUG("King loc is: ROW:%d, COL:%d\n", tmp_game->whites[4]->piece_location->row, tmp_game->whites[4]->piece_location->column);
 	move_piece(tmp_game, tmp_move, tmp_piece);
