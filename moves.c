@@ -96,8 +96,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 
 	DEBUG("before destroy!\n");
 
-	destroy_piece(tmp_piece);
-	DEBUG("piece destroyed!\n");
+	//destroy_piece(tmp_piece);
+	//DEBUG("piece destroyed!\n");
 	destroy_move(tmp_move);
 	DEBUG("move destroyed!\n");
 	game_destroy(tmp_game);
