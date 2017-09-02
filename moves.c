@@ -184,10 +184,8 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 }
 
 bool is_mate(game* cur_game){
-	DEBUG("in is mate!!\n");
 	piece** pieces;
 	location** valid_locs = malloc(64*sizeof(location*));
-	DEBUG("in is mate - allocations worked!\n");
 	for (int i=0; i<64; i++){
 		valid_locs[i] = create_location();
 	}
@@ -201,16 +199,12 @@ bool is_mate(game* cur_game){
 		pieces = cur_game->blacks;
 	}
 
-	DEBUG("pieces were chosen!\n");
-
 	for (int i=0; i<16; i++){
 		if (pieces[i]->alive == true){
 			DEBUG("%d!\n", i);
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0]->row != -1){
-				DEBUG("Not mate\n");
-				DEBUG("VALID LOCS[0] is: ROW: %d, COL: %d\n", valid_locs[0]->row, valid_locs[0]->column);
 				for (int i=0; i<64;i++){
 					free(valid_locs[i]);
 				}
@@ -588,7 +582,6 @@ location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
-	DEBUG("in is_valid_move\n");
 	int color;
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 
@@ -597,9 +590,6 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	for (int i=0; i<64; i++){
 		valid_locs[i] = create_location();
 	}
-
-
-	DEBUG("ROW IS %d COL IS %d\n", cur_move->source->row, cur_move->source->column);
 
 	// source is empty
 	if (source == EMPTY_ENTRY){
