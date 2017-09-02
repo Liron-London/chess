@@ -245,10 +245,12 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 		valid_locs[i]->row = next_row;
 		valid_locs[i]->column = next_col;
 		//check capturing
-		if (check_capturing(cur_game->board[next_row][next_col], color)) {
+		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
+			i++;
+			if (check_capturing(cur_game->board[next_row][next_col], color)) {
 				break;
+			}
 		}
-		i++;
 		next_row++;
 		next_col++;
 	}
@@ -262,10 +264,12 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 		valid_locs[i]->row = next_row;
 		valid_locs[i]->column = next_col;
 		//check capturing
-		if (check_capturing(cur_game->board[next_row][next_col], color)) {
-			break;
+		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
+			i++;
+			if (check_capturing(cur_game->board[next_row][next_col], color)) {
+				break;
+			}
 		}
-		i++;
 		next_row++;
 		next_col--;
 	}
@@ -278,10 +282,12 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i]->row = next_row;
 		valid_locs[i]->column = next_col;
-		if (check_capturing(cur_game->board[next_row][next_col], color)) {
-			break;
+		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
+			i++;
+			if (check_capturing(cur_game->board[next_row][next_col], color)) {
+				break;
+			}
 		}
-		i++;
 		next_row--;
 		next_col++;
 	}
@@ -294,10 +300,12 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i]->row = next_row;
 		valid_locs[i]->column = next_col;
-		if (check_capturing(cur_game->board[next_row][next_col], color)) {
-			break;
+		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
+			i++;
+			if (check_capturing(cur_game->board[next_row][next_col], color)) {
+				break;
+			}
 		}
-		i++;
 		next_row--;
 		next_col--;
 	}
