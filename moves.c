@@ -78,23 +78,15 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
 
-	DEBUG("move source is: ROW: %d, COL: %d\n", tmp_move->source->row,tmp_move->source->column);
-	DEBUG("move dest is: ROW: %d, COL: %d\n", tmp_move->dest->row,tmp_move->dest->column);
-
-	DEBUG("King loc is: ROW:%d, COL:%d\n", tmp_game->whites[4]->piece_location->row, tmp_game->whites[4]->piece_location->column);
 	move_piece(tmp_game, tmp_move, tmp_piece);
-	DEBUG("King loc is: ROW:%d, COL:%d\n", tmp_game->whites[4]->piece_location->row, tmp_game->whites[4]->piece_location->column);
 
 	if (is_check(tmp_game) == false) {
 		valid_locs[index]->row = next_row;
 		valid_locs[index]->column = next_col;
 		valid_move = true;
-		DEBUG("valid move was found: ROW: %d, COL: %d\n", next_row, next_col);
-		DEBUG("piece type is: %c\n", tmp_piece->piece_type);
-		print_board(tmp_game);
 	}
 
-	DEBUG("before destroy!\n");
+	//DEBUG("before destroy!\n");
 
 	//destroy_piece(tmp_piece);
 	//DEBUG("piece destroyed!\n");
@@ -102,8 +94,6 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	DEBUG("move destroyed!\n");
 	game_destroy(tmp_game);
 	DEBUG("game destroyed!\n");
-
-	DEBUG("after is_check_aux func!\n");
 
 	return valid_move;
 }
@@ -179,7 +169,6 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 		}
 	}
-	DEBUG("finished pawn valid moves!\n");
 	return valid_locs;
 }
 
@@ -201,7 +190,6 @@ bool is_mate(game* cur_game){
 
 	for (int i=0; i<16; i++){
 		if (pieces[i]->alive == true){
-			DEBUG("%d!\n", i);
 			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0]->row != -1){
@@ -606,7 +594,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 			if (cur_game->whites[i]->piece_type == source &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
-				DEBUG("made it! (whites)\n");
+				//DEBUG("made it! (whites)\n");
 				valid_locs = valid_moves(valid_locs, cur_game, cur_game->whites[i]);
 				break;
 			}
@@ -618,7 +606,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 			if (cur_game->blacks[i]->piece_type == source &&
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
-				DEBUG("made it! (blacks)\n");
+				//DEBUG("made it! (blacks)\n");
 				valid_locs = valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
 
 				break;
@@ -646,7 +634,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 }
 
 void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
-	DEBUG("in move piece\n");
+	//DEBUG("in move piece\n");
 	change_turn(cur_game);
 
 	cur_piece->piece_location->row = cur_move->dest->row;

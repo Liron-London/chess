@@ -451,14 +451,12 @@ bool is_check(game* cur_game){
 	if (color == 1){
 		DEBUG("KING IS WHITE\n");
 		king_loc = cur_game->whites[4]->piece_location;
-		DEBUG("king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
 		enemies = cur_game->blacks;
 	}
 	// black turn
 	else{
 		DEBUG("KING IS BLACK\n");
 		king_loc = cur_game->blacks[4]->piece_location;
-		DEBUG("king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
 		enemies = cur_game->whites;
 	}
 
