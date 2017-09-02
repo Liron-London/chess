@@ -210,7 +210,7 @@ bool is_mate(game* cur_game){
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0]->row != -1){
 				DEBUG("Not mate\n");
-				DEBUG("VALID LOCS[0] is: ROW: %d, COL: %D\n", valid_locs[0]->row, valid_locs[0]->column);
+				DEBUG("VALID LOCS[0] is: ROW: %d, COL: %d\n", valid_locs[0]->row, valid_locs[0]->column);
 				for (int i=0; i<64;i++){
 					free(valid_locs[i]);
 				}
