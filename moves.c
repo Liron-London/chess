@@ -210,6 +210,7 @@ bool is_mate(game* cur_game){
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0]->row != -1){
 				DEBUG("Not mate\n");
+				DEBUG("VALID LOCS[0] is: ROW: %d, COL: %D\n", valid_locs[0]->row, valid_locs[0]->column);
 				for (int i=0; i<64;i++){
 					free(valid_locs[i]);
 				}
@@ -255,7 +256,7 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	//check upwards left
 	next_row = row + 1;
 	next_col = col - 1;
-	while (next_row <= 8 && next_col >= 1 &&
+	while (next_row <= 7 && next_col >= 0 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			(color_by_type(cur_game->board[next_row][next_col]) != color))) {
 		valid_locs[i]->row = next_row;
@@ -272,7 +273,7 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	//check downwards right
 	next_row = row - 1;
 	next_col = col + 1;
-	while (next_row >= 1 && next_col <= 8 &&
+	while (next_row >= 0 && next_col <= 7 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i]->row = next_row;
@@ -288,7 +289,7 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 	//check downwards left
 	next_row = row - 1;
 	next_col = col - 1;
-	while (next_row >= 1 && next_col >= 1 &&
+	while (next_row >= 0 && next_col >= 0 &&
 			(cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		valid_locs[i]->row = next_row;
@@ -563,7 +564,6 @@ location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	char type = cur_piece->piece_type;
 
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
-		DEBUG("In valid moves!\n");
 		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
