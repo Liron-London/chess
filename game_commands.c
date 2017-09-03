@@ -187,26 +187,28 @@ int game_play(game* game){
 				}
 
 				else{
+					DEBUG("history is not empty!\n");
 					// takes 2 moves and games out of history
 					move* tmp_move = create_move();
 					tmp_move = array_list_get_last_move(history);
 					if (game->user_color == 0){
-						printf("Undo move for player white : <%d, %d> -> <%d, %d>", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
+						printf("Undo move for player white : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
 						array_list_remove_last(history);
 						tmp_move = array_list_get_last_move(history);
-						printf("Undo move for player black : <%d, %d> -> <%d, %d>", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
+						printf("Undo move for player black : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
 					}
 
 					else{
-						printf("Undo move for player black : <%d, %d> -> <%d, %d>", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
+						printf("Undo move for player black : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
 						array_list_remove_last(history);
 						tmp_move = array_list_get_last_move(history);
-						printf("Undo move for player white : <%d, %d> -> <%d, %d>", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
+						printf("Undo move for player white : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
 					}
 
 					//updating game and history
 					game = array_list_get_last_game(history);
 					array_list_remove_last(history);
+					destroy_move(tmp_move);
 				}
 			}
 		}
