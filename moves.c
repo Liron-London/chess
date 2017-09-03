@@ -43,6 +43,16 @@ move* create_move() {
 	return new_move;
 }
 
+move* copy_move(move* cur_move){
+	move* move_copy = create_move();
+	move_copy->dest->row = cur_move->dest->row;
+	move_copy->dest->column = cur_move->dest->column;
+	move_copy->source->row = cur_move->source->row;
+	move_copy->source->column = cur_move->source->column;
+	return move_copy;
+
+}
+
 void destroy_move(move* old_move) {
 	destroy_location(old_move->dest);
 	destroy_location(old_move->source);

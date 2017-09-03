@@ -151,7 +151,7 @@ int game_play(game* game){
 					if (array_list_is_full(history) == true){
 						array_list_remove_first(history);
 					}
-					array_list_add_last(history, copy_game(game), copy_move(game_command->move));
+					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
 				}
 
 				DEBUG("is_valid_move is OK\n");

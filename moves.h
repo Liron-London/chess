@@ -14,6 +14,7 @@
  */
 void move_piece(game* cur_game, move* cur_move, piece* cur_piece);
 
+move* copy_move(move* cur_move);
 /*
 * returns a list of all valid moves, needs to call is_check to verify the King's not threatened
 */
