@@ -211,6 +211,7 @@ int game_play(game* game){
 					game = array_list_get_last_game(history);
 					array_list_remove_last(history);
 					destroy_move(tmp_move);
+					print_board(game);
 				}
 			}
 		}
