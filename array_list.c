@@ -97,7 +97,7 @@ ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, game* game, move* move, in
 
 
  ARRAY_LIST_MESSAGE array_list_add_last(array_list* src, game* game, move* move) {
-     return(array_list_add_at(src, game, move, src->actualSize));
+     return array_list_add_at(src, game, move, src->actualSize);
  }
 
 

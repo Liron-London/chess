@@ -151,7 +151,7 @@ int game_play(game* game){
 					if (array_list_is_full(history) == true){
 						array_list_remove_first(history);
 					}
-					array_list_add_last(history, game, game_command->move);
+					array_list_add_last(history, copy_game(game), copy_move(game_command->move));
 				}
 
 				DEBUG("is_valid_move is OK\n");
@@ -190,7 +190,9 @@ int game_play(game* game){
 					DEBUG("history is not empty!\n");
 					// takes 2 moves and games out of history
 					move* tmp_move = create_move();
+					DEBUG("move created!\n");
 					tmp_move = array_list_get_last_move(history);
+
 					if (game->user_color == 0){
 						printf("Undo move for player white : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
 						array_list_remove_last(history);
