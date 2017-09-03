@@ -76,17 +76,17 @@ ARRAY_LIST_MESSAGE array_list_remove_first(array_list* src);
 
 ARRAY_LIST_MESSAGE array_list_remove_last(array_list* src);
 
-int array_list_get_game_at(array_list* src, int index);
+game* array_list_get_game_at(array_list* src, int index);
 
-int array_list_get_move_at(array_list* src, int index);
+move* array_list_get_move_at(array_list* src, int index);
 
-int array_list_get_first_game(array_list* src);
+game* array_list_get_first_game(array_list* src);
 
-int array_list_get_first_move(array_list* src);
+move* array_list_get_first_move(array_list* src);
 
-int array_list_get_last_game(array_list* src);
+game* array_list_get_last_game(array_list* src);
 
-int array_list_get_last_move(array_list* src);
+move* array_list_get_last_move(array_list* src);
 
 int array_list_max_capacity(array_list* src);
 

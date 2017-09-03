@@ -123,7 +123,7 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
      return array_list_remove_at(src, src->actualSize-1);
  }
 
- int array_list_get_game_at(array_list* src, int index) {
+ game* array_list_get_game_at(array_list* src, int index) {
      if (src == NULL || index < 0 || index > src->actualSize) {
                 return -1;
             }
@@ -132,7 +132,7 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
      }
  }
 
- int array_list_get_move_at(array_list* src, int index) {
+ move* array_list_get_move_at(array_list* src, int index) {
       if (src == NULL || index < 0 || index > src->actualSize) {
                  return -1;
              }
@@ -142,19 +142,19 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
   }
 
 
- int array_list_get_first_game(array_list* src) {
+ game* array_list_get_first_game(array_list* src) {
      return array_list_get_game_at(src, 0);
  }
 
- int array_list_get_first_move(array_list* src) {
+ move* array_list_get_first_move(array_list* src) {
       return array_list_get_move_at(src, 0);
   }
 
- int array_list_get_last_game(array_list* src) {
+ game* array_list_get_last_game(array_list* src) {
      return array_list_get_game_at(src, src->actualSize-1);
  }
 
- int array_list_get_last_move(array_list* src) {
+ move* array_list_get_last_move(array_list* src) {
      return array_list_get_move_at(src, src->actualSize-1);
  }
 
