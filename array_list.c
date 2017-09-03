@@ -125,7 +125,7 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
 
  game* array_list_get_game_at(array_list* src, int index) {
      if (src == NULL || index < 0 || index > src->actualSize) {
-                return -1;
+                return NULL;
             }
      else {
          return src->privous_games[index];
@@ -134,7 +134,7 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
 
  move* array_list_get_move_at(array_list* src, int index) {
       if (src == NULL || index < 0 || index > src->actualSize) {
-                 return -1;
+                 return NULL;
              }
       else {
           return src->privous_moves[index];
