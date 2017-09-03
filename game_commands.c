@@ -7,7 +7,7 @@
 #include "game_commands.h"
 #include "file_handler.h"
 #include "debug.h"
-#include "game.h"
+#include "array_list.h"
 
 Gamecommand* game_command_create(){
 	Gamecommand* game_command = malloc(sizeof(Gamecommand));
