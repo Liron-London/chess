@@ -1,7 +1,9 @@
 #ifndef ARRAYLIST_H_
 #define ARRAYLIST_H_
+
 #include <stdbool.h>
 #include <stdlib.h>
+#include "moves.h"
 
 /**
  * ArrayList summary:
@@ -38,7 +40,8 @@
  * spArrayListIsEmpty      - Returns true if the array list contains no elements.
  */
 typedef struct array_list_t {
-	int* elements;
+	game** privous_games;
+	move** privous_moves;
 	int actualSize;
 	int maxSize;
 } array_list;
@@ -53,204 +56,44 @@ typedef enum array_list_message_t {
 	ARRAY_LIST_EMPTY
 } ARRAY_LIST_MESSAGE;
 
-/**
- *  Creates an empty array list with the specified maximum capacity.
- *  @param maxSize - the maximum capacity of the target array list.
- *  @return
- *  NULL, if an allocation error occurred or maxSize  <= 0.
- *  An instant of an array list otherwise.
- */
+ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, game* game, move* move, int index);
+
 array_list* array_list_create(int maxSize);
 
-/**
- *	Creates an exact copy of the src array list. Elements in the new copy will
- *	be in the same order as they appeared in the source list.
- *	@param src - the source array list.
- *	@return
- *	NULL if either an allocation error occurs or src == NULL.
- *	A new copy of the source array list, otherwise.
- */
-array_list* array_list_copy(array_list* src);
+array_list* array_list_copy(array_list* src) ;
 
-/**
- * Frees all memory resources associated with the source array list. If the
- * source array is NULL, then the function does nothing.
- * @param src - the source array list
- */
-void array_list_destroy(array_list* src);
+void array_list_destroy(array_list* src) ;
 
-/**
- * Clears all elements from the source array list. After invoking this function,
- * the size of the source list will be reduced to zero and maximum capacity is
- * not affected.
- * @param src - the source array list
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT if src == NULL
- * SP_ARRAY_LIST_SUCCESS otherwise
- */
-ARRAY_LIST_MESSAGE array_list_clear(array_list* src);
+ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, game* game, move* move, int index);
 
-/**
- * Inserts element at a specified index. The elements residing at and after the
- * specified index will be shifted to make place for the new element. If the
- * array list reached its maximum capacity and error message is returned and
- * the source list is not affected
- * @param src   - the source array list
- * @param elem  - the new element to be inserted
- * @param index - the index where the new element will be placed. The index is
- *                0-based.
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL or the index is out of bound
- * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
- * SP_ARRAY_LIST_SUCCESS - otherwise
- */
-ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, int elem, int index);
+ARRAY_LIST_MESSAGE array_list_add_first(array_list* src, game* game, move* move) ;
 
-/**
- * Inserts element at a the beginning of the source element. The elements
- * will be shifted to make place for the new element. If the
- * array list reached its maximum capacity and error message is returned and
- * the source list is not affected
- * @param src   - the source array list
- * @param elem  - the new element to be inserted
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL or the index is out of bound
- * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
- * SP_ARRAY_LIST_SUCCESS - otherwise
- */
- ARRAY_LIST_MESSAGE array_list_add_first(array_list* src, int elem);
+ARRAY_LIST_MESSAGE array_list_add_last(array_list* src, game* game, move* move);
 
-/**
- * Inserts element at a the end of the source element. If the array list
- * reached its maximum capacity and error message is returned and the source
- * list is not affected.
- * @param src   - the source array list
- * @param elem  - the new element to be inserted
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL or the index is out of bound
- * SP_ARRAY_LIST_FULL - if the source array list reached its maximum capacity
- * SP_ARRAY_LIST_SUCCESS - otherwise
- */
-ARRAY_LIST_MESSAGE array_list_add_last(array_list* src, int elem);
-
-/**
- * Removes an element from a specified index. The elements residing after the
- * specified index will be shifted to make to keep the list continuous. If the
- * array list is empty then an error message is returned and the source list
- * is not affected
- * @param src   - The source array list
- * @param index - The index from where the element will be removed.
- *                The index is 0-based.
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL or the index is out of bound
- * SP_ARRAY_LIST_EMPTY - if the source array list is empty
- * SP_ARRAY_LIST_SUCCESS - otherwise
- */
 ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index);
 
-/**
- * Removes an element from a the beginning of the list.
- * The elements will be shifted to make to keep the list continuous. If the
- * array list is empty then an error message is returned and the source list
- * is not affected
- * @param src   - The source array list
- * @param elem  - The new element to be inserted
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL
- * SP_ARRAY_LIST_EMPTY - if the source array list is empty
- * SP_ARRAY_LIST_SUCCESS - otherwise
- */
 ARRAY_LIST_MESSAGE array_list_remove_first(array_list* src);
 
-/**
- * Removes an element from a the end of the list.
- * The elements will be shifted to make to keep the list continuous. If the
- * array list is empty then an error message is returned and the source list
- * is not affected
- * @param src   - The source array list
- * @param elem  - The new element to be inserted
- * @return
- * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL
- * SP_ARRAY_LIST_EMPTY - if the source array list is empty
- * SP_ARRAY_LIST_SUCCESS - otherwise.
- */
 ARRAY_LIST_MESSAGE array_list_remove_last(array_list* src);
 
-/**
- * Returns the element at the specified index. The function is called
- * with the assertion that all arguments are valid. If any of the arguments is
- * invalid then an undefined value is returned.
- * @param src - the source array list
- * @param index - the specified index, the index is 0-based.
- * @return
- * Undefined value if either src == NULL or index out of bound.
- * Otherwise, the element at the specified index is returned.
- */
-int array_list_get_at(array_list* src, int index);
+int array_list_get_game_at(array_list* src, int index);
 
-/**
- * Returns the element at the beginning of the list. The function is called
- * with the assertion that all arguments are valid. If any of the arguments is
- * invalid then an undefined value is returned.
- * @param src - the source array list
- * @return
- * Undefined value if either src == NULL or the list is empty
- * Otherwise, the element at the beginning of the list is returned.
- */
-int array_list_get_first(array_list* src);
+int array_list_get_move_at(array_list* src, int index);
 
-/**
- * Returns the element at the end of the list. The function is called
- * with the assertion that all arguments are valid. If any of the arguments is
- * invalid then an undefined value is returned.
- * @param src - the source array list
- * @return
- * Undefined value if either src == NULL or the list is empty
- * Otherwise, the element at the end of the list is returned.
- */
-int array_list_get_last(array_list* src);
+int array_list_get_first_game(array_list* src);
 
-/**
- * Returns the maximum capacity of the list. The function is called
- * with the assertion that all arguments are valid. If any of the arguments is
- * invalid then an undefined value is returned.
- * @param src - the source array list
- * @return
- * Undefined value if either src == NULL
- * Otherwise, the maximum capacity of the list is returned.
- */
+int array_list_get_first_move(array_list* src);
+
+int array_list_get_last_game(array_list* src);
+
+int array_list_get_last_move(array_list* src);
+
 int array_list_max_capacity(array_list* src);
 
-/**
- * Returns the number of elements in the list. The function is called
- * with the assertion that all arguments are valid. If any of the arguments is
- * invalid then an undefined value is returned.
- * @param src - the source array list
- * @return
- * Undefined value if either src == NULL
- * Otherwise, the number of the elements in the list is returned.
- */
 int array_list_size(array_list* src);
 
-/**
- * Returns true if the list is full, that is the number of elements in the list
- * equals its maximum capacity.
- * @param src - the source array list
- * @return
- * false if either src == NULL or the number of elements in the list is less
- * than its maximum capacity.
- * Otherwise, true is returned.
- */
 bool array_list_is_full(array_list* src);
 
-/**
- * Returns true if the list is empty, that is the number of elements in the list
- * equals to zero.
- * @param src - the source array list
- * @return
- * false if either src == NULL or the number of elements in the list is not zero.
- * Otherwise, true is returned.
- */
 bool array_list_is_empty(array_list* src);
 
 #endif
