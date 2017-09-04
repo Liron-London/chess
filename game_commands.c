@@ -105,6 +105,33 @@ void ask_for_move(game* cur_game) {
 	}
 }
 
+void announce_empty_history() {
+	printf("Empty history, move cannot be undone\n");
+}
+
+void announce_undo_not_available() {
+	printf("Undo command not avaialbe in 2 players mode\n");
+}
+
+void announce_undo_move(int player, move* tmp_move, array_list* history) {
+	if (player == 0) {
+		int src_row, dst_row;
+		char src_col, dst_col;
+		char player_color[6];
+		if (player == 1) {
+			player_color = "white";
+		} else {
+			player_color = "black";
+		}
+		dst_row = tmp_move->dest->row+1;
+		dst_col = tmp_move->dest->column+'A';
+		src_row = tmp_move->source->row+1;
+		src_col = tmp_move->source->column+'A';
+		printf("Undo move for player %s : <%d, %c> -> <%d, %c>\n",
+				player_color, dst_row, dst_col, src_row, src_col);
+	}
+}
+
 // called when the command "start" is pressed in settings
 int game_play(game* game){
 	Gamecommand* game_command;
@@ -178,37 +205,28 @@ int game_play(game* game){
 		if (game_command->validArg == true && game_command->cmd == UNDO){
 			DEBUG("In UNDO\n");
 			if (game->game_mode != 1){
-				printf("Undo command not avaialbe in 2 players mode\n");
+				announce_undo_not_available();
 			}
 
-			else{
+			else {
 				if (array_list_is_empty(history) == true){
-					printf("Empty history, move cannot be undone\n");
+					announce_empty_history();
 				}
 
-				else{
+				else {
 					DEBUG("history is not empty!\n");
 					// takes 2 moves and games out of history
 					move* tmp_move = create_move();
 					DEBUG("move created!\n");
 					tmp_move = array_list_get_last_move(history);
-
-					if (game->user_color == 0){
-						printf("Undo move for player white : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
-						array_list_remove_last(history);
-						tmp_move = array_list_get_last_move(history);
-						printf("Undo move for player black : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
-					}
-
-					else{
-						printf("Undo move for player black : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
-						array_list_remove_last(history);
-						tmp_move = array_list_get_last_move(history);
-						printf("Undo move for player white : <%d, %d> -> <%d, %d>\n", tmp_move->dest->row, tmp_move->dest->column, tmp_move->source->row, tmp_move->source->column);
-					}
+					announce_undo_move(current_turn_color(game), tmp_move, history);
+					array_list_remove_last(history);
+					tmp_move = array_list_get_last_move(history);
+					announce_undo_move((current_turn_color(game)+1)%2, tmp_move, history);
 
 					//updating game and history
 					game = array_list_get_last_game(history);
+
 					array_list_remove_last(history);
 					destroy_move(tmp_move);
 					print_board(game);
