@@ -53,8 +53,7 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
 		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
 		//check for invalid move parameters
-		if (game_command->move->source->row == NULL ||
-				game_command->move->source->column == NULL ||
+		if (game_command->move->source == NULL ||
 				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
 				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
 			announce_invalid_location();
