@@ -47,6 +47,11 @@ typedef struct move_t {
 	location* dest;
 } move;
 
+/*
+ * returns the player-color of the player of the current turn, based on current_turn and user_color
+ */
+int current_turn_color(game* game);
+
 piece* location_to_piece(game* game, location* loc);
 
 piece* copy_piece(piece* cur_piece);

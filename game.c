@@ -14,6 +14,10 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
 
+int current_turn_color(game* game) {
+	return (game->current_turn + game->user_color)%2;
+}
+
 piece* location_to_piece(game* cur_game, location* loc){
 	// DEBUG("in location_to_piece\n");
 	char type = cur_game->board[loc->row][loc->column];
