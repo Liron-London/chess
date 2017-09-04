@@ -152,7 +152,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			free(valid_locs[i]);
 		}
 		free(valid_locs);
-		free(tmp_move);
+		destroy_move(tmp_move);
 		return tmp_score;
 	}
 
@@ -199,7 +199,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			free(valid_locs[i]);
 		}
 		free(valid_locs);
-		free(tmp_move);
+		destroy_move(tmp_move);
 		return tmp_score;
 	}
 }
