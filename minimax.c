@@ -124,6 +124,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		for (int i=0; i<16; i++){
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
+				for (int k=0; k<64; k++){
+					valid_locs[k]->row=-1;
+					valid_locs[k]->column=-1;
+				}
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
@@ -172,6 +176,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		for (int i=0; i<16; i++){
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
+
+				for (int k=0; k<64; k++){
+					valid_locs[k]->row=-1;
+					valid_locs[k]->column=-1;
+				}
+
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
