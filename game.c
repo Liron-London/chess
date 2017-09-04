@@ -45,6 +45,7 @@ piece* location_to_piece(game* cur_game, location* loc){
 		}
 	}
 	DEBUG2("NULL is returned\n");
+	DEBUG2("piece location is: ROW %d, COL %d\n", loc->row, loc->column)
 	return NULL;
 }
 
