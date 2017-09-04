@@ -39,7 +39,9 @@ static bool comp_move_check(){
 	print_board(cur_game);
 	move* cur_move = create_move();
 	cur_move = get_recommended_move_for_comp(cur_game, 2);
-
+	piece* my_piece = location_to_piece(cur_game, cur_move->source);
+	move_piece(cur_game, cur_move, my_piece);
+	print_board(cur_game);
 }
 
 
@@ -49,6 +51,11 @@ int main() {
 //	printf("before last if\n");
 //	if (success)
 //		printf("basic game_commands checks success!\n");
+	success = comp_move_check();
+		if (success)
+			printf("game_play test success!\n");
+	return 0;
+
 	success = game_play_check();
 		if (success)
 			printf("game_play test success!\n");
