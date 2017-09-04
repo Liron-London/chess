@@ -199,7 +199,7 @@ bool is_mate(game* cur_game){
 
 	for (int i=0; i<16; i++){
 		if (pieces[i]->alive == true){
-			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
+			valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0]->row != -1){
 				for (int i=0; i<64;i++){
@@ -598,7 +598,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
 				//DEBUG("made it! (whites)\n");
-				valid_locs = valid_moves(valid_locs, cur_game, cur_game->whites[i]);
+				valid_moves(valid_locs, cur_game, cur_game->whites[i]);
 				break;
 			}
 		}
@@ -610,7 +610,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
 				//DEBUG("made it! (blacks)\n");
-				valid_locs = valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
+				valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
 
 				break;
 			}
