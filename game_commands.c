@@ -52,6 +52,14 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 
 		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
 		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
+		//check for invalid move parameters
+		if (game_command->move->source->row == NULL ||
+				game_command->move->source->column == NULL ||
+				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
+				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
+			announce_invalid_location();
+			game_command->validArg = false;
+		}
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
@@ -139,6 +147,25 @@ void announce_reset() {
 	printf("Restarting...\n");
 }
 
+void announce_invalid_location() {
+	printf("Invalid position on the board\n");
+}
+
+void announce_invalid_move() {
+	printf("Illegal move\n");
+}
+
+void announce_mate(int color) {
+	color = (color + 1) % 2;
+	char* color_name;
+	if (color == 1) {
+		color_name = "white";
+	} else {
+		color_name ="black";
+	}
+	printf("Checkmate! %s player wins the game\n", color_name);
+}
+
 // called when the command "start" is pressed in settings
 int game_play(game* game){
 	Gamecommand* game_command;
@@ -212,12 +239,13 @@ int game_play(game* game){
 				print_board(game);
 				DEBUG("valid move!\n");
 				if (is_mate(game) == true){
-					printf("player %d wins!", (game->current_turn + game->user_color)%2);
+					int color = current_turn_color(game);
+					announce_mate(color);
 				}
 			}
 
 			else {
-				DEBUG("move is not valid!\n");
+				announce_invalid_move();
 			}
 		}
 
