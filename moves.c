@@ -571,6 +571,10 @@ void valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("ERROR IN VALID MOVES");
 }
 
+void announce_illegal_move_src() {
+	printf("The specified position does not contain your piece\n");
+}
+
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
 	int color;
@@ -590,11 +594,15 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	DEBUG("CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
+	if (cur_move->source == EMPTY_ENTRY || color_by_type(cur_move->source) != color) {
+		announce_illegal_move_src();
+		return false;
+	}
 
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			if (cur_game->whites[i]->piece_type == source &&
+			if (cur_game->whites[i]->piece_type == source && cur_game->whites[i]->alive &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
 				//DEBUG("made it! (whites)\n");
@@ -606,7 +614,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 
 	if (color == 0){
 		for (int i=0; i<16; i++){
-			if (cur_game->blacks[i]->piece_type == source &&
+			if (cur_game->blacks[i]->piece_type == source && cur_game->blacks[i]->alive &&
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
 				//DEBUG("made it! (blacks)\n");
