@@ -135,6 +135,10 @@ void announce_quit() {
 	printf("Exiting...\n");
 }
 
+void announce_reset() {
+	printf("Restarting...\n");
+}
+
 // called when the command "start" is pressed in settings
 int game_play(game* game){
 	Gamecommand* game_command;
@@ -156,7 +160,7 @@ int game_play(game* game){
 		DEBUG("prase the line!\n");
 
 		// QUIT
-		if (game_command->validArg == true && game_command->cmd == GAME_QUIT){
+		if (game_command->validArg == true && game_command->cmd == GAME_QUIT) {
 			// freeing all variables
 			array_list_destroy(history);
 			free(command_str);
@@ -164,6 +168,18 @@ int game_play(game* game){
 			game_destroy(game);
 			announce_quit();
 			return 1;
+		}
+
+		//RESET
+		if (game_command->validArg == true && game_command->cmd == RESET) {
+			// freeing all variables
+			array_list_destroy(history);
+			free(command_str);
+			game_command_destroy(game_command);
+			game_destroy(game);
+			announce_reset();
+			set_game();
+			return 0;
 		}
 
 		//SAVE
@@ -200,7 +216,7 @@ int game_play(game* game){
 				}
 			}
 
-			else{
+			else {
 				DEBUG("move is not valid!\n");
 			}
 		}

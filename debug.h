@@ -15,6 +15,10 @@
 #else
 	#define DEBUG(...) {}
 #endif
-
+#if DEBUGMODE == 2
+	#define DEBUG2(...) {printf("DEBUG: "); printf(__VA_ARGS__);}
+#else
+	#define DEBUG2(...) {}
+#endif
 
 #endif /* DEBUG_H_ */
