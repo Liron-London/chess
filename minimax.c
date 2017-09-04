@@ -151,7 +151,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
-					best_move = copy_move(tmp_move);
+					best_move = tmp_move;
 					alpha = max(alpha, tmp_score);
 					game_destroy(tmp_game);
 
@@ -201,7 +201,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
-					best_move = copy_move(tmp_move);
+					best_move = tmp_move;
 					beta = min(beta, tmp_score);
 					game_destroy(tmp_game);
 
