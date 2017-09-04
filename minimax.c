@@ -92,6 +92,7 @@ void all_valid_moves(game* game, move** all_valid_moves, int* amout_of_valid_mov
 // returns the move the computer should do, the move will be in best_move
 int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move* best_move){
 	if (depth == 0){
+		DEBUG2("Score is %d\n", scoring_function(node));
 		return scoring_function(node);
 	}
 
@@ -197,6 +198,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		for (int i=0; i<64; i++){
 			free(valid_locs[i]);
 		}
+		free(valid_locs);
 		free(tmp_move);
 		return tmp_score;
 	}
