@@ -139,7 +139,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
-					tmp_game = game_copy(node);
+					game* tmp_game = game_copy(node);
 
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
@@ -189,7 +189,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
-					tmp_game = game_copy(node);
+					game* tmp_game = game_copy(node);
 
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
