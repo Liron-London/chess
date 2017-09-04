@@ -42,6 +42,7 @@ static bool comp_move_check(){
 	piece* my_piece = location_to_piece(cur_game, cur_move->source);
 	move_piece(cur_game, cur_move, my_piece);
 	print_board(cur_game);
+	destroy_move(cur_move);
 	return true;
 }
 
