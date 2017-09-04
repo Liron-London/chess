@@ -114,22 +114,25 @@ void announce_undo_not_available() {
 }
 
 void announce_undo_move(int player, move* tmp_move) {
-	if (player == 0) {
-		int src_row, dst_row;
-		char src_col, dst_col;
-		char* player_color;
-		if (player == 1) {
-			player_color = "white";
-		} else {
-			player_color = "black";
-		}
-		dst_row = tmp_move->dest->row+1;
-		dst_col = tmp_move->dest->column+'A';
-		src_row = tmp_move->source->row+1;
-		src_col = tmp_move->source->column+'A';
-		printf("Undo move for player %s : <%d, %c> -> <%d, %c>\n",
-				player_color, dst_row, dst_col, src_row, src_col);
+	int src_row, dst_row;
+	char src_col, dst_col;
+	char* player_color;
+	if (player == 1) {
+		player_color = "white";
+	} else {
+		player_color = "black";
 	}
+	dst_row = tmp_move->dest->row+1;
+	dst_col = tmp_move->dest->column+'A';
+	src_row = tmp_move->source->row+1;
+	src_col = tmp_move->source->column+'A';
+	printf("Undo move for player %s : <%d, %c> -> <%d, %c>\n",
+			player_color, dst_row, dst_col, src_row, src_col);
+
+}
+
+void announce_quit() {
+	printf("Exiting...\n");
 }
 
 // called when the command "start" is pressed in settings
@@ -159,6 +162,7 @@ int game_play(game* game){
 			free(command_str);
 			game_command_destroy(game_command);
 			game_destroy(game);
+			announce_quit();
 			return 1;
 		}
 
