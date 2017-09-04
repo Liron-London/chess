@@ -21,6 +21,6 @@ move* get_recommended_move_for_comp(game* game, int depth);
 
 int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move* best_move);
 
-void all_valid_moves(game* game, move** all_valid_moves, int* amout_of_valid_moves);
+//void all_valid_moves(game* game, move** all_valid_moves, int* amout_of_valid_moves);
 
 #endif // MINIMAX_H_INCLUDED

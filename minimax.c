@@ -95,7 +95,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		return scoring_function(node);
 	}
 
-	int tmp_score;
 	piece** your_pieces;
 	piece* tmp_piece;
 	move* tmp_move = create_move();
@@ -120,7 +119,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		for (int i=0; i<16; i++){
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
-				valid_moves(valid_locs, game, tmp_piece);
+				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
 					game* tmp_game = game_copy(node);
@@ -166,7 +165,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		for (int i=0; i<16; i++){
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
-				valid_moves(valid_locs, game, tmp_piece);
+				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
 					game* tmp_game = game_copy(node);
@@ -201,6 +200,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
-	int score = alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
+	alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	return comp_move;
 }
