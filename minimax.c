@@ -99,6 +99,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	DEBUG2("In alphabeta\n");
 	DEBUG2("depth is %d\n", depth);
 
+	int tmp_score;
 	piece** your_pieces;
 	piece* tmp_piece;
 	move* tmp_move = create_move();
@@ -110,7 +111,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 	// only the minimum part
 	if (maximizing_player == true){
-		int tmp_score = INT_MIN;
+		tmp_score = INT_MIN;
 		if (color == 0){
 			your_pieces = node->blacks;
 		}
@@ -124,10 +125,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		for (int i=0; i<16; i++){
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
+
+				//TODO -- need to export to another func
 				for (int k=0; k<64; k++){
 					valid_locs[k]->row=-1;
 					valid_locs[k]->column=-1;
 				}
+
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
@@ -154,16 +158,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				}
 			}
 		}
-		for (int i=0; i<128; i++){
-			destroy_location(valid_locs[i]);
-		}
-		free(valid_locs);
-		destroy_move(tmp_move);
-		return tmp_score;
 	}
 
 	else{
-		int tmp_score = INT_MAX;
+		tmp_score = INT_MAX;
 		if (color == 0){
 			your_pieces = node->blacks;
 		}
@@ -177,6 +175,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
 
+				//TODO -- need to export to another func
 				for (int k=0; k<64; k++){
 					valid_locs[k]->row=-1;
 					valid_locs[k]->column=-1;
@@ -208,13 +207,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				}
 			}
 		}
-		for (int i=0; i<128; i++){
-			destroy_location(valid_locs[i]);
-		}
-		free(valid_locs);
-		destroy_move(tmp_move);
-		return tmp_score;
 	}
+	for (int i=0; i<128; i++){
+		destroy_location(valid_locs[i]);
+	}
+	free(valid_locs);
+	destroy_move(tmp_move);
+	return tmp_score;
 }
 
 move* get_recommended_move_for_comp(game* game, int depth){
