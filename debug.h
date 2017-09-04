@@ -9,7 +9,7 @@
 #define DEBUG_H_
 
 
-#define DEBUGMODE 2
+#define DEBUGMODE 0
 #if DEBUGMODE == 1
 	#define DEBUG(...) {printf("DEBUG: "); printf(__VA_ARGS__);}
 #else
