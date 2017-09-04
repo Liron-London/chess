@@ -128,11 +128,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				int j = 0;
 				while (valid_locs[j]->row != -1){
 					game* tmp_game = game_copy(node);
-					tmp_piece = location_to_piece(tmp_game, tmp_move->source);
+
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
 					tmp_move->dest->column = valid_locs[j]->column;
 					tmp_move->dest->row = valid_locs[j]->row;
+					tmp_piece = location_to_piece(tmp_game, tmp_move->source);
 
 					j += 1;
 					DEBUG2("J is %d\n", j);
@@ -176,12 +177,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				int j = 0;
 				while (valid_locs[j]->row != -1){
 					game* tmp_game = game_copy(node);
-					tmp_piece = location_to_piece(tmp_game, tmp_move->source);
+
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
 					tmp_move->dest->column = valid_locs[j]->column;
 					tmp_move->dest->row = valid_locs[j]->row;
-
+					tmp_piece = location_to_piece(tmp_game, tmp_move->source);
 					j += 1;
 
 					move_piece(tmp_game, tmp_move, tmp_piece);
