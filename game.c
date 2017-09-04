@@ -238,6 +238,7 @@ game* game_create() {
 game* game_copy(game* cur_game) {
 	if (cur_game == NULL)
 		return NULL;
+
 	game* copy = game_create();
 	if (copy == NULL) {
 		free(copy);
@@ -264,8 +265,17 @@ game* game_copy(game* cur_game) {
 	// initialize new pieces
 
 	for (int i=0; i<16; i++){
-		copy->whites[i] = copy_piece(cur_game->whites[i]);
-		copy->blacks[i] = copy_piece(cur_game->blacks[i]);
+		copy->whites[i]->alive = cur_game->whites[i]->alive;
+		copy->whites[i]->color = cur_game->whites[i]->color;
+		copy->whites[i]->piece_location->row = cur_game->whites[i]->piece_location->row;
+		copy->whites[i]->piece_location->column = cur_game->whites[i]->piece_location->column;
+		copy->whites[i]->piece_type = cur_game->whites[i]->piece_type;
+
+		copy->blacks[i]->alive = cur_game->blacks[i]->alive;
+		copy->blacks[i]->color = cur_game->blacks[i]->color;
+		copy->blacks[i]->piece_location->row = cur_game->blacks[i]->piece_location->row;
+		copy->blacks[i]->piece_location->column = cur_game->blacks[i]->piece_location->column;
+		copy->blacks[i]->piece_type = cur_game->blacks[i]->piece_type;
 	}
 	return copy;
 }
