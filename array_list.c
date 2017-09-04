@@ -14,14 +14,14 @@ array_list* array_list_create(int maxSize) {
     }
     array->actualSize = 0;
     array->maxSize = maxSize;
-    array->privous_games = calloc(maxSize, sizeof(game*));
-    if (array->privous_games == NULL) {
+    array->previous_games = calloc(maxSize, sizeof(game*));
+    if (array->previous_games == NULL) {
         free(array);
         return NULL;
     }
 
-    array->privous_moves = calloc(maxSize, sizeof(game*));
-    if (array->privous_moves == NULL) {
+    array->previous_moves = calloc(maxSize, sizeof(game*));
+    if (array->previous_moves == NULL) {
         free(array);
         return NULL;
     }
@@ -39,8 +39,8 @@ array_list* array_list_copy(array_list* src) {
     }
     copied_array->actualSize = src->actualSize;
     for (int i=0; i<copied_array->actualSize; i++){
-    	copied_array->privous_games[i] = src->privous_games[i];
-    	copied_array->privous_moves[i] = src->privous_moves[i];
+    	copied_array->previous_games[i] = src->previous_games[i];
+    	copied_array->previous_moves[i] = src->previous_moves[i];
     }
     return copied_array;
 
@@ -49,8 +49,8 @@ array_list* array_list_copy(array_list* src) {
 void array_list_destroy(array_list* src) {
     if (src != NULL){
     	for (int i=0; i<src->actualSize;i++){
-    		destroy_move(src->privous_moves[i]);
-    		game_destroy(src->privous_games[i]);
+    		destroy_move(src->previous_moves[i]);
+    		game_destroy(src->previous_games[i]);
     	}
         free(src);
     }
@@ -79,12 +79,12 @@ ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, game* game, move* move, in
     }
 
     for (int i = src->actualSize; i > index; i--) {
-        src->privous_games[i] = src->privous_games[i-1];
-        src->privous_moves[i] = src->privous_moves[i-1];
+        src->previous_games[i] = src->previous_games[i-1];
+        src->previous_moves[i] = src->previous_moves[i-1];
     }
 
-    src->privous_games[index] = game;
-    src->privous_moves[index] = move;
+    src->previous_games[index] = game;
+    src->previous_moves[index] = move;
 
     src->actualSize++;
     return ARRAY_LIST_SUCCESS;
@@ -107,8 +107,8 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
         }
 
         for (int i = index; i < src->actualSize-1; i++) {
-            src->privous_games[i] = src->privous_games[i+1];
-            src->privous_moves[i] = src->privous_moves[i+1];
+            src->previous_games[i] = src->previous_games[i+1];
+            src->previous_moves[i] = src->previous_moves[i+1];
         }
         src->actualSize--;
         return ARRAY_LIST_SUCCESS;
@@ -128,7 +128,7 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
                 return NULL;
             }
      else {
-         return src->privous_games[index];
+         return src->previous_games[index];
      }
  }
 
@@ -137,7 +137,7 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
                  return NULL;
              }
       else {
-          return src->privous_moves[index];
+          return src->previous_moves[index];
       }
   }
 

@@ -5,7 +5,6 @@
  *      Author: lironl
  */
 #include "minimax.h"
-#include "moves.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -96,66 +95,106 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		return scoring_function(node);
 	}
 
-	int amount_of_valid_moves = 0;
-	location** possible_locations = calloc(28, sizeof(location*));
 	int tmp_score;
 	piece** your_pieces;
+	piece* tmp_piece;
+	move* tmp_move = create_move();
 	int color = (node->current_turn + node->user_color)%2;
+	location** valid_locs = calloc(64, sizeof(location*)); // list of all the valid location of the relevant piece
+	for (int i=0; i<64; i++){
+		valid_locs[i] = create_location();
+	}
 
 	// only the minimum part
 	if (maximizing_player == true){
 		int tmp_score = INT_MIN;
-		game* tmp_game = game_copy(node);
-
 		if (color == 0){
-			your_pieces = node->whites;
+			your_pieces = node->blacks;
 		}
 
 		else{
-			your_pieces = node->blacks;
+			your_pieces = node->whites;
 		}
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
+			if (your_pieces[i]->alive){
+				tmp_piece = your_pieces[i];
+				valid_moves(valid_locs, game, tmp_piece);
+				int j = 0;
+				while (valid_locs[j]->row != -1){
+					game* tmp_game = game_copy(node);
+					tmp_move->source->row = tmp_piece->piece_location->row;
+					tmp_move->source->column = tmp_piece->piece_location->column;
+					tmp_move->dest->column = valid_locs[j]->column;
+					tmp_move->dest->row = valid_locs[j]->row;
 
+					j += 1;
 
+					move_piece(tmp_game, tmp_move, tmp_piece);
 
-			tmp_piece = location_to_piece(node, possible_moves[i]->source);
-			tmp_game = move_piece(node, possible_moves[i], tmp_piece);
-			best_move = possible_moves[i];
+					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
-			tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
-			alpha = max(alpha, tmp_score);
+					best_move = tmp_move;
+					game_destroy(tmp_game);
+					alpha = max(alpha, tmp_score);
 
-			if (beta <= alpha){
-				best_move = possible_moves[i];
-				break; // beta cut-off
+					if (beta <= alpha){
+						break; // beta cut-off
+					}
+				}
 			}
 		}
-		game_destroy(tmp_game);
-		free(possible_moves);
+		for (int i=0; i<64; i++){
+			free(valid_locs[i]);
+		}
+		free(tmp_move);
 		return tmp_score;
 	}
 
 	else{
 		int tmp_score = INT_MAX;
-		game* tmp_game = game_copy(node);
+		if (color == 0){
+			your_pieces = node->blacks;
+		}
 
-		all_valid_moves(node, possible_moves, amount_of_valid_moves);
-		for (int i=0; i<amount_of_valid_moves; i++){
-			tmp_piece = location_to_piece(node, possible_moves[i]->source);
-			tmp_game = move_piece(node, possible_moves[i], tmp_piece);
-			best_move = possible_moves[i];
+		else{
+			your_pieces = node->whites;
+		}
 
-			tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
-			alpha = min(alpha, tmp_score);
-			if (beta <= alpha){
-				best_move = possible_moves[i];
-				break; // alpha cut-off
+		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
+		for (int i=0; i<16; i++){
+			if (your_pieces[i]->alive){
+				tmp_piece = your_pieces[i];
+				valid_moves(valid_locs, game, tmp_piece);
+				int j = 0;
+				while (valid_locs[j]->row != -1){
+					game* tmp_game = game_copy(node);
+					tmp_move->source->row = tmp_piece->piece_location->row;
+					tmp_move->source->column = tmp_piece->piece_location->column;
+					tmp_move->dest->column = valid_locs[j]->column;
+					tmp_move->dest->row = valid_locs[j]->row;
+
+					j += 1;
+
+					move_piece(tmp_game, tmp_move, tmp_piece);
+
+					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+
+					best_move = tmp_move;
+					game_destroy(tmp_game);
+					beta = min(beta, tmp_score);
+
+					if (beta <= alpha){
+						break; // beta cut-off
+					}
+				}
 			}
 		}
-		game_destroy(tmp_game);
-		free(possible_moves);
+		for (int i=0; i<64; i++){
+			free(valid_locs[i]);
+		}
+		free(tmp_move);
 		return tmp_score;
 	}
 }

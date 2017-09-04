@@ -8,6 +8,9 @@
 #include "moves.h"
 #include "game_commands.h"
 #include <stdbool.h>
+#include "minimax.h"
+
+
 /*
 static bool basic_check(){
 	// game* game = game_create();
@@ -30,6 +33,15 @@ static bool game_play_check(){
 	game_play(cur_game);
 	return true;
 }
+
+static bool comp_move_check(){
+	game* cur_game = game_create();
+	print_board(cur_game);
+	move* cur_move = create_move();
+	cur_move = get_recommended_move_for_comp(cur_game, 2);
+
+}
+
 
 int main() {
 	bool success;

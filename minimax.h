@@ -2,6 +2,7 @@
 #define MINIMAX_H_INCLUDED
 
 #include "game.h"
+#include "moves.h"
 #include <limits.h>
 
 /*

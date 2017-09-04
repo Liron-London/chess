@@ -40,8 +40,8 @@
  * spArrayListIsEmpty      - Returns true if the array list contains no elements.
  */
 typedef struct array_list_t {
-	game** privous_games;
-	move** privous_moves;
+	game** previous_games;
+	move** previous_moves;
 	int actualSize;
 	int maxSize;
 } array_list;
