@@ -111,7 +111,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 	// only the minimum part
 	if (maximizing_player == true){
-		DEBUG("******************\n");
+		DEBUG2("******************\n");
 		tmp_score = INT_MIN;
 		if (color == 0){
 			your_pieces = node->blacks;
@@ -162,7 +162,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	}
 
 	else{
-		DEBUG("####################\n");
+		DEBUG2("####################\n");
 		tmp_score = INT_MAX;
 		if (color == 0){
 			your_pieces = node->blacks;
