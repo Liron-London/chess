@@ -108,7 +108,7 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	return valid_move;
 }
 
-location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In pawn valid moves\n");
 	int i = 0;
 	char type = cur_piece->piece_type;
@@ -179,7 +179,6 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 		}
 	}
-	return valid_locs;
 }
 
 bool is_mate(game* cur_game){
@@ -220,7 +219,7 @@ bool is_mate(game* cur_game){
 	return true;
 }
 
-location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In bishop valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
@@ -294,10 +293,9 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 		next_row--;
 		next_col--;
 	}
-	return valid_locs;
 }
 
-location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In rook valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
@@ -360,10 +358,9 @@ location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 			next_col--;
 		}
-	return valid_locs;
 }
 
-location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In knight valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
@@ -450,11 +447,10 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 			i++;
 		}
 	}
-	return valid_locs;
 }
 
 // need to find a way to prevent the bishop moves from overriding the rook moves
-location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In queen valid moves\n");
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	location** new_ptr_to_valid_locs;
@@ -464,12 +460,11 @@ location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_p
 		}
 	}
 	rook_valid_moves(new_ptr_to_valid_locs, cur_game, cur_piece);
-	return valid_locs;
 }
 
 
 
-location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void king_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In king valid moves\n");
 	int i = 0;
 	// char type = cur_piece->piece_type;
@@ -549,33 +544,31 @@ location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 		i++;
 	}
-	return valid_locs;
 }
 
 
-location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
 
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
-		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
+		pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
-		return bishop_valid_moves(valid_locs, cur_game, cur_piece);
+		bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_ROOK || type == BLACK_ROOK) {
-		return rook_valid_moves(valid_locs, cur_game, cur_piece);
+		rook_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_KNIGHT || type == BLACK_KNIGHT) {
-		return knight_valid_moves(valid_locs, cur_game, cur_piece);
+		knight_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_QUEEN || type == BLACK_QUEEN) {
-		return queen_valid_moves(valid_locs, cur_game, cur_piece);
+		queen_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_KING || type == BLACK_KING){
-		return king_valid_moves(valid_locs, cur_game, cur_piece);
+		king_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	DEBUG("ERROR IN VALID MOVES");
-	return NULL;
 }
 
 // given a move and a board says if the move is legal or not

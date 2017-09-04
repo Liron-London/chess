@@ -18,7 +18,7 @@ move* copy_move(move* cur_move);
 /*
 * returns a list of all valid moves, needs to call is_check to verify the King's not threatened
 */
-location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece);
+void valid_moves(location** valid_locs, game* cur_game, piece* cur_piece);
 
 move* create_move();
 
