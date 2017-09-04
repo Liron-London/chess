@@ -38,7 +38,7 @@ static bool comp_move_check(){
 	game* cur_game = game_create();
 	print_board(cur_game);
 	move* cur_move = create_move();
-	cur_move = get_recommended_move_for_comp(cur_game, 2);
+	cur_move = get_recommended_move_for_comp(cur_game, 4);
 	piece* my_piece = location_to_piece(cur_game, cur_move->source);
 	move_piece(cur_game, cur_move, my_piece);
 	print_board(cur_game);
