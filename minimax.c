@@ -119,6 +119,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			your_pieces = node->whites;
 		}
 
+
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
 			if (your_pieces[i]->alive){
@@ -127,6 +128,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				int j = 0;
 				while (valid_locs[j]->row != -1){
 					game* tmp_game = game_copy(node);
+
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
 					tmp_move->dest->column = valid_locs[j]->column;
@@ -134,7 +136,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					j += 1;
 					DEBUG2("J is %d\n", j);
-					move_piece(tmp_game, tmp_move, tmp_piece);
+					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
@@ -181,7 +183,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					j += 1;
 
-					move_piece(tmp_game, tmp_move, tmp_piece);
+					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
