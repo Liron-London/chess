@@ -44,7 +44,7 @@ piece* location_to_piece(game* cur_game, location* loc){
 			}
 		}
 	}
-	DEBUG("NULL is returned\n");
+	DEBUG2("NULL is returned\n");
 	return NULL;
 }
 
