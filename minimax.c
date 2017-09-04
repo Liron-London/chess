@@ -105,6 +105,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	move* tmp_move = create_move();
 	int color = (node->current_turn + node->user_color)%2;
 	location** valid_locs = malloc(64*sizeof(location*));
+	game* tmp_game = game_create();
+
+
 	for (int i=0; i<64; i++){
 		valid_locs[i] = create_location();
 	}
@@ -136,7 +139,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
-					game* tmp_game = game_copy(node);
+					tmp_game = game_copy(node);
 
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
@@ -150,7 +153,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					best_move = copy_move(tmp_move);
-					game_destroy(tmp_game);
 					alpha = max(alpha, tmp_score);
 
 					if (beta <= alpha){
@@ -186,7 +188,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				valid_moves(valid_locs, node, tmp_piece);
 				int j = 0;
 				while (valid_locs[j]->row != -1){
-					game* tmp_game = game_copy(node);
+					tmp_game = game_copy(node);
 
 					tmp_move->source->row = tmp_piece->piece_location->row;
 					tmp_move->source->column = tmp_piece->piece_location->column;
@@ -200,7 +202,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					best_move = copy_move(tmp_move);
-					game_destroy(tmp_game);
 					beta = min(beta, tmp_score);
 
 					if (beta <= alpha){
@@ -215,6 +216,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	}
 	free(valid_locs);
 	destroy_move(tmp_move);
+	game_destroy(tmp_game);
 	return tmp_score;
 }
 
