@@ -219,10 +219,10 @@ int game_play(game* game){
 					move* tmp_move = create_move();
 					DEBUG("move created!\n");
 					tmp_move = array_list_get_last_move(history);
-					announce_undo_move(current_turn_color(game), tmp_move, history);
+					announce_undo_move(current_turn_color(game), tmp_move);
 					array_list_remove_last(history);
 					tmp_move = array_list_get_last_move(history);
-					announce_undo_move((current_turn_color(game)+1)%2, tmp_move, history);
+					announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
 
 					//updating game and history
 					game = array_list_get_last_game(history);
