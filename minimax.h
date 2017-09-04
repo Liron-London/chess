@@ -4,6 +4,7 @@
 #include "game.h"
 #include "moves.h"
 #include <limits.h>
+#include "debug.h"
 
 /*
  * runs MiniMax and call set move
