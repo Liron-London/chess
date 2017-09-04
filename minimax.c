@@ -105,7 +105,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	move* tmp_move = create_move();
 	int color = (node->current_turn + node->user_color)%2;
 	location** valid_locs = malloc(64*sizeof(location*));
-	game* tmp_game = game_create();
+	// game* tmp_game = game_create();
 
 
 	for (int i=0; i<64; i++){
@@ -154,6 +154,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					best_move = copy_move(tmp_move);
 					alpha = max(alpha, tmp_score);
+					game_destroy(tmp_game);
 
 					if (beta <= alpha){
 						break; // beta cut-off
@@ -203,6 +204,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					best_move = copy_move(tmp_move);
 					beta = min(beta, tmp_score);
+					game_destroy(tmp_game);
 
 					if (beta <= alpha){
 						break; // beta cut-off
@@ -216,7 +218,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	}
 	free(valid_locs);
 	destroy_move(tmp_move);
-	game_destroy(tmp_game);
 	return tmp_score;
 }
 
