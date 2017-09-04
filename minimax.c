@@ -147,7 +147,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->row = valid_locs[j]->row;
 
 					j += 1;
-					DEBUG2("J is %d\n", j);
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
@@ -158,6 +157,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					if (beta <= alpha){
 						break; // beta cut-off
+						DEBUG2("In min\n");
 					}
 				}
 			}
@@ -197,7 +197,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->row = valid_locs[j]->row;
 
 					j += 1;
-					DEBUG2("J is %d\n", j);
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
@@ -208,6 +207,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					if (beta <= alpha){
 						break; // beta cut-off
+						DEBUG2("In max\n");
 					}
 				}
 			}
