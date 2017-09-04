@@ -4,7 +4,14 @@
  *  Created on: Aug 12, 2017
  *      Author: lironl
  */
-# include "minimax.h"
+#include "minimax.h"
+#include "moves.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define min(a,b)  ((((a)-(b))&0x80000000) >> 31)? (a) : (b)
+#define max(a,b)  ((((a)-(b))&0x80000000) >> 31)? (b) : (a)
 
 int scoring_function(game* game) {
 	if (game == NULL) {
@@ -60,5 +67,45 @@ int scoring_function(game* game) {
 		score = black_sum - white_sum;
 	}
 	return score;
+}
+
+// put all valid moves in all_valid_moves, amount of valid moves is the size of the list
+void all_valid_moves(game* game, move** all_valid_moves, int* amout_of_valid_moves){
+	return NULL;
+}
+
+// returns the move the computer should do, the move will be in best_move
+int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move** best_move){
+	if (depth == 0){
+		return scoring_function(node);
+	}
+
+	int amount_of_valid_moves = 0;
+	move** possible_moves = calloc(500, sizeof(move*));
+	int tmp_score;
+	piece* tmp_piece;
+
+	// only the minimum part
+	if (maximizing_player == true){
+		int tmp_score = INT_MIN;
+		game* tmp_game = game_copy(node);
+
+		all_valid_moves(node, possible_moves, &amount_of_valid_moves);
+		for (int i=0; i<amount_of_valid_moves; i++){
+			tmp_piece = location_to_piece(node, possible_moves[i]->source);
+			tmp_game = move_piece(node, possible_moves[i], tmp_piece);
+			best_move = &(possible_moves[i]);
+
+			tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+			alpha = max(alpha, tmp_score);
+			if (beta <= alpha){
+				game_destroy(tmp_game);
+				free(possible_moves);
+				best_move = possible_moves[i];
+				break; // beta cut-off
+			}
+		}
+		return tmp_score;
+	}
 }
 
