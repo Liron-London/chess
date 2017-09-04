@@ -113,11 +113,11 @@ void announce_undo_not_available() {
 	printf("Undo command not avaialbe in 2 players mode\n");
 }
 
-void announce_undo_move(int player, move* tmp_move, array_list* history) {
+void announce_undo_move(int player, move* tmp_move) {
 	if (player == 0) {
 		int src_row, dst_row;
 		char src_col, dst_col;
-		char player_color[6];
+		char* player_color;
 		if (player == 1) {
 			player_color = "white";
 		} else {
