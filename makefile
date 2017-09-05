@@ -7,7 +7,7 @@ GAME_TEST_OBJS = array_list.o game.o moves.o
 GAME_COMMANDS_TEST_OBJS = array_list.o game.o game_commands.o setting.o game_command_unitest.o moves.o file_handler.o
 FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
-SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o
+SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
 
 
