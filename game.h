@@ -2,8 +2,8 @@
 #define GAME_H_INCLUDED
 
 #include <stdio.h>
-#include "array_list.h"
 #include <stdbool.h>
+#include <stdlib.h>
 
 //Definitions
 #define WHITE_PAWN 'm'
@@ -36,11 +36,8 @@ typedef struct game_t {
     int game_mode; // 1 = one player mode, 2 = two player mode
     int difficulty; // between 1-4
     int user_color; // 0 - black, 1 - white
-    //array_list history; // for undo move
     int current_turn; //0 - PC or player 2, 1 - player one
     char board[8][8];
-    //piece* whites[16];
-    //piece* blacks[16];
     piece** whites;
     piece** blacks;
 } game;
@@ -50,8 +47,12 @@ typedef struct move_t {
 	location* dest;
 } move;
 
-piece* location_to_piece(game* game, location* loc);
+/*
+ * returns the player-color of the player of the current turn, based on current_turn and user_color
+ */
+int current_turn_color(game* game);
 
+piece* location_to_piece(game* game, location* loc);
 
 piece* copy_piece(piece* cur_piece);
 

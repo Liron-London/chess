@@ -1,8 +1,7 @@
 london
-1. fix array_list.h and array_list.c
-2. game.c - the rest 
-3. game.h fix definitions for pieces enum
-4. file handler - create c file
+1. announce "check - XXX king is threatened"
+2. finish load and relevant announcements
+3. check that announcements in game commands are ok
 
 gal
 1. settings.c 
@@ -12,5 +11,4 @@ gal
 	b. print board
 
 both
-1. read about minimax algo
-2. read about SDL
+1. read about SDL

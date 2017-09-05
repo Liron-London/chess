@@ -8,6 +8,9 @@
 #include "moves.h"
 #include "game_commands.h"
 #include <stdbool.h>
+#include "minimax.h"
+
+
 /*
 static bool basic_check(){
 	// game* game = game_create();
@@ -31,12 +34,30 @@ static bool game_play_check(){
 	return true;
 }
 
+static bool comp_move_check(){
+	game* cur_game = game_create();
+	print_board(cur_game);
+	move* cur_move = create_move();
+	cur_move = get_recommended_move_for_comp(cur_game, 3);
+	piece* my_piece = location_to_piece(cur_game, cur_move->source);
+	move_piece(cur_game, cur_move, my_piece);
+	print_board(cur_game);
+	destroy_move(cur_move);
+	return true;
+}
+
+
 int main() {
 	bool success;
 //	success = basic_check();
 //	printf("before last if\n");
 //	if (success)
 //		printf("basic game_commands checks success!\n");
+	success = comp_move_check();
+		if (success)
+			printf("game_play test success!\n");
+	return 0;
+
 	success = game_play_check();
 		if (success)
 			printf("game_play test success!\n");

@@ -22,10 +22,6 @@ static bool array_list_create_test() {
 		printf("List maxSize is %d, when it should be %d\n", list->maxSize, CAPACITY_SIZE);
 		return false;
 	}
-	if (list->elements[CAPACITY_SIZE - 1] != 0 ) {
-		printf("Error initializing list elements\n");
-		return false;
-	}
 	array_list_destroy(list);
 	return true;
 }
@@ -35,6 +31,9 @@ static bool array_list_add_test() {
 	if (list == NULL) {
 		array_list_destroy(list);
 	}
+
+
+
 	for (int i = 0; i < CAPACITY_SIZE; i++) {
 		array_list_add_at(list, i, i);
 		//printf("list[%d] is %d\n", i, list->elements[i]);

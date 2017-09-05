@@ -43,6 +43,16 @@ move* create_move() {
 	return new_move;
 }
 
+move* copy_move(move* cur_move){
+	move* move_copy = create_move();
+	move_copy->dest->row = cur_move->dest->row;
+	move_copy->dest->column = cur_move->dest->column;
+	move_copy->source->row = cur_move->source->row;
+	move_copy->source->column = cur_move->source->column;
+	return move_copy;
+
+}
+
 void destroy_move(move* old_move) {
 	destroy_location(old_move->dest);
 	destroy_location(old_move->source);
@@ -78,23 +88,15 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	tmp_move->dest->row = next_row;
 	tmp_move->dest->column = next_col;
 
-	DEBUG("move source is: ROW: %d, COL: %d\n", tmp_move->source->row,tmp_move->source->column);
-	DEBUG("move dest is: ROW: %d, COL: %d\n", tmp_move->dest->row,tmp_move->dest->column);
-
-	DEBUG("King loc is: ROW:%d, COL:%d\n", tmp_game->whites[4]->piece_location->row, tmp_game->whites[4]->piece_location->column);
 	move_piece(tmp_game, tmp_move, tmp_piece);
-	DEBUG("King loc is: ROW:%d, COL:%d\n", tmp_game->whites[4]->piece_location->row, tmp_game->whites[4]->piece_location->column);
 
 	if (is_check(tmp_game) == false) {
 		valid_locs[index]->row = next_row;
 		valid_locs[index]->column = next_col;
 		valid_move = true;
-		DEBUG("valid move was found: ROW: %d, COL: %d\n", next_row, next_col);
-		DEBUG("piece type is: %c\n", tmp_piece->piece_type);
-		print_board(tmp_game);
 	}
 
-	DEBUG("before destroy!\n");
+	//DEBUG("before destroy!\n");
 
 	//destroy_piece(tmp_piece);
 	//DEBUG("piece destroyed!\n");
@@ -103,12 +105,10 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	game_destroy(tmp_game);
 	DEBUG("game destroyed!\n");
 
-	DEBUG("after is_check_aux func!\n");
-
 	return valid_move;
 }
 
-location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In pawn valid moves\n");
 	int i = 0;
 	char type = cur_piece->piece_type;
@@ -179,15 +179,11 @@ location** pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 		}
 	}
-	DEBUG("finished pawn valid moves!\n");
-	return valid_locs;
 }
 
 bool is_mate(game* cur_game){
-	DEBUG("in is mate!!\n");
 	piece** pieces;
 	location** valid_locs = malloc(64*sizeof(location*));
-	DEBUG("in is mate - allocations worked!\n");
 	for (int i=0; i<64; i++){
 		valid_locs[i] = create_location();
 	}
@@ -201,16 +197,11 @@ bool is_mate(game* cur_game){
 		pieces = cur_game->blacks;
 	}
 
-	DEBUG("pieces were chosen!\n");
-
 	for (int i=0; i<16; i++){
 		if (pieces[i]->alive == true){
-			DEBUG("%d!\n", i);
-			valid_locs = valid_moves(valid_locs, cur_game,pieces[i]);
+			valid_moves(valid_locs, cur_game,pieces[i]);
 			// if valid_locs[0] is not null it means there is at least one valid move
 			if (valid_locs[0]->row != -1){
-				DEBUG("Not mate\n");
-				DEBUG("VALID LOCS[0] is: ROW: %d, COL: %d\n", valid_locs[0]->row, valid_locs[0]->column);
 				for (int i=0; i<64;i++){
 					free(valid_locs[i]);
 				}
@@ -228,7 +219,7 @@ bool is_mate(game* cur_game){
 	return true;
 }
 
-location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In bishop valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
@@ -302,10 +293,9 @@ location** bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 		next_row--;
 		next_col--;
 	}
-	return valid_locs;
 }
 
-location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In rook valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
@@ -368,10 +358,9 @@ location** rook_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			}
 			next_col--;
 		}
-	return valid_locs;
 }
 
-location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In knight valid moves\n");
 	int i = 0;
 	int row = cur_piece->piece_location->row;
@@ -458,11 +447,10 @@ location** knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_
 			i++;
 		}
 	}
-	return valid_locs;
 }
 
 // need to find a way to prevent the bishop moves from overriding the rook moves
-location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In queen valid moves\n");
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	location** new_ptr_to_valid_locs;
@@ -472,12 +460,11 @@ location** queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_p
 		}
 	}
 	rook_valid_moves(new_ptr_to_valid_locs, cur_game, cur_piece);
-	return valid_locs;
 }
 
 
 
-location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void king_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("In king valid moves\n");
 	int i = 0;
 	// char type = cur_piece->piece_type;
@@ -557,38 +544,39 @@ location** king_valid_moves(location** valid_locs, game* cur_game, piece* cur_pi
 			is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
 		i++;
 	}
-	return valid_locs;
 }
 
 
-location** valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
+void valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	char type = cur_piece->piece_type;
 
 	if (type == WHITE_PAWN || type == BLACK_PAWN) {
-		return pawn_valid_moves(valid_locs, cur_game, cur_piece);
+		pawn_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_BISHOP || type == BLACK_BISHOP) {
-		return bishop_valid_moves(valid_locs, cur_game, cur_piece);
+		bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_ROOK || type == BLACK_ROOK) {
-		return rook_valid_moves(valid_locs, cur_game, cur_piece);
+		rook_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_KNIGHT || type == BLACK_KNIGHT) {
-		return knight_valid_moves(valid_locs, cur_game, cur_piece);
+		knight_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_QUEEN || type == BLACK_QUEEN) {
-		return queen_valid_moves(valid_locs, cur_game, cur_piece);
+		queen_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	if (type == WHITE_KING || type == BLACK_KING){
-		return king_valid_moves(valid_locs, cur_game, cur_piece);
+		king_valid_moves(valid_locs, cur_game, cur_piece);
 	}
 	DEBUG("ERROR IN VALID MOVES");
-	return NULL;
+}
+
+void announce_illegal_move_src() {
+	printf("The specified position does not contain your piece\n");
 }
 
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
-	DEBUG("in is_valid_move\n");
 	int color;
 	char source = cur_game->board[cur_move->source->row][cur_move->source->column];
 
@@ -598,9 +586,6 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 		valid_locs[i] = create_location();
 	}
 
-
-	DEBUG("ROW IS %d COL IS %d\n", cur_move->source->row, cur_move->source->column);
-
 	// source is empty
 	if (source == EMPTY_ENTRY){
 		return false;
@@ -609,15 +594,20 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	DEBUG("CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
+	if (cur_game->board[cur_move->source->row][cur_move->source->column] == EMPTY_ENTRY ||
+			color_by_type(cur_game->board[cur_move->source->row][cur_move->source->column]) != color) {
+		announce_illegal_move_src();
+		return false;
+	}
 
 	// update valid_moves
 	if (color == 1){
 		for (int i=0; i<16; i++){
-			if (cur_game->whites[i]->piece_type == source &&
+			if (cur_game->whites[i]->piece_type == source && cur_game->whites[i]->alive &&
 					cur_game->whites[i]->piece_location->row == cur_move->source->row &&
 					cur_game->whites[i]->piece_location->column == cur_move->source->column){
-				DEBUG("made it! (whites)\n");
-				valid_locs = valid_moves(valid_locs, cur_game, cur_game->whites[i]);
+				//DEBUG("made it! (whites)\n");
+				valid_moves(valid_locs, cur_game, cur_game->whites[i]);
 				break;
 			}
 		}
@@ -625,11 +615,11 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 
 	if (color == 0){
 		for (int i=0; i<16; i++){
-			if (cur_game->blacks[i]->piece_type == source &&
+			if (cur_game->blacks[i]->piece_type == source && cur_game->blacks[i]->alive &&
 					cur_game->blacks[i]->piece_location->row == cur_move->source->row &&
 					cur_game->blacks[i]->piece_location->column == cur_move->source->column){
-				DEBUG("made it! (blacks)\n");
-				valid_locs = valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
+				//DEBUG("made it! (blacks)\n");
+				valid_moves(valid_locs, cur_game, cur_game->blacks[i]);
 
 				break;
 			}
@@ -656,7 +646,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 }
 
 void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
-	DEBUG("in move piece\n");
+	//DEBUG("in move piece\n");
 	change_turn(cur_game);
 
 	cur_piece->piece_location->row = cur_move->dest->row;

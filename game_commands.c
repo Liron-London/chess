@@ -7,6 +7,7 @@
 #include "game_commands.h"
 #include "file_handler.h"
 #include "debug.h"
+#include "array_list.h"
 
 Gamecommand* game_command_create(){
 	Gamecommand* game_command = malloc(sizeof(Gamecommand));
@@ -30,12 +31,6 @@ void game_command_destroy(Gamecommand* command) {
 	free(command);
 }
 
-/* TODO -
- * there is a memory leak in this function - need to free locations in the end of use
- * in move, need to make sure that the input is legal
- * need to free game_command
- *
-*/
 Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
@@ -57,6 +52,13 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 
 		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
 		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
+		//check for invalid move parameters
+		if (game_command->move->source == NULL ||
+				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
+				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
+			announce_invalid_location();
+			game_command->validArg = false;
+		}
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
@@ -110,11 +112,67 @@ void ask_for_move(game* cur_game) {
 	}
 }
 
+void announce_empty_history() {
+	printf("Empty history, move cannot be undone\n");
+}
+
+void announce_undo_not_available() {
+	printf("Undo command not avaialbe in 2 players mode\n");
+}
+
+void announce_undo_move(int player, move* tmp_move) {
+	int src_row, dst_row;
+	char src_col, dst_col;
+	char* player_color;
+	if (player == 1) {
+		player_color = "white";
+	} else {
+		player_color = "black";
+	}
+	dst_row = tmp_move->dest->row+1;
+	dst_col = tmp_move->dest->column+'A';
+	src_row = tmp_move->source->row+1;
+	src_col = tmp_move->source->column+'A';
+	printf("Undo move for player %s : <%d, %c> -> <%d, %c>\n",
+			player_color, dst_row, dst_col, src_row, src_col);
+
+}
+
+void announce_quit() {
+	printf("Exiting...\n");
+}
+
+void announce_reset() {
+	printf("Restarting...\n");
+}
+
+void announce_invalid_location() {
+	printf("Invalid position on the board\n");
+}
+
+void announce_invalid_move() {
+	printf("Illegal move\n");
+}
+
+void announce_mate(int color) {
+	color = (color + 1) % 2;
+	char* color_name;
+	if (color == 1) {
+		color_name = "white";
+	} else {
+		color_name ="black";
+	}
+	printf("Checkmate! %s player wins the game\n", color_name);
+}
+
 // called when the command "start" is pressed in settings
 int game_play(game* game){
 	Gamecommand* game_command;
 	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
+
+	// relevant only in one player mode -- need to create history array
+	array_list* history = array_list_create(6);
 
 	while (1){
 		char* command_str = (char*) malloc(1024*sizeof(char));
@@ -128,8 +186,26 @@ int game_play(game* game){
 		DEBUG("prase the line!\n");
 
 		// QUIT
-		if (game_command->validArg == true && game_command->cmd == GAME_QUIT){
+		if (game_command->validArg == true && game_command->cmd == GAME_QUIT) {
+			// freeing all variables
+			array_list_destroy(history);
+			free(command_str);
+			game_command_destroy(game_command);
+			game_destroy(game);
+			announce_quit();
 			return 1;
+		}
+
+		//RESET
+		if (game_command->validArg == true && game_command->cmd == RESET) {
+			// freeing all variables
+			array_list_destroy(history);
+			free(command_str);
+			game_command_destroy(game_command);
+			game_destroy(game);
+			announce_reset();
+			set_game();
+			return 0;
 		}
 
 		//SAVE
@@ -142,25 +218,69 @@ int game_play(game* game){
 			// check if valid move
 			DEBUG("Current turn is: %d\n", game->current_turn);
 			if (is_valid_move(game, game_command->move) == true){
+
+				// update history
+				if (game->game_mode == 1){
+					if (array_list_is_full(history) == true){
+						array_list_remove_first(history);
+					}
+					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
+				}
+
 				DEBUG("is_valid_move is OK\n");
 				cur_piece = location_to_piece(game, game_command->move->source);
 				DEBUG("location_to_piece is OK\n");
 				DEBUG("current piece is %c %d %d\n", cur_piece->piece_type, cur_piece->piece_location->row,cur_piece->piece_location->column);
 				move_piece(game, game_command->move, cur_piece);
+
+
 				DEBUG("move_piece is OK\n");
 				print_board(game);
 				DEBUG("valid move!\n");
 				if (is_mate(game) == true){
-					printf("player %d wins!", (game->current_turn + game->user_color)%2);
+					int color = current_turn_color(game);
+					announce_mate(color);
 				}
 			}
 
-			else{
-				DEBUG("move is not valid!\n");
+			else {
+				announce_invalid_move();
 			}
-			// update history
-			// return 1;
 		}
+
+		// UNDO
+		if (game_command->validArg == true && game_command->cmd == UNDO){
+			DEBUG("In UNDO\n");
+			if (game->game_mode != 1){
+				announce_undo_not_available();
+			}
+
+			else {
+				if (array_list_is_empty(history) == true){
+					announce_empty_history();
+				}
+
+				else {
+					DEBUG("history is not empty!\n");
+					// takes 2 moves and games out of history
+					move* tmp_move = create_move();
+					DEBUG("move created!\n");
+					tmp_move = array_list_get_last_move(history);
+					announce_undo_move(current_turn_color(game), tmp_move);
+					array_list_remove_last(history);
+					tmp_move = array_list_get_last_move(history);
+					announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
+
+					//updating game and history
+					game = array_list_get_last_game(history);
+
+					array_list_remove_last(history);
+					destroy_move(tmp_move);
+					print_board(game);
+				}
+			}
+		}
+
 		free(command_str);
 		game_command_destroy(game_command);
 	}

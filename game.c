@@ -14,6 +14,10 @@
  * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
  */
 
+int current_turn_color(game* game) {
+	return (game->current_turn + game->user_color)%2;
+}
+
 piece* location_to_piece(game* cur_game, location* loc){
 	// DEBUG("in location_to_piece\n");
 	char type = cur_game->board[loc->row][loc->column];
@@ -40,7 +44,8 @@ piece* location_to_piece(game* cur_game, location* loc){
 			}
 		}
 	}
-	DEBUG("NULL is returned\n");
+	DEBUG2("NULL is returned\n");
+	DEBUG2("piece location is: ROW %d, COL %d\n", loc->row, loc->column)
 	return NULL;
 }
 
@@ -233,6 +238,7 @@ game* game_create() {
 game* game_copy(game* cur_game) {
 	if (cur_game == NULL)
 		return NULL;
+
 	game* copy = game_create();
 	if (copy == NULL) {
 		free(copy);
@@ -259,8 +265,17 @@ game* game_copy(game* cur_game) {
 	// initialize new pieces
 
 	for (int i=0; i<16; i++){
-		copy->whites[i] = copy_piece(cur_game->whites[i]);
-		copy->blacks[i] = copy_piece(cur_game->blacks[i]);
+		copy->whites[i]->alive = cur_game->whites[i]->alive;
+		copy->whites[i]->color = cur_game->whites[i]->color;
+		copy->whites[i]->piece_location->row = cur_game->whites[i]->piece_location->row;
+		copy->whites[i]->piece_location->column = cur_game->whites[i]->piece_location->column;
+		copy->whites[i]->piece_type = cur_game->whites[i]->piece_type;
+
+		copy->blacks[i]->alive = cur_game->blacks[i]->alive;
+		copy->blacks[i]->color = cur_game->blacks[i]->color;
+		copy->blacks[i]->piece_location->row = cur_game->blacks[i]->piece_location->row;
+		copy->blacks[i]->piece_location->column = cur_game->blacks[i]->piece_location->column;
+		copy->blacks[i]->piece_type = cur_game->blacks[i]->piece_type;
 	}
 	return copy;
 }
@@ -451,14 +466,12 @@ bool is_check(game* cur_game){
 	if (color == 1){
 		DEBUG("KING IS WHITE\n");
 		king_loc = cur_game->whites[4]->piece_location;
-		DEBUG("king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
 		enemies = cur_game->blacks;
 	}
 	// black turn
 	else{
 		DEBUG("KING IS BLACK\n");
 		king_loc = cur_game->blacks[4]->piece_location;
-		DEBUG("king loc is ROW %d, COL %d\n", king_loc->row, king_loc->column);
 		enemies = cur_game->whites;
 	}
 

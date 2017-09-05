@@ -47,4 +47,6 @@ void game_command_destroy(Gamecommand* command);
  */
 int game_play(game* game);
 
+void announce_invalid_location();
+
 #endif /* GAME_COMMANDS_H_ */
