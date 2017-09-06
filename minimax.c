@@ -146,17 +146,18 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->column = valid_locs[j]->column;
 					tmp_move->dest->row = valid_locs[j]->row;
 
-					j += 1;
-					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
-
-					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
-
 					if (best_move == NULL){
 						best_move->source->row = tmp_move->source->row;
 						best_move->source->column = tmp_move->source->column;
 						best_move->dest->row = tmp_move->dest->row;
 						best_move->dest->column = tmp_move->dest->column;
 					}
+
+					j += 1;
+					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
+
+					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+
 
 					alpha = max(alpha, tmp_score);
 					game_destroy(tmp_game);
@@ -206,17 +207,17 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->column = valid_locs[j]->column;
 					tmp_move->dest->row = valid_locs[j]->row;
 
-					j += 1;
-					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
-
-					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
-
 					if (best_move == NULL){
 						best_move->source->row = tmp_move->source->row;
 						best_move->source->column = tmp_move->source->column;
 						best_move->dest->row = tmp_move->dest->row;
 						best_move->dest->column = tmp_move->dest->column;
 					}
+
+					j += 1;
+					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
+
+					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					beta = min(beta, tmp_score);
 					game_destroy(tmp_game);
