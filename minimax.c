@@ -142,10 +142,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					game_destroy(tmp_game);
 
 					if (beta <= alpha){
-						best_move->source->row = tmp_move->source->row;
-						best_move->source->column = tmp_move->source->column;
-						best_move->dest->row = tmp_move->dest->row;
-						best_move->dest->column = tmp_move->dest->column;
+						best_move->source->row = -1;// tmp_move->source->row;
+						//best_move->source->column = tmp_move->source->column;
+						//best_move->dest->row = tmp_move->dest->row;
+						//best_move->dest->column = tmp_move->dest->column;
 						DEBUG2("In min\n");
 						break; // beta cut-off
 					}
@@ -202,10 +202,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					game_destroy(tmp_game);
 
 					if (beta <= alpha){
-						best_move->source->row = tmp_move->source->row;
-						best_move->source->column = tmp_move->source->column;
-						best_move->dest->row = tmp_move->dest->row;
-						best_move->dest->column = tmp_move->dest->column;
+						best_move->source->row = -1; //tmp_move->source->row;
+						//best_move->source->column = tmp_move->source->column;
+						//best_move->dest->row = tmp_move->dest->row;
+						//best_move->dest->column = tmp_move->dest->column;
 						DEBUG2("In max\n");
 						break; // beta cut-off
 					}
