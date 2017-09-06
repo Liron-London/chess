@@ -485,8 +485,8 @@ bool is_check(game* cur_game){
 
 		// black pawn
 		if (enemy_type == BLACK_PAWN){
-			if ((enemy_loc->column == (king_loc->column) + 1) &&
-					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
+			if ((enemy_loc->row == (king_loc->row) + 1) &&
+					((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1))){
 				DEBUG("FAILED BECAUSE OF A BLACK PAWN!\n");
 				return true;
 			}
@@ -494,8 +494,8 @@ bool is_check(game* cur_game){
 
 		// white pawn
 		if (enemy_type == WHITE_PAWN){
-			if ((enemy_loc->column == (king_loc->column) - 1) &&
-					((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))){
+			if ((enemy_loc->row == (king_loc->row) - 1) &&
+					((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1))){
 				DEBUG("FAILED BECAUSE OF A WHITE PAWN!\n");
 				return true;
 			}
