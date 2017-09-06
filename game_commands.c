@@ -250,6 +250,15 @@ int game_play(game* game){
 				move_piece(game, comp_move, location_to_piece(game, comp_move->source));
 				print_board(game);
 
+				// update history
+				if (game->game_mode == 1){
+					if (array_list_is_full(history) == true){
+						array_list_remove_first(history);
+					}
+					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
+				}
+
+
 				if (is_mate(game) == true){
 					int color = current_turn_color(game);
 					announce_mate(color);
