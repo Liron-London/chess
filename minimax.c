@@ -102,7 +102,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	int tmp_score;
 	piece** your_pieces;
 	piece* tmp_piece;
-	move* tmp_move = create_move();
+	//move* tmp_move = create_move();
 	int color = (node->current_turn + node->user_color)%2;
 	location** valid_locs = malloc(64*sizeof(location*));
 	// game* tmp_game = game_create();
