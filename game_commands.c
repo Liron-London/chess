@@ -245,7 +245,7 @@ int game_play(game* game){
 				// computer plays
 				move* comp_move = create_move();
 				comp_move = get_recommended_move_for_comp(game, game->difficulty);
-				move_piece(game, comp_move, location_to_piece(game, comp_move));
+				move_piece(game, comp_move, location_to_piece(game, comp_move->source));
 
 				if (is_mate(game) == true){
 					int color = current_turn_color(game);
