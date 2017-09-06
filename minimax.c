@@ -153,8 +153,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					best_move->source->row = tmp_piece->piece_location->row;
 					best_move->source->column = tmp_piece->piece_location->column;
-					best_move->dest->column = valid_locs[j]->column;
-					best_move->dest->row = valid_locs[j]->row;
+					best_move->dest->column = valid_locs[j-1]->column;
+					best_move->dest->row = valid_locs[j-1]->row;
 
 					alpha = max(alpha, tmp_score);
 					game_destroy(tmp_game);
@@ -207,8 +207,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					best_move->source->row = tmp_piece->piece_location->row;
 					best_move->source->column = tmp_piece->piece_location->column;
-					best_move->dest->column = valid_locs[j]->column;
-					best_move->dest->row = valid_locs[j]->row;
+					best_move->dest->column = valid_locs[j-1]->column;
+					best_move->dest->row = valid_locs[j-1]->row;
 
 					beta = min(beta, tmp_score);
 					game_destroy(tmp_game);
