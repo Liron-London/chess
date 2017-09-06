@@ -55,13 +55,15 @@ int main() {
 //	printf("before last if\n");
 //	if (success)
 //		printf("basic game_commands checks success!\n");
-//	success = comp_move_check();
-//		if (success)
-//			printf("game_play test success!\n");
-//	return 0;
 
 	success = game_play_check();
-		if (success)
-			printf("game_play test success!\n");
+	if (success){
+		printf("game_play test success!\n");
+	}
+
+	success = comp_move_check();
+	if (success)
+		printf("game_play test success!\n");
 	return 0;
+
 }
