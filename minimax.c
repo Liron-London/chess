@@ -68,26 +68,6 @@ int scoring_function(game* game) {
 	return score;
 }
 
-// put all valid moves in all_valid_moves, amount of valid moves is the size of the list
-/*
-void all_valid_moves(game* game, move** all_valid_moves, int* amout_of_valid_moves){
-	int color = (game->current_turn + game->user_color)%2;
-	piece** your_pieces;
-	// white turn
-	if (color == 0){
-		your_pieces = game->whites;
-	}
-	else{
-		your_pieces = game->blacks;
-	}
-	for (int i=0; i<16; i++){
-		// piece is alive
-		if (your_pieces->alive == 1){
-			valid_moves()
-		}
-	}
-	return NULL;
-}*/
 
 // returns the move the computer should do, the move will be in best_move
 int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move* best_move){
@@ -105,7 +85,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	move* tmp_move = create_move();
 	int color = (node->current_turn + node->user_color + 1)%2;
 	location** valid_locs = malloc(64*sizeof(location*));
-	// game* tmp_game = game_create();
 
 
 	for (int i=0; i<64; i++){
@@ -146,7 +125,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->column = valid_locs[j]->column;
 					tmp_move->dest->row = valid_locs[j]->row;
 
-					if (best_move == NULL){
+					if (best_move->source->row == -1){
 						best_move->source->row = tmp_move->source->row;
 						best_move->source->column = tmp_move->source->column;
 						best_move->dest->row = tmp_move->dest->row;
@@ -207,7 +186,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->column = valid_locs[j]->column;
 					tmp_move->dest->row = valid_locs[j]->row;
 
-					if (best_move == NULL){
+					if (best_move->source->row == -1){
 						best_move->source->row = tmp_move->source->row;
 						best_move->source->column = tmp_move->source->column;
 						best_move->dest->row = tmp_move->dest->row;
@@ -244,7 +223,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
-	comp_move = NULL;
 	alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	return comp_move;
 }
