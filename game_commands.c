@@ -244,7 +244,7 @@ int game_play(game* game){
 
 				// computer plays
 				move* comp_move = create_move();
-				move* comp_move = get_recommended_move_for_comp(game, game->difficulty);
+				comp_move = get_recommended_move_for_comp(game, game->difficulty);
 				move_piece(game, comp_move, location_to_piece(game, comp_move));
 
 				if (is_mate(game) == true){
