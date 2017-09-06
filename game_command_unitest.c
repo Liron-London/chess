@@ -39,8 +39,8 @@ static bool comp_move_check(){
 	print_board(cur_game);
 	move* cur_move = create_move();
 	cur_move = get_recommended_move_for_comp(cur_game, 3);
-	printf("MOVE IS: ROW: %d, COL: %d", cur_move->source->row, cur_move->source->column);
-	printf("MOVE IS: ROW: %d, COL: %d", cur_move->dest->row, cur_move->dest->column);
+	printf("MOVE IS: ROW: %d, COL: %d\n", cur_move->source->row, cur_move->source->column);
+	printf("MOVE IS: ROW: %d, COL: %d\n", cur_move->dest->row, cur_move->dest->column);
 	piece* my_piece = location_to_piece(cur_game, cur_move->source);
 	move_piece(cur_game, cur_move, my_piece);
 	print_board(cur_game);
