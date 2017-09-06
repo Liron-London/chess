@@ -454,9 +454,11 @@ void queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	DEBUG("In queen valid moves\n");
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	location** new_ptr_to_valid_locs;
+
 	for (int i = 0; i < 64; i++) {
 		if (valid_locs[i]->row == -1 && valid_locs[i]->column == -1) {
 			new_ptr_to_valid_locs = &valid_locs[i];
+			DEBUG2("index is %d\n", i);
 		}
 	}
 	rook_valid_moves(new_ptr_to_valid_locs, cur_game, cur_piece);
