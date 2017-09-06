@@ -245,6 +245,8 @@ int game_play(game* game){
 				// computer plays
 				move* comp_move = create_move();
 				comp_move = get_recommended_move_for_comp(game, game->difficulty);
+				printf("MOVE IS: ROW: %d, COL: %d\n", comp_move->source->row, comp_move->source->column);
+				printf("MOVE IS: ROW: %d, COL: %d\n", comp_move->dest->row, comp_move->dest->column);
 				move_piece(game, comp_move, location_to_piece(game, comp_move->source));
 				print_board(game);
 
