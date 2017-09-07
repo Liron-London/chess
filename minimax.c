@@ -136,6 +136,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
+					DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
 					//new_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
@@ -147,7 +148,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
+						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
 
