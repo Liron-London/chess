@@ -22,39 +22,39 @@ int scoring_function(game* game) {
 	//calculate white pieces
 	for (int i = 0; i < 16; i++) {
 		char cur_piece_type = game->whites[i]->piece_type;
-		if (cur_piece_type == WHITE_PAWN) {
+		if (cur_piece_type == WHITE_PAWN && game->whites[i]->alive == 1) {
 			white_sum += 1;
 		}
-		if (cur_piece_type == WHITE_BISHOP || cur_piece_type == WHITE_KNIGHT) {
+		if ((cur_piece_type == WHITE_BISHOP || cur_piece_type == WHITE_KNIGHT) && game->whites[i]->alive == 1) {
 			white_sum += 3;
 		}
-		if (cur_piece_type == WHITE_ROOK) {
+		if (cur_piece_type == WHITE_ROOK && game->whites[i]->alive == 1) {
 			white_sum += 5;
 		}
-		if (cur_piece_type == WHITE_QUEEN) {
+		if (cur_piece_type == WHITE_QUEEN && game->whites[i]->alive == 1) {
 			white_sum += 9;
 		}
-		if (cur_piece_type == WHITE_KING) {
+		if (cur_piece_type == WHITE_KING && game->whites[i]->alive == 1) {
 			white_sum += 100;
 		}
 	}
 
 	//calculate black pieces
-	for (int j = 0; j < 16; j++) {
-		char cur_piece_type = game->blacks[j]->piece_type;
-		if (cur_piece_type == BLACK_PAWN) {
+	for (int i = 0; i < 16; i++) {
+		char cur_piece_type = game->blacks[i]->piece_type;
+		if (cur_piece_type == BLACK_PAWN && game->blacks[i]->alive == 1) {
 			black_sum += 1;
 		}
-		if (cur_piece_type == BLACK_BISHOP || cur_piece_type == BLACK_KNIGHT) {
+		if ((cur_piece_type == BLACK_BISHOP || cur_piece_type == BLACK_KNIGHT) && game->blacks[i]->alive == 1 ) {
 			black_sum += 3;
 		}
-		if (cur_piece_type == BLACK_ROOK) {
+		if (cur_piece_type == BLACK_ROOK && game->blacks[i]->alive == 1) {
 			black_sum += 5;
 		}
-		if (cur_piece_type == BLACK_QUEEN) {
+		if (cur_piece_type == BLACK_QUEEN && game->blacks[i]->alive == 1) {
 			black_sum += 9;
 		}
-		if (cur_piece_type == BLACK_KING) {
+		if (cur_piece_type == BLACK_KING && game->blacks[i]->alive == 1) {
 			black_sum += 100;
 		}
 	}
