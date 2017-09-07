@@ -96,7 +96,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	// only the minimum part
 	if (maximizing_player == true){
 		DEBUG2("******************\n");
-		tmp_score = INT_MIN;
+		tmp_score = -10000000;
 		if (color == 0){
 			your_pieces = node->blacks;
 		}
@@ -169,7 +169,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 	else{
 		DEBUG2("####################\n");
-		tmp_score = INT_MAX;
+		tmp_score = 10000000;
 		if (color == 0){
 			your_pieces = node->blacks;
 		}
@@ -211,7 +211,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
+						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
 
