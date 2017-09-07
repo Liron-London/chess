@@ -65,7 +65,7 @@ int scoring_function(game* game) {
 	} else {
 		score = black_sum - white_sum;
 	}
-	return score;
+	return -score;
 }
 
 
