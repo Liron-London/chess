@@ -482,6 +482,9 @@ bool is_check(game* cur_game){
 		//DEBUG("enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 		char enemy_type = enemies[i]->piece_type;
 		//DEBUG("enemy type %c\n",enemy_type);
+		if (enemies[i]->alive == 0){
+			continue;
+		}
 
 		// black pawn
 		if (enemy_type == BLACK_PAWN){
