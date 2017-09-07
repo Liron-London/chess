@@ -421,7 +421,7 @@ void knight_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece)
 
 	// check downward left (2 down, 1 left)
 	next_row = row - 2;
-	next_col = col - 2;
+	next_col = col - 1;
 	if (next_row >= 0 && next_col >= 0 && (cur_game->board[next_row][next_col] == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[next_row][next_col]) != color)) {
 		if (is_check_aux(valid_locs, cur_game, cur_piece, next_row, next_col, i)) {
