@@ -15,7 +15,7 @@ int save_game(game* cur_game, char* filename);
  * @params text from xml file, the tag to search for, return-variable in which the relevant text
  * will be copied
  */
-void tag_finder(char* input_file_text, char* tag, char* content);
+char* tag_finder(char* input_file_text, char* tag);
 
 /*
 * loads game from XML file
