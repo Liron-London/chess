@@ -71,7 +71,7 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	if (current_turn_color(cur_game) == 0){
 		for (int i=0; i<16; i++){
 			if (tmp_game->whites[i]->piece_location->row == cur_piece->piece_location->row &&
-				tmp_game->whites[i]->piece_location->column == cur_piece->piece_location->column){
+				tmp_game->whites[i]->piece_location->column == cur_piece->piece_location->column && tmp_game->whites[i]->alive==1){
 				tmp_piece = tmp_game->whites[i];
 			}
 		}
@@ -79,8 +79,8 @@ bool is_check_aux(location** valid_locs, game* cur_game, piece* cur_piece,
 	if (current_turn_color(cur_game) == 1){
 		for (int i=0; i<16; i++){
 			if (tmp_game->blacks[i]->piece_location->row == cur_piece->piece_location->row &&
-				tmp_game->blacks[i]->piece_location->column == cur_piece->piece_location->column){
-					tmp_piece = tmp_game->whites[i];
+				tmp_game->blacks[i]->piece_location->column == cur_piece->piece_location->column && tmp_game->blacks[i]->alive==1){
+					tmp_piece = tmp_game->blacks[i];
 			}
 		}
 	}
