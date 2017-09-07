@@ -149,6 +149,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
+						DEBUG2("tmp score is greater than beta\n");
+						DEBUG2("alpha is %d\n", alpha);
+						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					alpha = max(alpha, tmp_score);
@@ -220,6 +223,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
+						DEBUG2("tmp score is lower than beta\n");
+						DEBUG2("beta is %d\n", beta);
+						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 
