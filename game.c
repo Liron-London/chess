@@ -29,7 +29,7 @@ piece* location_to_piece(game* cur_game, location* loc){
 		for (int i=0; i<16;i++){
 			DEBUG("piece location is: ROW %d, COL %d\n", cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
 			if (cur_game->whites[i]->piece_location->row == loc->row &&
-					cur_game->whites[i]->piece_location->column == loc->column){
+					cur_game->whites[i]->piece_location->column == loc->column && cur_game->whites[i]->alive == 1){
 				DEBUG("NON-NULL is returned\n");
 				return cur_game->whites[i];
 			}
@@ -38,7 +38,7 @@ piece* location_to_piece(game* cur_game, location* loc){
 
 	else{
 		for (int i=0; i<16;i++){
-			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column){
+			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column && cur_game->blacks[i]->alive == 1){
 				DEBUG("NON-NULL is returned\n");
 				return cur_game->blacks[i];
 			}
