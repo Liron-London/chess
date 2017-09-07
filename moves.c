@@ -137,7 +137,7 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 		// if board[i][j] is black
 		if (row < 7 && col < 7 &&
-				color_by_type(cur_game->board[row + 1][col + 1]) == 1) {
+				color_by_type(cur_game->board[row + 1][col + 1]) == 0) {
 
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col + 1, i)) {
 				i++;
@@ -145,7 +145,7 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 
 		if (row < 7 && col > 0 &&
-				color_by_type(cur_game->board[row + 1][col - 1]) == 1) {
+				color_by_type(cur_game->board[row + 1][col - 1]) == 0) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col - 1, i)) {
 				i++;
 			}
@@ -167,14 +167,14 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 		// if board[i][j] is white
 		if (row > 0 && col > 0 &&
-				color_by_type(cur_game->board[row - 1][col - 1]) == 0) {
+				color_by_type(cur_game->board[row - 1][col - 1]) == 1) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col - 1, i)) {
 				i++;
 			}
 		}
 
 		if (row > 0 && col < 7 &&
-				color_by_type(cur_game->board[row - 1][col + 1]) == 0) {
+				color_by_type(cur_game->board[row - 1][col + 1]) == 1) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col + 1, i)) {
 				i++;
 			}
