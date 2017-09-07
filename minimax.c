@@ -80,6 +80,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	DEBUG2("depth is %d\n", depth);
 
 	int tmp_score;
+	int new_score;
 	piece** your_pieces;
 	piece* tmp_piece;
 	move* tmp_move = create_move();
@@ -129,14 +130,15 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					tmp_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+					new_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					// if best move is not initialized or
-					if (best_move->source->row == -1){
+					if (best_move->source->row == -1 && new_score > tmp_score){
 						best_move->source->row = tmp_move->source->row;
 						best_move->source->column = tmp_move->source->column;
 						best_move->dest->row = tmp_move->dest->row;
 						best_move->dest->column = tmp_move->dest->column;
+						tmp_score = new_score;
 					}
 
 					if (tmp_score > alpha){
@@ -200,11 +202,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					// if best move is not initialized or
-					if (best_move->source->row == -1){
+					if (best_move->source->row == -1  && new_score < tmp_score){
 						best_move->source->row = tmp_move->source->row;
 						best_move->source->column = tmp_move->source->column;
 						best_move->dest->row = tmp_move->dest->row;
 						best_move->dest->column = tmp_move->dest->column;
+						tmp_score = new_score;
 					}
 
 					if (tmp_score < beta){
