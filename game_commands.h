@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "moves.h"
+#include "minimax.h"
 
 typedef enum {
     MOVE,

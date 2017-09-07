@@ -241,6 +241,29 @@ int game_play(game* game){
 					int color = current_turn_color(game);
 					announce_mate(color);
 				}
+
+				// computer plays
+				move* comp_move = create_move();
+				comp_move = get_recommended_move_for_comp(game, game->difficulty);
+				printf("MOVE IS: ROW: %d, COL: %d\n", comp_move->source->row, comp_move->source->column);
+				printf("MOVE IS: ROW: %d, COL: %d\n", comp_move->dest->row, comp_move->dest->column);
+				move_piece(game, comp_move, location_to_piece(game, comp_move->source));
+				print_board(game);
+
+				// update history
+				if (game->game_mode == 1){
+					if (array_list_is_full(history) == true){
+						array_list_remove_first(history);
+					}
+					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
+				}
+
+
+				if (is_mate(game) == true){
+					int color = current_turn_color(game);
+					announce_mate(color);
+				}
+
 			}
 
 			else {

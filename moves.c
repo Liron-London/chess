@@ -116,8 +116,9 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	int col = cur_piece->piece_location->column;
 
 	DEBUG("ROW IS %d\n COL IS %d\n", row, col);
+	int color = (cur_game->current_turn + cur_game->user_color)%2;
 
-	if (type == WHITE_PAWN) {
+	if (type == WHITE_PAWN && color == 0) {
 		if (row == 1 && cur_game->board[2][col] == EMPTY_ENTRY &&
 				cur_game->board[3][col] == EMPTY_ENTRY) {
 
@@ -144,14 +145,14 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 
 		if (row < 7 && col > 0 &&
-				color_by_type(cur_game->board[row + 1][col + 1]) == 0) {
+				color_by_type(cur_game->board[row + 1][col - 1]) == 0) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row + 1, col - 1, i)) {
 				i++;
 			}
 		}
 	}
 
-	if (type == BLACK_PAWN) {
+	if (type == BLACK_PAWN && color == 1) {
 		if (row == 6 && cur_game->board[5][col] == EMPTY_ENTRY &&
 				cur_game->board[4][col] == EMPTY_ENTRY) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, 4, col, i)) {
@@ -166,14 +167,14 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 		// if board[i][j] is white
 		if (row > 0 && col > 0 &&
-				color_by_type(cur_game->board[row - 1][col - 1]) == 1) {
+				color_by_type(cur_game->board[row - 1][col - 1]) == 0) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col - 1, i)) {
 				i++;
 			}
 		}
 
 		if (row > 0 && col < 7 &&
-				color_by_type(cur_game->board[row - 1][col + 1]) == 1) {
+				color_by_type(cur_game->board[row - 1][col + 1]) == 0) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col + 1, i)) {
 				i++;
 			}
@@ -454,9 +455,13 @@ void queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	DEBUG("In queen valid moves\n");
 	bishop_valid_moves(valid_locs, cur_game, cur_piece);
 	location** new_ptr_to_valid_locs;
+
 	for (int i = 0; i < 64; i++) {
 		if (valid_locs[i]->row == -1 && valid_locs[i]->column == -1) {
 			new_ptr_to_valid_locs = &valid_locs[i];
+			DEBUG2("index is %d\n", i);
+			DEBUG2("valid_locs is ROW: %d COL: %d\n", valid_locs[i]->row, valid_locs[i]->column);
+			break ;
 		}
 	}
 	rook_valid_moves(new_ptr_to_valid_locs, cur_game, cur_piece);
