@@ -140,7 +140,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
-						// tmp_score = new_score;
+						tmp_score = new_score;
 						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
