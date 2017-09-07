@@ -38,7 +38,8 @@ piece* location_to_piece(game* cur_game, location* loc){
 
 	else{
 		for (int i=0; i<16;i++){
-			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column && cur_game->blacks[i]->alive == 1){
+			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column
+					&& cur_game->blacks[i]->alive == 1){
 				DEBUG("NON-NULL is returned\n");
 				return cur_game->blacks[i];
 			}
