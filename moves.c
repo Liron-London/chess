@@ -657,7 +657,14 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 	cur_piece->piece_location->row = cur_move->dest->row;
 	cur_piece->piece_location->column = cur_move->dest->column;
 
+	// checks if a piece should be killed and kill it if needed
+	if (cur_game->board[cur_move->dest->row][cur_move->dest->column] != EMPTY_ENTRY){
+		piece* dead_piece = location_to_piece(cur_game, cur_move->dest);
+		dead_piece->alive = 0;
+	}
+
 	// update the board
 	cur_game->board[cur_move->source->row][cur_move->source->column] = EMPTY_ENTRY;
 	cur_game->board[cur_move->dest->row][cur_move->dest->column] = cur_piece->piece_type;
+
 }
