@@ -167,7 +167,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						//best_move->source->column = tmp_move->source->column;
 						//best_move->dest->row = tmp_move->dest->row;
 						//best_move->dest->column = tmp_move->dest->column;
-						DEBUG2("In min\n");
+						DEBUG2("In max\n");
+						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
 						break; // beta cut-off
 					}
 				}
@@ -244,7 +245,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						//best_move->source->column = tmp_move->source->column;
 						//best_move->dest->row = tmp_move->dest->row;
 						//best_move->dest->column = tmp_move->dest->column;
-						DEBUG2("In max\n");
+						DEBUG2("In min\n");
+						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
 						break; // beta cut-off
 					}
 				}
