@@ -135,7 +135,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
-					DEBUG2("PC current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
+					DEBUG2("PC current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_move->source->row, tmp_move->source->column, tmp_move->dest->row, tmp_move->dest->column);
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
 					//new_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
@@ -219,7 +219,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					DEBUG2("User current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
+					DEBUG2("User current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_move->source->row, tmp_move->source->column, tmp_move->dest->row, tmp_move->dest->column);
 
 					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
