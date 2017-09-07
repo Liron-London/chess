@@ -118,7 +118,7 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("ROW IS %d\n COL IS %d\n", row, col);
 	int color = (cur_game->current_turn + cur_game->user_color)%2;
 
-	if (type == WHITE_PAWN && color == 0) {
+	if (type == WHITE_PAWN && color == 1) {
 		if (row == 1 && cur_game->board[2][col] == EMPTY_ENTRY &&
 				cur_game->board[3][col] == EMPTY_ENTRY) {
 
@@ -152,7 +152,7 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 	}
 
-	if (type == BLACK_PAWN && color == 1) {
+	if (type == BLACK_PAWN && color == 0) {
 		if (row == 6 && cur_game->board[5][col] == EMPTY_ENTRY &&
 				cur_game->board[4][col] == EMPTY_ENTRY) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, 4, col, i)) {
