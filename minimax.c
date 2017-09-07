@@ -134,12 +134,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					new_score = max(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					// if best move is not initialized or
-					if (tmp_best_move->source->row == -1 && new_score > tmp_score){
+					if (tmp_best_move->source->row == -1 || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
+						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					if (tmp_score > alpha){
@@ -203,12 +204,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					// if best move is not initialized or
-					if (tmp_best_move->source->row == -1  && new_score < tmp_score){
+					if (tmp_best_move->source->row == -1  || new_score < tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
+						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					if (tmp_score < beta){

@@ -459,8 +459,6 @@ void queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	for (int i = 0; i < 64; i++) {
 		if (valid_locs[i]->row == -1 && valid_locs[i]->column == -1) {
 			new_ptr_to_valid_locs = &valid_locs[i];
-			DEBUG2("index is %d\n", i);
-			DEBUG2("valid_locs is ROW: %d COL: %d\n", valid_locs[i]->row, valid_locs[i]->column);
 			break ;
 		}
 	}
