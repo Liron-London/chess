@@ -8,6 +8,7 @@
 #include "debug.h"
 
 int save_game(game* cur_game, char* filename) {
+	strcat(filename, ".xml");
 	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
@@ -32,19 +33,83 @@ int save_game(game* cur_game, char* filename) {
 		}
 		fprintf(fp, "</row_%d>\n", i+1);
 	}
-	//
+
 	fprintf(fp, "\t</board>\n");
 	fprintf(fp, "</game>\n");
 	fclose(fp);
 	return 0;
 }
 
+char* tag_finder(char* input_file_text, char* tag) {
+//	int tag_len = strlen(tag);
+	char open_tag[30], close_tag[30];
+
+	DEBUG2("Input file text: %s\n", input_file_text);
+
+	sprintf(open_tag, "<%s>", tag);
+	sprintf(close_tag, "</%s>", tag);
+
+	DEBUG2("open tag is %s, close tag is %s\n", open_tag, close_tag);
+
+	char* content_start = strstr(input_file_text, ">");
+	char* content_end = strstr(input_file_text, "</");
+
+	DEBUG2("content_start is %s, content_end is %s\n", content_start, content_end);
+
+	int len = (int)(content_end - content_start) - 1;
+
+	DEBUG2("Content length is %d\n", len);
+	char* content = malloc((len + 1)* sizeof(char));
+	strncpy(content, content_start+1, len);
+	content[len] = '\0';
+	DEBUG2("Content is %s\n", content);
+	return content;
+}
+
 int load_game(game* cur_game, char* filename) {
+	DEBUG("in load_game, filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
 		return 1;
 	}
-	printf("Difficulty is: %d\n", cur_game->difficulty);
+	char input_file_text[50];
+	char* tag_content;
+
+	fgets(input_file_text, 50, fp); // gets the formatting line
+	fgets(input_file_text, 50, fp); // gets the <game> line
+	fgets(input_file_text, 50, fp); // gets the <current_turn> line
+	tag_content = tag_finder(input_file_text, "current_turn");
+	cur_game->current_turn = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <game_mode> line
+	tag_content = tag_finder(input_file_text, "game_mode");
+	cur_game->game_mode = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <difficulty> line
+	tag_content = tag_finder(input_file_text, "difficulty");
+	cur_game->difficulty = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <user_color> line
+	tag_content = tag_finder(input_file_text, "user_color");
+	cur_game->user_color = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <board> line
+
+	for (int i = 8; i >= 1; i--) {
+	fgets(input_file_text, 50, fp); // gets the <row_i> line
+		char row_x[5];
+		sprintf(row_x, "row_%d", i);
+		tag_content = tag_finder(input_file_text, row_x);
+		for (int j = 0; j <= 7; j++) {
+			cur_game->board[i-1][j] = tag_content[j];
+		}
+
+	}
+
+
+	print_settings(cur_game);
+	print_board(cur_game);
+	game_play(cur_game);
 	return 0;
 }
 

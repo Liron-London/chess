@@ -7,11 +7,12 @@ GAME_TEST_OBJS = array_list.o game.o moves.o
 GAME_COMMANDS_TEST_OBJS = array_list.o game.o game_commands.o setting.o game_command_unitest.o moves.o file_handler.o minimax.o
 FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
-SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o
+SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o minimax.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
+SDL_CFLAGS := $(shell sdl-config --cflags)
+SDL_LDFLAGS := $(shell sdl-config --libs)
 
-
-COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
+COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 
 
@@ -40,7 +41,7 @@ array_list.o: array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 setting.o: game_commands.c game_commands.h game.c game.h setting.c setting.h array_list.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
-game_commands.o: moves.h moves.c game_commands.c game_commands.h game.c game.h array_list.c array_list.h file_handler.c file_handler.h
+game_commands.o: moves.h moves.c game_commands.c game_commands.h game.c game.h array_list.c array_list.h file_handler.c file_handler.h minimax.c minimax.h
 	$(CC) $(COMP_FLAG) -c $*.c
 
 setting_test.o: moves.c moves.h game_commands.c game_commands.h game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c

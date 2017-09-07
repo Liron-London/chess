@@ -6,6 +6,7 @@
  */
 
 #include "setting.h"
+#include "file_handler.h"
 #include "debug.h"
 
 Command* create_command() {
@@ -50,12 +51,12 @@ void print_invalid_difficulty() {
 	printf("Wrong difficulty level. The value should be between 1 to 5\n");
 }
 
-Command* parse_line(game* game, const char* str, Command* command) {
+Command* parse_line(game* game, const char* str, Command* command, char* command_param) {
 
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
-	char* command_int = strtok(NULL, " \t\n");
+	strcpy(command_param, strtok(NULL, " \t\n"));
 
 	command->validArg = false;
 	command->cmd = INVALID_COMMAND;
@@ -76,15 +77,14 @@ Command* parse_line(game* game, const char* str, Command* command) {
 		command->cmd = PRINT_SETTINGS;
 	}
 
-	// argument is not int - need to think what we should do...
 	if (strcmp(command_text, "load") == 0) {
 		command->cmd = LOAD;
 	}
 
 	if (strcmp(command_text, "user_color") == 0) {
 		command->cmd = USER_COLOR;
-		if (parser_is_int(command_int) == true){
-			command->arg = atoi(command_int);
+		if (parser_is_int(command_param) == true){
+			command->arg = atoi(command_param);
 			if (command->arg == 1 || command->arg == 2){
 				command->validArg = true;
 				game->user_color = command->arg;
@@ -94,8 +94,8 @@ Command* parse_line(game* game, const char* str, Command* command) {
 
 	if (strcmp(command_text, "game_mode") == 0) {
 		command->cmd = GAME_MODE;
-		if (parser_is_int(command_int) == true){
-			command->arg = atoi(command_int); // 1 for single player and 2 for two players
+		if (parser_is_int(command_param) == true){
+			command->arg = atoi(command_param); // 1 for single player and 2 for two players
 			if (command->arg == 1 || command->arg == 2){
 				command->validArg = true;
 				game->game_mode = command->arg;
@@ -106,8 +106,8 @@ Command* parse_line(game* game, const char* str, Command* command) {
 	if (strcmp(command_text, "difficulty") == 0) {
 		command->cmd = DIFFICULTY;
 		// TODO - in case we do the bonus we need to change the upper bound
-		if (parser_is_int(command_int) == true) {
-			command->arg = atoi(command_int);
+		if (parser_is_int(command_param) == true) {
+			command->arg = atoi(command_param);
 			if (command->arg >= 1 && command->arg <= 4) {
 				command->validArg = true;
 				game->difficulty = command->arg;
@@ -132,6 +132,7 @@ Command* parse_line(game* game, const char* str, Command* command) {
 char* ask_for_settings(char* command_text) {
 	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
 	scanf(" %1024[^\n]", command_text);
+	DEBUG("command text is: %s\n", command_text);
 	return command_text;
 }
 
@@ -142,8 +143,8 @@ int set_game() {
 
 		char* command_text = malloc(1024 * sizeof(char));
 		ask_for_settings(command_text);
-
-		parse_line(new_game, command_text, command);
+		char command_param[100];
+		parse_line(new_game, command_text, command, command_param);
 		if (command->cmd == START) {
 			game_play(new_game);
 			return 0;
@@ -163,8 +164,7 @@ int set_game() {
 			new_game->user_color = command->arg;
 		}
 		if (command->cmd == LOAD) {
-			//TODO
-			continue;
+			load_game(new_game, command_param);
 		}
 		if (command->cmd == DEFAULT_GAME) {
 			continue;

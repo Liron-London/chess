@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 // TODO -- need to expend
-
+/*
 static bool basic_check() {
 	printf("Starting basic check.\n");
 	game* game = game_create();
@@ -71,13 +71,13 @@ static bool basic_check() {
 	game_destroy(game);
 	return true;
 }
-
+*/
 
 int main() {
-	bool success;
-	success = basic_check();
-	if (success)
-		printf("basic settings checks success!\n");
+//	bool success;
+//	success = basic_check();
+//	if (success)
+//		printf("basic settings checks success!\n");
 	set_game();
 	return 0;
 }

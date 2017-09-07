@@ -57,8 +57,10 @@ bool parse_is_int(const char* str);
 
 /*
  * get command-string from user and checks validity of command
+ * @params - current game, command object, return variable for load command
+ * @return command*
  */
-Command* parse_line(game* game, const char* str, Command* command);
+Command* parse_line(game* game, const char* str, Command* command, char* filename);
 
 /*
  * prints the current game settings
