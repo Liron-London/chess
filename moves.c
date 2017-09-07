@@ -167,14 +167,14 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 		}
 		// if board[i][j] is white
 		if (row > 0 && col > 0 &&
-				color_by_type(cur_game->board[row - 1][col - 1]) == 0) {
+				color_by_type(cur_game->board[row - 1][col - 1]) == 1) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col - 1, i)) {
 				i++;
 			}
 		}
 
 		if (row > 0 && col < 7 &&
-				color_by_type(cur_game->board[row - 1][col + 1]) == 0) {
+				color_by_type(cur_game->board[row - 1][col + 1]) == 1) {
 			if (is_check_aux(valid_locs, cur_game, cur_piece, row - 1, col + 1, i)) {
 				i++;
 			}
@@ -459,8 +459,6 @@ void queen_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) 
 	for (int i = 0; i < 64; i++) {
 		if (valid_locs[i]->row == -1 && valid_locs[i]->column == -1) {
 			new_ptr_to_valid_locs = &valid_locs[i];
-			DEBUG2("index is %d\n", i);
-			DEBUG2("valid_locs is ROW: %d COL: %d\n", valid_locs[i]->row, valid_locs[i]->column);
 			break ;
 		}
 	}
@@ -657,7 +655,14 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 	cur_piece->piece_location->row = cur_move->dest->row;
 	cur_piece->piece_location->column = cur_move->dest->column;
 
+	// checks if a piece should be killed and kill it if needed
+	if (cur_game->board[cur_move->dest->row][cur_move->dest->column] != EMPTY_ENTRY){
+		piece* dead_piece = location_to_piece(cur_game, cur_move->dest);
+		dead_piece->alive = 0;
+	}
+
 	// update the board
 	cur_game->board[cur_move->source->row][cur_move->source->column] = EMPTY_ENTRY;
 	cur_game->board[cur_move->dest->row][cur_move->dest->column] = cur_piece->piece_type;
+
 }
