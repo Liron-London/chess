@@ -89,6 +89,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	int color = (node->current_turn + node->user_color + 1)%2;
 	location** valid_locs = malloc(64*sizeof(location*));
 	move* tmp_best_move = create_move();
+	bool quit = false;
 
 
 	for (int i=0; i<64; i++){
@@ -110,6 +111,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
+			if (quit == true){
+				break;
+			}
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
 
@@ -169,6 +173,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						//best_move->dest->column = tmp_move->dest->column;
 						DEBUG2("In max\n");
 						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
+						quit = true;
 						break; // beta cut-off
 					}
 				}
@@ -189,6 +194,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
+			if (quit == true){
+				break;
+			}
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
 
@@ -247,6 +255,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						//best_move->dest->column = tmp_move->dest->column;
 						DEBUG2("In min\n");
 						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
+						quit = true;
 						break; // beta cut-off
 					}
 				}
