@@ -59,13 +59,15 @@ int scoring_function(game* game) {
 		}
 	}
 	// if it's the white player's turn:
-	if ((game->current_turn == 1 && game->user_color == 1) ||
-			(game->current_turn == 0 && game->user_color == 0)) {
+
+
+
+	if (current_turn_color(game) == 1) {
 		score = white_sum - black_sum;
 	} else {
 		score = black_sum - white_sum;
 	}
-	return -score;
+	return score;
 }
 
 
