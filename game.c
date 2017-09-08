@@ -330,7 +330,7 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 	// up right diagonal
 	DEBUG("KING LOC IS: ROW %d, COL %d\n", king_loc->row, king_loc->column);
 	DEBUG("ENEMY LOC IS: ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
-	for (int i=0; i<8; i++){
+	for (int i=1; i<8; i++){
 
 		if ((enemy_loc->row + i == king_loc->row) && (enemy_loc->column + i == king_loc->column)){
 			return true;
