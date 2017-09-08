@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include <stdio.h>
-#include "graphics/SPTicTacToeGUIManager.h"
+#include "SPTicTacToeGUIManager.h"
 int main() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) { //SDL2 INIT
 		printf("ERROR: unable to init SDL: %s\n", SDL_GetError());

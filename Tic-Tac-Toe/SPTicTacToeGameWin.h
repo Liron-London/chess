@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include "SPTicTacToeWindow.h"
-#include "../SPTicTacToe.h"
+#include "SPTicTacToe.h"
 
 typedef enum {
 	SP_GAME_EVENT_X_WON,
