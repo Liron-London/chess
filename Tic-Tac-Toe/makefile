@@ -5,8 +5,6 @@ SDL_LDFLAGS := $(shell sdl-config --libs)
 
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-
-
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@
 ttt: $(OBJS)
