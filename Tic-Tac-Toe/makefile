@@ -17,7 +17,7 @@ SPTicTacToe.o: SPTicTacToe.c SPTicTacToe.h
 graphics/SPTicTacToeGameWin.o: graphics/SPTicTacToeWindow.c graphics/SPTicTacToeWindow.h SPTicTacToe.c SPTicTacToe.h graphics/SPTicTacToeGameWin.h graphics/SPTicTacToeGameWin.c 
 	$(CC) $(COMP_FLAG) -c $*.c
 graphics/SPTicTacToeGUIManager.o: graphics/SPTicTacToeGUIManager.c graphics/SPTicTacToeGUIManager.h graphics/SPTicTacToeGameWin.c graphics/SPTicTacToeGameWin.h graphics/SPTicTacToeMainWin.h
-  	$(CC) $(COMP_FLAG) -c $*.c
+	$(CC) $(COMP_FLAG) -c $*.c
 
 clean:
 	rm -f *.o $(EXEC) $(OBJS)
