@@ -15,7 +15,7 @@ main.o: graphics/SPTicTacToeGUIManager.c graphics/SPTicTacToeGUIManager.h main.c
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 SPTicTacToe.o: SPTicTacToe.c SPTicTacToe.h
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
-graphics/SPTicTacToeGameWin.o: graphics/SPTicTacToeWindow.c graphics/SPTicTacToeWindow.h SPTicTacToe.c SPTicTacToe.h graphics/SPTicTacToeGameWin.h graphics/SPTicTacToeGameWin.c 
+graphics/SPTicTacToeGameWin.o: graphics/SPTicTacToeWindow.h SPTicTacToe.c SPTicTacToe.h graphics/SPTicTacToeGameWin.h graphics/SPTicTacToeGameWin.c 
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 graphics/SPTicTacToeGUIManager.o: graphics/SPTicTacToeGUIManager.c graphics/SPTicTacToeGUIManager.h graphics/SPTicTacToeGameWin.c graphics/SPTicTacToeGameWin.h graphics/SPTicTacToeMainWin.h
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
