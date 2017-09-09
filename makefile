@@ -9,11 +9,12 @@ FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o minimax.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
-SDL_CFLAGS := $(shell sdl-config --cflags)
-SDL_LDFLAGS := $(shell sdl-config --libs)
+GUI_OBJS = GUI.o
+SDL_CFLAGS := $(shell sdl2-config --cflags)
+SDL_LDFLAGS := $(shell sdl2-config --libs)
 
-COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS) $(SDL_LDFLAGS)
-
+COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
+LINK_FLAG = $(SDL_LDFLAGS)
 
 
 $(EXEC): $(OBJS)
@@ -25,7 +26,9 @@ setting_test: $(SETTINGS_TEST_OBJ)
 game_unit_test: $(GAME_TEST_OBJ)
 	$(CC) $(GAME_TEST_OBJ) -o $@
 game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
-	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@ 
+	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@
+gui_test: $(GUI_OBJS)
+	$(CC) $(GUI_OBJS) $(LINK_FLAG) -o $@  
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -50,6 +53,7 @@ game_unit_test.o: game.c game.h moves.c moves.h setting.c setting.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
 game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_commands.c moves.c moves.h minimax.c minimax.h 
 	$(CC) $(COMP_FLAG) -c $*.c
-
+gui.o: gui.c
+	$(CC) $(COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
