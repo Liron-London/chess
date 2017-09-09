@@ -134,7 +134,15 @@ int main(int argc, char* args[]) {
 	SDL_QueryTexture(quit_texture, NULL, NULL, &quit_rec.w, &quit_rec.h);
 	quit_rec.x = (SCREEN_WIDTH - quit_rec.w) / 2;
 	quit_rec.y = load_game_rec.y + 30 + load_game_rec.h;
-
+	bool running = true;
+	while(running) {
+		SDL_Event event;
+		//loop runs as long as event queue isn't empty
+		while (SDL_PollEvent(&event)) {
+			if(event.type == SDL_QUIT) {
+				running = false;
+			}
+		}
 
 
 	//change renderer background color to white
@@ -163,15 +171,7 @@ int main(int argc, char* args[]) {
     //Free the loaded image
     SDL_FreeSurface( hello );
 	*/
-	bool running = true;
-	while(running) {
-		SDL_Event event;
-		//loop runs as long as event queue isn't empty
-		while (SDL_PollEvent(&event)) {
-			if(event.type == SDL_QUIT) {
-				running = false;
-			}
-		}
+
 	}
 
     //Free resources
