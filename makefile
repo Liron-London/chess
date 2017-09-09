@@ -10,8 +10,8 @@ MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o minimax.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
 GUI_OBJS = GUI.o
-SDL_CFLAGS := $(shell sdl2-config --cflags)
-SDL_LDFLAGS := $(shell sdl2-config --libs)
+SDL_CFLAGS := $(shell sdl-config --cflags)
+SDL_LDFLAGS := $(shell sdl-config --libs)
 
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
 LINK_FLAG = $(SDL_LDFLAGS)
