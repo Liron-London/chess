@@ -13,8 +13,9 @@ GUI_OBJS = GUI.o
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs)
 
-#COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
-COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
+# COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
+# COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
+COMP_FLAG = -std=c99
 LINK_FLAG = $(SDL_LDFLAGS)
 
 SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/SDL2 -D_REENTRANT
