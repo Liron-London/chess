@@ -17,7 +17,7 @@
 int main(int argc, char* argv[]) {
 
 	// debug
-	argv = NULL;
+	printf("DEBUG: %d", argv);
 	printf("DEBUG: %d", argc);
 
 	//Start SDL
