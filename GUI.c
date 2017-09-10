@@ -9,8 +9,8 @@
 #include <stdio.h>
 //#include <SDL2/SDL.h>
 #include <SDL.h>
-#include <SDL2/SDL_video.h>
-#include <SDL2/SDL_timer.h>
+//#include <SDL2/SDL_video.h>
+//#include <SDL2/SDL_timer.h>
 #define SCREEN_WIDTH (800)
 #define SCREEN_HEIGHT (600)
 
