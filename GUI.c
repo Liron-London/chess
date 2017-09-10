@@ -15,6 +15,9 @@
 #define SCREEN_HEIGHT (600)
 
 int main(int argc, char* args[]) {
+
+	printf("DEBUG: %d", argc);
+
 	//Start SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
