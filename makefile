@@ -16,9 +16,12 @@ SDL_LDFLAGS := $(shell sdl-config --libs)
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
 LINK_FLAG = $(SDL_LDFLAGS)
 
+SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/SDL2 -D_REENTRANT
+SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib -Wl,--enable-new-dtags -lSDL2 -lSDL2main
+
 
 $(EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@
+	$(CC) $(OBJS) $(SDL_LIB) -o $@
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 setting_test: $(SETTINGS_TEST_OBJ)
@@ -28,7 +31,7 @@ game_unit_test: $(GAME_TEST_OBJ)
 game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
 	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@
 gui_test: $(GUI_OBJS)
-	$(CC) $(GUI_OBJS) $(LINK_FLAG) -o $@  
+	$(CC) $(GUI_OBJS) $(SDL_LIB) -o $@  
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -54,6 +57,6 @@ game_unit_test.o: game.c game.h moves.c moves.h setting.c setting.h array_list.c
 game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_commands.c moves.c moves.h minimax.c minimax.h 
 	$(CC) $(COMP_FLAG) -c $*.c
 gui.o: gui.c
-	$(CC) $(COMP_FLAG) -c $*.c
+	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
