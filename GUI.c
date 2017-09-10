@@ -14,8 +14,10 @@
 #define SCREEN_WIDTH (800)
 #define SCREEN_HEIGHT (600)
 
-int main(int argc, char* args[]) {
+int main(int argc, char* argv[]) {
 
+	// debug
+	argv = NULL;
 	printf("DEBUG: %d", argc);
 
 	//Start SDL
