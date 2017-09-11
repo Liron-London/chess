@@ -53,7 +53,7 @@ game_unit_test.o: game.c game.h moves.c moves.h setting.c setting.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
 game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_commands.c moves.c moves.h minimax.c minimax.h 
 	$(CC) $(COMP_FLAG) -c $*.c
-gui.o: gui.c
+gui.o: GUI.c GUI.h
 	$(CC) $(COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
