@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include "setting.h"
 //#include <SDL2/SDL_video.h>
 //#include <SDL2/SDL_timer.h>
 #define SCREEN_WIDTH (800)
@@ -25,7 +26,7 @@ bool check_mouse_button_event(SDL_Event event, SDL_Rect rect) {
 	return in_button;
 }
 
-int set_difficulty_dialog() {
+int set_difficulty_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 	        { /* .flags, .buttonid, .text */        0, 0, "noob" },
 	        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "easy" },
@@ -62,14 +63,15 @@ int set_difficulty_dialog() {
 	    }
 	    if (buttonid == -1) {
 	        SDL_Log("no selection");
-	    } else if (buttonid == 1) {
+	    } else {
 	        SDL_Log("selection was %s", buttons[buttonid].text);
-	        set_difficulty_dialog();
+	        new_game->difficulty = buttonid + 1;
+	        SDL_Log("Game difficulty is %d", new_game->difficulty);
 	    }
 	    return 0;
 }
 
-int set_game_mode_dialog() {
+int set_game_mode_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 	        { /* .flags, .buttonid, .text */        0, 0, "1 player" },
 	        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "2 players" }
@@ -106,17 +108,19 @@ int set_game_mode_dialog() {
 	        SDL_Log("no selection");
 	    } else if (buttonid == 0) {
 	        SDL_Log("selection was %s", buttons[buttonid].text);
-	        set_difficulty_dialog();
+	        new_game->game_mode = 1;
+	        SDL_Log("Game mode is %d", new_game->game_mode);
+	        set_difficulty_dialog(new_game);
+	    } else if (buttonid == 1) {
+	        SDL_Log("selection was %s", buttons[buttonid].text);
+	        new_game->game_mode = 2;
+	        SDL_Log("Game mode is %d", new_game->game_mode);
 	    }
 	    return 0;
 }
 
 int main(int argc, char* argv[]) {
-
-	// debug
-	printf("DEBUG: %d", argc);
-
->>>>>>> 403dd4e1b6570afc7ef8574ea1622a0c5ecb478a
+	game* new_game = game_create();
 	//Start SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -252,7 +256,7 @@ int main(int argc, char* argv[]) {
 						running = false;
 					}
 					else if (check_mouse_button_event(event, new_game_rec)) {
-						set_game_mode_dialog();
+						set_game_mode_dialog(new_game);
 					}
 					else if (check_mouse_button_event(event, load_game_rec)) {
 						running = false;
