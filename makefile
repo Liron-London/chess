@@ -1,5 +1,5 @@
 CC = gcc
-OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o settings.o main.o 
+OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o setting.o GUI.o move.o 
 TEST_OBJS = setting_test.o array_list_unit_test.o game_unit_test.o game_command_unitest.o
 EXEC = chessprog
 ARRAY_LIST_TEST_OBJS = array_list.o array_list_unit_test.o
@@ -10,15 +10,20 @@ MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o minimax.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
 GUI_OBJS = GUI.o
-SDL_CFLAGS := $(shell sdl2-config --cflags)
-SDL_LDFLAGS := $(shell sdl2-config --libs)
+SDL_CFLAGS := $(shell sdl-config --cflags)
+SDL_LDFLAGS := $(shell sdl-config --libs)
 
-COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
+# COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
+# COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
+COMP_FLAG = -std=c99
 LINK_FLAG = $(SDL_LDFLAGS)
+
+SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/SDL2 -D_REENTRANT
+SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib -Wl,--enable-new-dtags -lSDL2 -lSDL2main
 
 
 $(EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@
+	$(CC) $(OBJS) $(SDL_LIB) -o $@
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 setting_test: $(SETTINGS_TEST_OBJ)
@@ -28,7 +33,7 @@ game_unit_test: $(GAME_TEST_OBJ)
 game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
 	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@
 gui_test: $(GUI_OBJS)
-	$(CC) $(GUI_OBJS) $(LINK_FLAG) -o $@  
+	$(CC) $(GUI_OBJS) $(SDL_LIB) -o $@  
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -53,7 +58,8 @@ game_unit_test.o: game.c game.h moves.c moves.h setting.c setting.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
 game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_list.h game_commands.h game_commands.c moves.c moves.h minimax.c minimax.h 
 	$(CC) $(COMP_FLAG) -c $*.c
-gui.o: GUI.c GUI.h
-	$(CC) $(COMP_FLAG) -c $*.c
+
+GUI.o: GUI.c GUI.h
+	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)

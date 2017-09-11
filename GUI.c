@@ -7,10 +7,11 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
-#include <SDL2/SDL_timer.h>
+//#include <SDL2/SDL_video.h>
+//#include <SDL2/SDL_timer.h>
 #define SCREEN_WIDTH (800)
 #define SCREEN_HEIGHT (600)
+
 
 bool check_mouse_button_event(SDL_Event event, SDL_Rect rect) {
 	bool in_button = false;
@@ -110,7 +111,12 @@ int set_game_mode_dialog() {
 	    return 0;
 }
 
-int main(int argc, char* args[]) {
+int main(int argc, char* argv[]) {
+
+	// debug
+	printf("DEBUG: %d", argc);
+
+>>>>>>> 403dd4e1b6570afc7ef8574ea1622a0c5ecb478a
 	//Start SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
