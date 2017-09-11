@@ -4,7 +4,6 @@
  *  Created on: Sep 8, 2017
  *      Author: lironl
  */
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -12,6 +11,104 @@
 #include <SDL2/SDL_timer.h>
 #define SCREEN_WIDTH (800)
 #define SCREEN_HEIGHT (600)
+
+bool check_mouse_button_event(SDL_Event event, SDL_Rect rect) {
+	bool in_button = false;
+	if (event.button.button == SDL_BUTTON_LEFT &&
+		event.motion.x >= rect.x &&
+		event.motion.x <= rect.x + rect.w &&
+		event.motion.y >= rect.y &&
+		event.motion.y <= rect.y +rect.h) {
+		in_button = true;
+	}
+	return in_button;
+}
+
+int set_difficulty_dialog() {
+	const SDL_MessageBoxButtonData buttons[] = {
+	        { /* .flags, .buttonid, .text */        0, 0, "noob" },
+	        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "easy" },
+	        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "moderate" },
+	        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 3, "hard" }
+	    };
+	    const SDL_MessageBoxColorScheme colorScheme = {
+	        { /* .colors (.r, .g, .b) */
+	            /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+	            { 255,   255,   255 },
+	            /* [SDL_MESSAGEBOX_COLOR_TEXT] */
+	            {   50, 50,   50 },
+	            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+	            { 123, 182,   86 },
+	            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+	            {   123,   182, 86 },
+	            /* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+	            { 153,   255, 255 }
+	        }
+	    };
+	    const SDL_MessageBoxData messageboxdata = {
+	        SDL_MESSAGEBOX_INFORMATION, /* .flags */
+	        NULL, /* .window */
+	        "Setting New Game", /* .title */
+	        "Please select difficulty level", /* .message */
+	        SDL_arraysize(buttons), /* .numbuttons */
+	        buttons, /* .buttons */
+	        &colorScheme /* .colorScheme */
+	    };
+	    int buttonid;
+	    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+	        SDL_Log("error displaying message box");
+	        return 1;
+	    }
+	    if (buttonid == -1) {
+	        SDL_Log("no selection");
+	    } else if (buttonid == 1) {
+	        SDL_Log("selection was %s", buttons[buttonid].text);
+	        set_difficulty_dialog();
+	    }
+	    return 0;
+}
+
+int set_game_mode_dialog() {
+	const SDL_MessageBoxButtonData buttons[] = {
+	        { /* .flags, .buttonid, .text */        0, 0, "1 player" },
+	        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "2 players" }
+	    };
+	    const SDL_MessageBoxColorScheme colorScheme = {
+	        { /* .colors (.r, .g, .b) */
+	            /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+	            { 255,   255,   255 },
+	            /* [SDL_MESSAGEBOX_COLOR_TEXT] */
+	            {   50, 50,   50 },
+	            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+	            { 123, 182,   86 },
+	            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+	            {   123,   182, 86 },
+	            /* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+	            { 153,   255, 255 }
+	        }
+	    };
+	    const SDL_MessageBoxData messageboxdata = {
+	        SDL_MESSAGEBOX_INFORMATION, /* .flags */
+	        NULL, /* .window */
+	        "Setting New Game", /* .title */
+	        "Please select game mode", /* .message */
+	        SDL_arraysize(buttons), /* .numbuttons */
+	        buttons, /* .buttons */
+	        &colorScheme /* .colorScheme */
+	    };
+	    int buttonid;
+	    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+	        SDL_Log("error displaying message box");
+	        return 1;
+	    }
+	    if (buttonid == -1) {
+	        SDL_Log("no selection");
+	    } else if (buttonid == 0) {
+	        SDL_Log("selection was %s", buttons[buttonid].text);
+	        set_difficulty_dialog();
+	    }
+	    return 0;
+}
 
 int main(int argc, char* args[]) {
 	//Start SDL
@@ -134,16 +231,29 @@ int main(int argc, char* args[]) {
 	SDL_QueryTexture(quit_texture, NULL, NULL, &quit_rec.w, &quit_rec.h);
 	quit_rec.x = (SCREEN_WIDTH - quit_rec.w) / 2;
 	quit_rec.y = load_game_rec.y + 30 + load_game_rec.h;
+
 	bool running = true;
 	while(running) {
 		SDL_Event event;
 		//loop runs as long as event queue isn't empty
 		while (SDL_PollEvent(&event)) {
-			if(event.type == SDL_QUIT) {
-				running = false;
+			switch(event.type) {
+				case SDL_QUIT:
+					running = false;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					if (check_mouse_button_event(event, quit_rec)) {
+						running = false;
+					}
+					else if (check_mouse_button_event(event, new_game_rec)) {
+						set_game_mode_dialog();
+					}
+					else if (check_mouse_button_event(event, load_game_rec)) {
+						running = false;
+					}
+					break;
 			}
 		}
-
 
 	//change renderer background color to white
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
