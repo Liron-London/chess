@@ -65,30 +65,35 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		//DEBUG("command_text is: %s\n", command_text);
 		if (strcmp(command_text, "to") != 0){
 			// game_command->is_val is false...
+			free(str_copy);
 			return game_command;
 		}
 		game_command->move->dest->row = atoi(strtok(NULL, "<, ")) - 1;
 		game_command->move->dest->column = strtok(NULL, "<,> ")[0] - 'A';
 
 		game_command->validArg = true;
+		free(str_copy);
 		return game_command;
 	}
 
 	if (strcmp(command_text, "quit") == 0){
 		game_command->cmd = GAME_QUIT;
 		game_command->validArg = true;
+		free(str_copy);
 		return game_command;
 	}
 
 	if (strcmp(command_text, "undo") == 0){
 		game_command->cmd = UNDO;
 		game_command->validArg = true;
+		free(str_copy);
 		return game_command;
 	}
 
 	if (strcmp(command_text, "reset") == 0){
 		game_command->cmd = RESET;
 		game_command->validArg = true;
+		free(str_copy);
 		return game_command;
 	}
 
@@ -97,8 +102,10 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		//DEBUG("in parse line, file_name is: %s\n", file_name);
 		game_command->cmd = SAVE;
 		game_command->validArg = true;
+		free(str_copy);
 		return game_command;
 	}
+	free(str_copy);
 	return game_command;
 }
 
