@@ -230,9 +230,14 @@ int game_play(game* game){
 			}
 			array_list_add_last(history, game_copy(game), copy_move(comp_move));
 			destroy_move(comp_move);
-			if (is_mate(game) == true){
-				int color = current_turn_color(game);
-				announce_mate(color);
+			int color = current_turn_color(game);
+			if (has_valid_moves(game) == false){
+				if (is_check(game) == true){
+					announce_mate(color);
+				}
+				else{
+					announce_tie();
+				}
 				break;
 
 			}
@@ -295,8 +300,13 @@ int game_play(game* game){
 
 				print_board(game);
 				int color = current_turn_color(game);
-				if (is_mate(game) == true){
-					announce_mate(color);
+				if (has_valid_moves(game) == false){
+					if (is_check(game) == true){
+						announce_mate(color);
+					}
+					else{
+						announce_tie();
+					}
 					free(command_str);
 					game_command_destroy(game_command);
 					break;
