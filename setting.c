@@ -160,10 +160,14 @@ int set_game() {
 			if (new_game->game_mode == 1 && new_game->user_color == 0) {
 				new_game->current_turn = 0;
 			}
+			free(command_text);
+			destroy_command(command);
 			game_play(new_game);
 			return 0;
 		}
 		if (command->cmd == QUIT) {
+			free(command_text);
+			destroy_command(command);
 			game_destroy(new_game);
 			return 0;
 		}

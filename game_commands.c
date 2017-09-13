@@ -117,7 +117,7 @@ void announce_empty_history() {
 }
 
 void announce_undo_not_available() {
-	printf("Undo command not avaialbe in 2 players mode\n");
+	printf("Undo command not available in 2 players mode\n");
 }
 
 void announce_undo_move(int player, move* tmp_move) {
@@ -165,33 +165,41 @@ void announce_mate(int color) {
 	printf("Checkmate! %s player wins the game\n", color_name);
 }
 
+void announce_tie() {
+	printf("The game ends in a tie\n");
+}
+
 // called when the command "start" is pressed in settings
 int game_play(game* game){
 	Gamecommand* game_command;
 	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
-	print_board(game);
+	if(!(game->game_mode == 1 && game->user_color == 0)) {
+		print_board(game);
+	}
 	// relevant only in one player mode -- need to create history array
 	array_list* history = array_list_create(6);
-
 	while (1){
 
-		printf("DEBUG: current turn is %d, game mode is %d\n", game->current_turn, game->game_mode);
 		// computer's turn
 		if (game->game_mode == 1 && game->current_turn == 0){
 			move* comp_move = create_move();
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
 			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
-
+			print_board(game);
 			// update history
 			if (array_list_is_full(history) == true){
 				array_list_remove_first(history);
 			}
 			array_list_add_last(history, game_copy(game), copy_move(comp_move));
-
 			if (is_mate(game) == true){
 				int color = current_turn_color(game);
 				announce_mate(color);
+				break;
+
+			}
+			if (is_check(game)) {
+				announce_check((current_turn_color(game) + 1)%2);
 			}
 
 		}
@@ -200,11 +208,8 @@ int game_play(game* game){
 		char file_name[256] = "default_game.xml";
 		ask_for_move(game);
 		scanf(" %1024[^\n]", command_str);
-		DEBUG("scanf passed\n");
-		DEBUG("text is %s\n", command_str);
+
 		game_command = game_command_parse_line(command_str, file_name);
-		DEBUG("in game_play, file_name is: %s\n", file_name);
-		DEBUG("prase the line!\n");
 
 		// QUIT
 		if (game_command->validArg == true && game_command->cmd == GAME_QUIT) {
@@ -237,7 +242,6 @@ int game_play(game* game){
 		// MOVE
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
-			DEBUG("Current turn is: %d\n", game->current_turn);
 			if (is_valid_move(game, game_command->move) == true){
 
 				// update history
@@ -248,24 +252,20 @@ int game_play(game* game){
 					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
 				}
 
-				DEBUG("is_valid_move is OK\n");
 				cur_piece = location_to_piece(game, game_command->move->source);
-				DEBUG("location_to_piece is OK\n");
-				DEBUG("current piece is %c %d %d\n", cur_piece->piece_type, cur_piece->piece_location->row,cur_piece->piece_location->column);
 				move_piece(game, game_command->move, cur_piece);
 
-
-				DEBUG("move_piece is OK\n");
 				print_board(game);
-				DEBUG("valid move!\n");
+				int color = current_turn_color(game);
 				if (is_mate(game) == true){
-					int color = current_turn_color(game);
 					announce_mate(color);
+					free(command_str);
+					game_command_destroy(game_command);
+					break;
 				}
 
-				if (is_mate(game) == true){
-					int color = current_turn_color(game);
-					announce_mate(color);
+				if (is_check(game) == true){
+					announce_check(color);
 				}
 
 			}
@@ -311,6 +311,9 @@ int game_play(game* game){
 		free(command_str);
 		game_command_destroy(game_command);
 	}
+
+	array_list_destroy(history);
+	game_destroy(game);
 return 0;
 }
 

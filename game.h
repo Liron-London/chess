@@ -64,6 +64,11 @@ void destroy_piece(piece* cur_piece);
 piece* create_piece();
 
 /*
+ * prints which king is threatened
+ */
+void announce_check(int color);
+
+/*
 * checks that the King's not threatened
 */
 bool is_check(game* cur_game);

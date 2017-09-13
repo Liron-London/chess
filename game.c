@@ -451,6 +451,14 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 	return false;
 }
 
+void announce_check(int color) {
+	if (color == 1) {
+		printf("Check: white King is threatened!\n");
+	} else {
+		printf("Check: black King is threatened!\n");
+	}
+}
+
 // if it's white's turn, white king cannot be threatened by a black piece, the opposite if it's black's turn
 bool is_check(game* cur_game){
 	if (cur_game == NULL){
