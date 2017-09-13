@@ -132,7 +132,7 @@ Command* parse_line(const char* str, Command* command, char* command_param) {
 		command->validArg = true;
 
 	}
-
+	free(str_copy);
 	return command;
 }
 

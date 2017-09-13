@@ -229,6 +229,7 @@ int game_play(game* game){
 				array_list_remove_first(history);
 			}
 			array_list_add_last(history, game_copy(game), copy_move(comp_move));
+			destroy_move(comp_move);
 			if (is_mate(game) == true){
 				int color = current_turn_color(game);
 				announce_mate(color);
