@@ -185,7 +185,7 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	}
 }
 
-bool is_mate(game* cur_game){
+bool has_valid_moves(game* cur_game){
 	piece** pieces;
 	location** valid_locs = malloc(64*sizeof(location*));
 	for (int i=0; i<64; i++){
@@ -210,7 +210,7 @@ bool is_mate(game* cur_game){
 					free(valid_locs[i]);
 				}
 				free(valid_locs);
-				return false;
+				return true;
 			}
 		}
 	}
@@ -219,8 +219,7 @@ bool is_mate(game* cur_game){
 		free(valid_locs[i]);
 	}
 	free(valid_locs);
-	DEBUG("Mate\n");
-	return true;
+	return false;
 }
 
 void bishop_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
