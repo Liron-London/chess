@@ -52,6 +52,8 @@ void array_list_destroy(array_list* src) {
     		destroy_move(src->previous_moves[i]);
     		game_destroy(src->previous_games[i]);
     	}
+    	free(src->previous_games);
+    	free(src->previous_moves);
         free(src);
     }
 }
