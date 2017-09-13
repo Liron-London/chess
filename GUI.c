@@ -12,8 +12,11 @@
 
 //#include <SDL2/SDL_video.h>
 //#include <SDL2/SDL_timer.h>
-
-
+/*
+int start_game(SDL_Window* window, SDL_Renderer* rend) {
+	display_game_buttons(window, rend);
+}
+*/
 bool check_mouse_button_event(SDL_Event event, SDL_Rect rect) {
 	bool in_button = false;
 	if (event.button.button == SDL_BUTTON_LEFT &&
