@@ -38,18 +38,23 @@ bool parser_is_int(const char* str) {
 void print_settings(game* cur_game){
 	printf("SETTINGS:\n");
 	printf("GAME_MODE: %i\n", cur_game->game_mode);
-
-	printf("DIFFICULTY_LVL: %i\n", cur_game->difficulty);
-	if (cur_game->user_color == 1){
-		printf("USER_CLR: WHITE\n");
-	}
-	else{
-		printf("USER_CLR: BLACK\n");
+	if (cur_game->game_mode == 2) {
+		printf("DIFFICULTY_LVL: %i\n", cur_game->difficulty);
+		if (cur_game->user_color == 1){
+			printf("USER_CLR: WHITE\n");
+		}
+		else{
+			printf("USER_CLR: BLACK\n");
+		}
 	}
 }
 
 void print_invalid_difficulty() {
 	printf("Wrong difficulty level. The value should be between 1 to 5\n");
+}
+
+void print_level_not_supported() {
+	printf("Expert level not supported, please choose a value between 1 to 4:\n");
 }
 
 Command* parse_line(const char* str, Command* command, char* command_param) {
@@ -113,6 +118,9 @@ Command* parse_line(const char* str, Command* command, char* command_param) {
 			if (command->arg >= 1 && command->arg <= 4) {
 				command->validArg = true;
 			}
+			else if (command->arg == 5) {
+				print_level_not_supported();
+			}
 			else {
 				print_invalid_difficulty();
 			}
@@ -159,6 +167,9 @@ int set_game() {
 			new_game->game_mode = command->arg;
 			if (new_game->game_mode == 2) {
 				new_game->user_color = 1;
+				printf("Game mode is set to 2 players\n");
+			} else {
+				printf("Game mode is set to 1 player\n");
 			}
 		}
 		if (command->cmd == DIFFICULTY) {
