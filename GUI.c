@@ -112,7 +112,7 @@ int set_game_mode_dialog(game* new_game) {
 	return 0;
 }
 
-int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game) {
+screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game) {
 	//Load NEW GAME button image as surface
 	SDL_Surface* new_game_surface = SDL_LoadBMP("./images/game buttons/button-new-game.bmp");
 	if (!new_game_surface) {
@@ -120,7 +120,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		return 1;
+		return EXIT;
 	}
 
 	//Create NEW GAME texture from surface
@@ -131,7 +131,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		return 1;
+		return EXIT;
 	}
 
 	//Create rectangle
@@ -150,7 +150,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		return 1;
+		return EXIT;
 	}
 
 	//Create NEW GAME texture from surface
@@ -161,7 +161,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		return 1;
+		return EXIT;
 	}
 
 	//Create rectangle
@@ -179,7 +179,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		return 1;
+		return EXIT;
 	}
 
 	//Create texture from surface
@@ -190,7 +190,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		return 1;
+		return EXIT;
 	}
 
 	//Create rectangle for button
@@ -209,21 +209,21 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 			switch(event.type) {
 			case SDL_QUIT:
 				main_menu = false;
-				return 1;
+				return EXIT;
 			case SDL_MOUSEBUTTONUP:
 				if (check_mouse_button_event(event, quit_rec)) {
 					main_menu = false;
-					return 1;
+					return EXIT;
 				}
 				else if (check_mouse_button_event(event, new_game_rec)) {
 					set_game_mode_dialog(new_game);
 					if (new_game->game_mode == 2) {
-						return 2;
+						return GAME_SCREEN;
 					}
 				}
 				else if (check_mouse_button_event(event, load_game_rec)) {
 					main_menu = false;
-					return 1;
+					return EXIT;
 				}
 			}
 		}
@@ -251,7 +251,7 @@ int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game
 	SDL_DestroyTexture(load_game_texture);
 
 	SDL_DestroyTexture(quit_texture);
-	return 0;
+	return MENU_SCREEN;
 }
 
 //int main(int argc, char* argv[]) {
@@ -287,21 +287,21 @@ int main() {
 		return 1;
 	}
 
-	int running = 0;
-	while(running == 0) {
+	int running = MENU_SCREEN;
+	while(running != EXIT) {
 		SDL_Event event;
 		//loop runs as long as event queue isn't empty
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
 			case SDL_QUIT:
-				running = 1;
+				running = EXIT;
 				break;
 			}
 		}
 
 		running = display_main_menu(window, renderer, new_game);
-		if (running == 2) {
-			display_game_buttons(renderer, window);
+		if (running == GAME_SCREEN) {
+			running = game_screen(window, renderer, new_game);
 		}
 	}
 	//free resources

@@ -10,6 +10,11 @@
 
 #include <SDL2/SDL.h>
 
-int display_game_buttons(SDL_Renderer* renderer, SDL_Window* window);
+screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer);
+
+/*
+ * calls the displayers and manages events
+ */
+screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game);
 
 #endif /* GUI_DISPLAY_GAME_H_ */

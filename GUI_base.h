@@ -13,6 +13,13 @@
 #define SCREEN_WIDTH (800)
 #define SCREEN_HEIGHT (600)
 
+typedef enum {
+	EXIT,
+	GAME_SCREEN,
+	MENU_SCREEN,
+	LOAD_SCREEN
+} screen;
+
 /*
  * receives a rect object, checks if the mouse click was in it
  */
