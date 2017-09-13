@@ -152,9 +152,13 @@ int set_game() {
 		ask_for_settings(command_text);
 		char command_param[100];
 		parse_line(command_text, command, command_param);
+
 		if (command->cmd == START) {
 			if (new_game->game_mode == 2){
 				new_game->user_color = 1;
+			}
+			if (new_game->game_mode == 1 && new_game->user_color == 0) {
+				new_game->current_turn = 0;
 			}
 			game_play(new_game);
 			return 0;
@@ -177,7 +181,6 @@ int set_game() {
 
 		}
 		if (command->cmd == USER_COLOR) {
-			new_game->user_color = command->arg;
 			new_game->user_color = command->arg;
 		}
 		if (command->cmd == LOAD) {

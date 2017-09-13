@@ -176,6 +176,7 @@ int game_play(game* game){
 
 	while (1){
 
+		printf("DEBUG: current turn is %d, game mode is %d\n", game->current_turn, game->game_mode);
 		// computer's turn
 		if (game->game_mode == 1 && game->current_turn == 0){
 			move* comp_move = create_move();
