@@ -667,5 +667,4 @@ void move_piece(game* cur_game, move* cur_move, piece* cur_piece){
 	// update the board
 	cur_game->board[cur_move->source->row][cur_move->source->column] = EMPTY_ENTRY;
 	cur_game->board[cur_move->dest->row][cur_move->dest->column] = cur_piece->piece_type;
-
 }
