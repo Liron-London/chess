@@ -182,6 +182,7 @@ int game_play(game* game){
 			move* comp_move = create_move();
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
 			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
+			print_board(game);
 
 			// update history
 			if (array_list_is_full(history) == true){
