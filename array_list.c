@@ -20,7 +20,7 @@ array_list* array_list_create(int maxSize) {
         return NULL;
     }
 
-    array->previous_moves = calloc(maxSize, sizeof(game*));
+    array->previous_moves = calloc(maxSize, sizeof(move*));
     if (array->previous_moves == NULL) {
         free(array);
         return NULL;
