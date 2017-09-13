@@ -185,6 +185,28 @@ int game_play(game* game){
 		DEBUG("in game_play, file_name is: %s\n", file_name);
 		DEBUG("prase the line!\n");
 
+
+		// computer's turn
+
+		if (game->game_mode == 1 && game->current_turn == 0){
+			move* comp_move = create_move();
+			comp_move = get_recommended_move_for_comp(game, game->difficulty);
+			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
+			print_board(game);
+
+			// update history
+			if (array_list_is_full(history) == true){
+				array_list_remove_first(history);
+			}
+			array_list_add_last(history, game_copy(game), copy_move(game_command->move));
+
+			if (is_mate(game) == true){
+				int color = current_turn_color(game);
+				announce_mate(color);
+			}
+
+		}
+
 		// QUIT
 		if (game_command->validArg == true && game_command->cmd == GAME_QUIT) {
 			// freeing all variables
@@ -241,22 +263,6 @@ int game_play(game* game){
 					int color = current_turn_color(game);
 					announce_mate(color);
 				}
-
-				// computer plays
-
-				if (game->game_mode == 1){
-					move* comp_move = create_move();
-					comp_move = get_recommended_move_for_comp(game, game->difficulty);
-					move_piece(game, comp_move, location_to_piece(game, comp_move->source));
-					print_board(game);
-
-					// update history
-					if (array_list_is_full(history) == true){
-						array_list_remove_first(history);
-					}
-					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
-				}
-
 
 				if (is_mate(game) == true){
 					int color = current_turn_color(game);

@@ -153,6 +153,9 @@ int set_game() {
 		char command_param[100];
 		parse_line(command_text, command, command_param);
 		if (command->cmd == START) {
+			if (new_game->game_mode == 2){
+				new_game->user_color = 1;
+			}
 			game_play(new_game);
 			return 0;
 		}
