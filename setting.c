@@ -56,7 +56,6 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
 	char* command_text = strtok(str_copy, " \t\n");
-	strcpy(command_param, strtok(NULL, " \t\n"));
 
 	command->validArg = false;
 	command->cmd = INVALID_COMMAND;
@@ -79,9 +78,11 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 
 	if (strcmp(command_text, "load") == 0) {
 		command->cmd = LOAD;
+		strcpy(command_param, strtok(NULL, " \t\n"));
 	}
 
 	if (strcmp(command_text, "user_color") == 0) {
+		strcpy(command_param, strtok(NULL, " \t\n"));
 		command->cmd = USER_COLOR;
 		if (parser_is_int(command_param) == true){
 			command->arg = atoi(command_param);
@@ -94,6 +95,7 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 
 	if (strcmp(command_text, "game_mode") == 0) {
 		command->cmd = GAME_MODE;
+		strcpy(command_param, strtok(NULL, " \t\n"));
 		if (parser_is_int(command_param) == true){
 			command->arg = atoi(command_param); // 1 for single player and 2 for two players
 			if (command->arg == 1 || command->arg == 2){
@@ -104,6 +106,7 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 	}
 
 	if (strcmp(command_text, "difficulty") == 0) {
+		strcpy(command_param, strtok(NULL, " \t\n"));
 		command->cmd = DIFFICULTY;
 		// TODO - in case we do the bonus we need to change the upper bound
 		if (parser_is_int(command_param) == true) {

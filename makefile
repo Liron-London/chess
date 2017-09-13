@@ -1,5 +1,5 @@
 CC = gcc
-OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o setting.o GUI.o move.o 
+OBJS = array_list.o minimax.o game.o game_commands.o file_handler.o setting.o moves.o main.o
 TEST_OBJS = setting_test.o array_list_unit_test.o game_unit_test.o game_command_unitest.o
 EXEC = chessprog
 ARRAY_LIST_TEST_OBJS = array_list.o array_list_unit_test.o
@@ -51,6 +51,7 @@ setting.o: game_commands.c game_commands.h game.c game.h setting.c setting.h arr
 	$(CC) $(COMP_FLAG) -c $*.c
 game_commands.o: moves.h moves.c game_commands.c game_commands.h game.c game.h array_list.c array_list.h file_handler.c file_handler.h minimax.c minimax.h
 	$(CC) $(COMP_FLAG) -c $*.c
+main.o: setting.c setting.h
 
 setting_test.o: moves.c moves.h game_commands.c game_commands.h game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
