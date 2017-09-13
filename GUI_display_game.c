@@ -197,6 +197,59 @@ int display_game_buttons(SDL_Renderer* renderer, SDL_Window* window) {
 	quit_rec.w /= 4;
 	quit_rec.h /= 4;
 
+	bool game_buttons = true;
+	while(game_buttons) {
+		SDL_Event event;
+		//loop runs as long as event queue isn't empty
+		while (SDL_PollEvent(&event)) {
+			switch(event.type) {
+			case SDL_QUIT:
+				game_buttons = false;
+				return 1;
+			case SDL_MOUSEBUTTONUP:
+				if (check_mouse_button_event(event, quit_rec)) {
+					game_buttons = false;
+					return 1;
+				} else if (check_mouse_button_event(event, restart_game_rec)) {
+					//TODO
+				} else if (check_mouse_button_event(event, load_game_rec)) {
+					//TODO
+				} else if (check_mouse_button_event(event, save_game_rec)) {
+					//TODO
+				} else if (check_mouse_button_event(event, undo_move_rec)) {
+					//TODO
+				} else if (check_mouse_button_event(event, main_menu_rec)) {
+					//TODO
+				}
+			}
+		}
+
+		//change renderer background color to white
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+
+		//clear screen
+		SDL_RenderClear(renderer);
+
+
+		SDL_RenderCopy(renderer, restart_game_texture, NULL, &restart_game_rec);
+
+		SDL_RenderCopy(renderer, load_game_texture, NULL, &load_game_rec);
+
+		SDL_RenderCopy(renderer, save_game_texture, NULL, &save_game_rec);
+
+		SDL_RenderCopy(renderer, undo_move_texture, NULL, &undo_move_rec);
+
+		SDL_RenderCopy(renderer, main_menu_texture, NULL, &main_menu_rec);
+
+		SDL_RenderCopy(renderer, main_menu_texture, NULL, &quit_rec);
+
+		//show what was drawn on screen
+		SDL_RenderPresent(renderer);
+	}
+
+	SDL_RenderClear(renderer);
+	SDL_Log("DEBUG: cleared renderer\n");
+
 	return 0;
 }
 

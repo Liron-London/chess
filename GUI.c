@@ -16,18 +16,7 @@
 int start_game(SDL_Window* window, SDL_Renderer* rend) {
 	display_game_buttons(window, rend);
 }
-*/
-bool check_mouse_button_event(SDL_Event event, SDL_Rect rect) {
-	bool in_button = false;
-	if (event.button.button == SDL_BUTTON_LEFT &&
-			event.motion.x >= rect.x &&
-			event.motion.x <= rect.x + rect.w &&
-			event.motion.y >= rect.y &&
-			event.motion.y <= rect.y +rect.h) {
-		in_button = true;
-	}
-	return in_button;
-}
+ */
 
 int set_difficulty_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
@@ -123,42 +112,7 @@ int set_game_mode_dialog(game* new_game) {
 	return 0;
 }
 
-
-//int main(int argc, char* argv[]) {
-int main() {
-	game* new_game = game_create();
-	//Start SDL
-//	SDL_Init(SDL_INIT_EVERYTHING);
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
-		printf("ERROR: unable to initialize SDL: %s\n", SDL_GetError());
-		return 1;
-	}
-
-	//Set up screen
-	SDL_Window* window = SDL_CreateWindow("Chess",
-			SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED,
-			800, 600,
-			SDL_WINDOW_OPENGL);
-	//Handle error in window creation
-	if (!window) {
-		printf("Error creating SDL window: %s\n", SDL_GetError());
-		SDL_Quit();
-		return 1;
-	}
-
-	//create a renderer, accelerated and in sync with display refresh rate
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	//Handle error in renderer creation
-	if (!renderer) {
-		printf("Error creating SDL renderer: %s\n", SDL_GetError());
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return 1;
-	}
-
-
+int display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game) {
 	//Load NEW GAME button image as surface
 	SDL_Surface* new_game_surface = SDL_LoadBMP("./images/game buttons/button-new-game.bmp");
 	if (!new_game_surface) {
@@ -247,26 +201,30 @@ int main() {
 	quit_rec.x = (SCREEN_WIDTH - quit_rec.w) / 2;
 	quit_rec.y = load_game_rec.y + 30 + load_game_rec.h;
 
-	bool running = true;
-	while(running) {
+	bool main_menu = true;
+	while(main_menu) {
 		SDL_Event event;
 		//loop runs as long as event queue isn't empty
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
 			case SDL_QUIT:
-				running = false;
-				break;
+				main_menu = false;
+				return 1;
 			case SDL_MOUSEBUTTONUP:
 				if (check_mouse_button_event(event, quit_rec)) {
-					running = false;
+					main_menu = false;
+					return 1;
 				}
 				else if (check_mouse_button_event(event, new_game_rec)) {
 					set_game_mode_dialog(new_game);
+					if (new_game->game_mode == 2) {
+						return 2;
+					}
 				}
 				else if (check_mouse_button_event(event, load_game_rec)) {
-					running = false;
+					main_menu = false;
+					return 1;
 				}
-				break;
 			}
 		}
 
@@ -285,30 +243,68 @@ int main() {
 
 		//show what was drawn on screen
 		SDL_RenderPresent(renderer);
-		/*
-
-    //Apply image to screen
-    SDL_BlitSurface( hello, NULL, screen, NULL );
-
-    //Update Screen
-    SDL_Flip( screen );
-
-    //Free the loaded image
-    SDL_FreeSurface( hello );
-		 */
-
 	}
 
 	//Free resources
 	SDL_DestroyTexture(new_game_texture);
-//	SDL_FreeSurface(new_game_surface);
 
 	SDL_DestroyTexture(load_game_texture);
-//	SDL_FreeSurface(load_game_surface);
 
 	SDL_DestroyTexture(quit_texture);
-//	SDL_FreeSurface(quit_surface);
+	return 0;
+}
 
+//int main(int argc, char* argv[]) {
+int main() {
+	game* new_game = game_create();
+	//Start SDL
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
+		printf("ERROR: unable to initialize SDL: %s\n", SDL_GetError());
+		return 1;
+	}
+
+	//Set up screen
+	SDL_Window* window = SDL_CreateWindow("Chess",
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			800, 600,
+			SDL_WINDOW_OPENGL);
+	//Handle error in window creation
+	if (!window) {
+		printf("Error creating SDL window: %s\n", SDL_GetError());
+		SDL_Quit();
+		return 1;
+	}
+
+	//create a renderer, accelerated and in sync with display refresh rate
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	//Handle error in renderer creation
+	if (!renderer) {
+		printf("Error creating SDL renderer: %s\n", SDL_GetError());
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		return 1;
+	}
+
+	int running = 0;
+	while(running == 0) {
+		SDL_Event event;
+		//loop runs as long as event queue isn't empty
+		while (SDL_PollEvent(&event)) {
+			switch(event.type) {
+			case SDL_QUIT:
+				running = 1;
+				break;
+			}
+		}
+
+		running = display_main_menu(window, renderer, new_game);
+		if (running == 2) {
+			display_game_buttons(renderer, window);
+		}
+	}
+	//free resources
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	//Quit SDL
