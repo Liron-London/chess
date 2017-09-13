@@ -138,6 +138,29 @@ void announce_undo_move(int player, move* tmp_move) {
 
 }
 
+
+void announce_computer_move(game* game, move* move){
+	char piece_type = location_to_piece(game, move->source)->piece_type;
+	if (piece_type == 'm' || piece_type == 'M'){
+		printf("Computer: move pawn at <%d, %c> to <%d, %c>\n", piece_type, move->source->row, move->source->column + 'A', move->dest->row, move->dest->column + 'A')
+	}
+	if (piece_type == 'n' || piece_type == 'N'){
+		printf("Computer: move knight at <%d, %c> to <%d, %c>\n", piece_type, move->source->row, move->source->column + 'A', move->dest->row, move->dest->column + 'A')
+	}
+	if (piece_type == 'b' || piece_type == 'B'){
+		printf("Computer: move bishop at <%d, %c> to <%d, %c>\n", piece_type, move->source->row, move->source->column + 'A', move->dest->row, move->dest->column + 'A')
+	}
+	if (piece_type == 'q' || piece_type == 'Q'){
+		printf("Computer: move queen at <%d, %c> to <%d, %c>\n", piece_type, move->source->row, move->source->column + 'A', move->dest->row, move->dest->column + 'A')
+	}
+	if (piece_type == 'k' || piece_type == 'K'){
+		printf("Computer: move king at <%d, %c> to <%d, %c>\n", piece_type, move->source->row, move->source->column + 'A', move->dest->row, move->dest->column + 'A')
+	}
+	if (piece_type == 'r' || piece_type == 'R'){
+		printf("Computer: move rook at <%d, %c> to <%d, %c>\n", piece_type, move->source->row, move->source->column + 'A', move->dest->row, move->dest->column + 'A')
+	}
+}
+
 void announce_quit() {
 	printf("Exiting...\n");
 }
@@ -186,6 +209,7 @@ int game_play(game* game){
 			move* comp_move = create_move();
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
 			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
+			announce_computer_move(game, comp_move);
 			print_board(game);
 			// update history
 			if (array_list_is_full(history) == true){
