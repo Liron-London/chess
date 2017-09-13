@@ -170,7 +170,7 @@ int game_play(game* game){
 	Gamecommand* game_command;
 	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
-
+	print_board(game);
 	// relevant only in one player mode -- need to create history array
 	array_list* history = array_list_create(6);
 
@@ -243,15 +243,14 @@ int game_play(game* game){
 				}
 
 				// computer plays
-				move* comp_move = create_move();
-				comp_move = get_recommended_move_for_comp(game, game->difficulty);
-				printf("MOVE IS: ROW: %d, COL: %d\n", comp_move->source->row, comp_move->source->column);
-				printf("MOVE IS: ROW: %d, COL: %d\n", comp_move->dest->row, comp_move->dest->column);
-				move_piece(game, comp_move, location_to_piece(game, comp_move->source));
-				print_board(game);
 
-				// update history
 				if (game->game_mode == 1){
+					move* comp_move = create_move();
+					comp_move = get_recommended_move_for_comp(game, game->difficulty);
+					move_piece(game, comp_move, location_to_piece(game, comp_move->source));
+					print_board(game);
+
+					// update history
 					if (array_list_is_full(history) == true){
 						array_list_remove_first(history);
 					}
