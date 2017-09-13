@@ -221,8 +221,8 @@ int game_play(game* game){
 		if (game->game_mode == 1 && game->current_turn == 0){
 			move* comp_move = create_move();
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
-			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
 			announce_computer_move(game, comp_move);
+			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
 			print_board(game);
 			// update history
 			if (array_list_is_full(history) == true){
