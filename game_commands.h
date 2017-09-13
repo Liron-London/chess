@@ -50,4 +50,6 @@ int game_play(game* game);
 
 void announce_invalid_location();
 
+void announce_computer_move(game* game, move* move);
+
 #endif /* GAME_COMMANDS_H_ */
