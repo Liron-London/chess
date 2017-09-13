@@ -38,6 +38,7 @@ bool parser_is_int(const char* str) {
 void print_settings(game* cur_game){
 	printf("SETTINGS:\n");
 	printf("GAME_MODE: %i\n", cur_game->game_mode);
+
 	printf("DIFFICULTY_LVL: %i\n", cur_game->difficulty);
 	if (cur_game->user_color == 1){
 		printf("USER_CLR: WHITE\n");
@@ -51,7 +52,7 @@ void print_invalid_difficulty() {
 	printf("Wrong difficulty level. The value should be between 1 to 5\n");
 }
 
-Command* parse_line(game* game, const char* str, Command* command, char* command_param) {
+Command* parse_line(const char* str, Command* command, char* command_param) {
 
 	char* str_copy = malloc(strlen(str) + 1);
 	strcpy(str_copy, str);
@@ -88,7 +89,6 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 			command->arg = atoi(command_param);
 			if (command->arg == 1 || command->arg == 2){
 				command->validArg = true;
-				game->user_color = command->arg;
 			}
 		}
 	}
@@ -100,7 +100,6 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 			command->arg = atoi(command_param); // 1 for single player and 2 for two players
 			if (command->arg == 1 || command->arg == 2){
 				command->validArg = true;
-				game->game_mode = command->arg;
 			}
 		}
 	}
@@ -113,7 +112,6 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 			command->arg = atoi(command_param);
 			if (command->arg >= 1 && command->arg <= 4) {
 				command->validArg = true;
-				game->difficulty = command->arg;
 			}
 			else {
 				print_invalid_difficulty();
@@ -124,9 +122,7 @@ Command* parse_line(game* game, const char* str, Command* command, char* command
 	if (strcmp(command_text, "default") == 0) {
 		command->cmd = DEFAULT_GAME;
 		command->validArg = true;
-		game->user_color = 1;
-		game->game_mode = 1;
-		game->difficulty = 2;
+
 	}
 
 	return command;
@@ -147,7 +143,7 @@ int set_game() {
 		char* command_text = malloc(1024 * sizeof(char));
 		ask_for_settings(command_text);
 		char command_param[100];
-		parse_line(new_game, command_text, command, command_param);
+		parse_line(command_text, command, command_param);
 		if (command->cmd == START) {
 			game_play(new_game);
 			return 0;
@@ -157,20 +153,26 @@ int set_game() {
 			return 0;
 		}
 		if (command->cmd == GAME_MODE) {
-			//TODO
-			continue;
+			new_game->game_mode = command->arg;
+			if (new_game->game_mode == 2) {
+				new_game->user_color = 1;
+			}
 		}
 		if (command->cmd == DIFFICULTY) {
 			new_game->difficulty = command->arg;
+
 		}
 		if (command->cmd == USER_COLOR) {
+			new_game->user_color = command->arg;
 			new_game->user_color = command->arg;
 		}
 		if (command->cmd == LOAD) {
 			load_game(new_game, command_param);
 		}
 		if (command->cmd == DEFAULT_GAME) {
-			continue;
+			new_game->user_color = 1;
+			new_game->game_mode = 1;
+			new_game->difficulty = 2;
 		}
 		if (command->cmd == PRINT_SETTINGS) {
 			print_settings(new_game);
