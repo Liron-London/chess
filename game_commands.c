@@ -175,19 +175,8 @@ int game_play(game* game){
 	array_list* history = array_list_create(6);
 
 	while (1){
-		char* command_str = (char*) malloc(1024*sizeof(char));
-		char file_name[256] = "default_game.xml";
-		ask_for_move(game);
-		scanf(" %1024[^\n]", command_str);
-		DEBUG("scanf passed\n");
-		DEBUG("text is %s\n", command_str);
-		game_command = game_command_parse_line(command_str, file_name);
-		DEBUG("in game_play, file_name is: %s\n", file_name);
-		DEBUG("prase the line!\n");
-
 
 		// computer's turn
-
 		if (game->game_mode == 1 && game->current_turn == 0){
 			move* comp_move = create_move();
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
@@ -206,6 +195,16 @@ int game_play(game* game){
 			}
 
 		}
+
+		char* command_str = (char*) malloc(1024*sizeof(char));
+		char file_name[256] = "default_game.xml";
+		ask_for_move(game);
+		scanf(" %1024[^\n]", command_str);
+		DEBUG("scanf passed\n");
+		DEBUG("text is %s\n", command_str);
+		game_command = game_command_parse_line(command_str, file_name);
+		DEBUG("in game_play, file_name is: %s\n", file_name);
+		DEBUG("prase the line!\n");
 
 		// QUIT
 		if (game_command->validArg == true && game_command->cmd == GAME_QUIT) {
