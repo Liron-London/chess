@@ -311,11 +311,6 @@ int game_play(game* game){
 				if (is_check(game) == true){
 					announce_check(color);
 				}
-
-			}
-
-			else {
-				announce_invalid_move();
 			}
 		}
 
