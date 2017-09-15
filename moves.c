@@ -592,14 +592,15 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	}
 
 	// source is empty
-	if (source == EMPTY_ENTRY){
-		return false;
-	}
+	//if (source == EMPTY_ENTRY){
+	//	announce_illegal_move_src();
+	//	return false;
+	//}
 
 	DEBUG("CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
-	if (cur_game->board[cur_move->source->row][cur_move->source->column] == EMPTY_ENTRY ||
+	if (source == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[cur_move->source->row][cur_move->source->column]) != color) {
 		announce_illegal_move_src();
 		return false;
