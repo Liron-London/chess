@@ -77,7 +77,7 @@ void update_pieces_for_load(game* cur_game){
 						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
 						cur_game->whites[white_index]->alive = 1;
 						cur_game->whites[white_index]->piece_location->row = i;
-						cur_game->whites[white_index]->piece_location->row = j;
+						cur_game->whites[white_index]->piece_location->column = j;
 						// we must not change whites[4] - it reserved for the king
 						if (white_index != 3){
 							white_index += 1;
@@ -91,7 +91,7 @@ void update_pieces_for_load(game* cur_game){
 						cur_game->whites[4]->piece_type = 'k';
 						cur_game->whites[4]->alive = 1;
 						cur_game->whites[4]->piece_location->row = i;
-						cur_game->whites[4]->piece_location->row = j;
+						cur_game->whites[4]->piece_location->column = j;
 					}
 				}
 			}
@@ -110,7 +110,7 @@ void update_pieces_for_load(game* cur_game){
 						cur_game->blacks[black_index]->piece_type = cur_game->board[i][j];
 						cur_game->blacks[black_index]->alive = 1;
 						cur_game->blacks[black_index]->piece_location->row = i;
-						cur_game->blacks[black_index]->piece_location->row = j;
+						cur_game->blacks[black_index]->piece_location->column = j;
 						// we must not change blacks[4] - it reserved for the king
 						if (black_index != 3){
 							black_index += 1;
@@ -124,7 +124,7 @@ void update_pieces_for_load(game* cur_game){
 						cur_game->blacks[4]->piece_type = 'K';
 						cur_game->blacks[4]->alive = 1;
 						cur_game->blacks[4]->piece_location->row = i;
-						cur_game->blacks[4]->piece_location->row = j;
+						cur_game->blacks[4]->piece_location->column = j;
 					}
 				}
 			}
