@@ -186,10 +186,6 @@ void announce_invalid_location() {
 	printf("Invalid position on the board\n");
 }
 
-void announce_invalid_move() {
-	printf("Illegal move\n");
-}
-
 void announce_mate(int color) {
 	color = (color + 1) % 2;
 	char* color_name;

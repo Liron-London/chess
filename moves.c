@@ -576,8 +576,16 @@ void valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	DEBUG("ERROR IN VALID MOVES");
 }
 
+void announce_invalid_move() {
+	printf("Illegal move\n");
+}
+
 void announce_illegal_move_src() {
 	printf("The specified position does not contain your piece\n");
+}
+
+void announce_illegal_place_on_board(){
+	printf("Invalid position on the board\n");
 }
 
 // given a move and a board says if the move is legal or not
@@ -591,13 +599,12 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 		valid_locs[i] = create_location();
 	}
 
-	// source is empty
-	//if (source == EMPTY_ENTRY){
-	//	announce_illegal_move_src();
-	//	return false;
-	//}
-
 	DEBUG("CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
+
+	if (cur_move->source->row < 0 || cur_move->source->row > 7 || cur_move->dest->row < 0 || cur_move->dest->row > 7){
+		announce_illegal_place_on_board();
+		return false;
+	}
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 	if (source == EMPTY_ENTRY ||
@@ -648,6 +655,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 		destroy_location(valid_locs[i]);
 	}
 	free(valid_locs);
+	announce_invalid_move();
 	return false;
 }
 
