@@ -95,6 +95,7 @@ int load_game(game* cur_game, char* filename) {
 
 	fgets(input_file_text, 50, fp); // gets the <board> line
 
+	// fill board
 	for (int i = 8; i >= 1; i--) {
 	fgets(input_file_text, 50, fp); // gets the <row_i> line
 		char row_x[5];
@@ -105,6 +106,7 @@ int load_game(game* cur_game, char* filename) {
 		}
 
 	}
+	update_pieces_for_load(cur_game);
 
 
 	print_settings(cur_game);
