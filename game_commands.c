@@ -56,7 +56,7 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		if (game_command->move->source == NULL ||
 				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
 				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
-			announce_invalid_location();
+			// announce_invalid_location();
 			game_command->validArg = false;
 		}
 
