@@ -279,11 +279,6 @@ int game_play(game* game){
 			save_game(game, file_name);
 		}
 
-		// LOAD
-		if (game_command->validArg == true && game_command->cmd == LOAD){
-			load_game(game, file_name);
-		}
-
 		// MOVE
 		if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
