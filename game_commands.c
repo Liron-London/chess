@@ -56,7 +56,7 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		if (game_command->move->source == NULL ||
 				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
 				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
-			// announce_invalid_location();
+			announce_invalid_location();
 			game_command->validArg = false;
 		}
 
@@ -276,6 +276,11 @@ int game_play(game* game){
 		//SAVE
 		if (game_command->validArg == true && game_command->cmd == SAVE){
 			save_game(game, file_name);
+		}
+
+		// LOAD
+		if (game_command->validArg == true && game_command->cmd == LOAD){
+			load_game(game, file_name);
 		}
 
 		// MOVE
