@@ -105,7 +105,7 @@ void update_pieces_for_load(game* cur_game){
 			// check if there is a tool in the every location
 			if (cur_game->board[i][j] != EMPTY_ENTRY){
 				if (cur_game->board[i][j] < 'a'){
-					// check if white king
+					// check if black king
 					if (cur_game->blacks[black_index]->piece_type != 'K'){
 						cur_game->blacks[black_index]->piece_type = cur_game->board[i][j];
 						cur_game->blacks[black_index]->alive = 1;
