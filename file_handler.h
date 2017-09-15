@@ -23,4 +23,6 @@ char* tag_finder(char* input_file_text, char* tag);
 */
 int load_game(game* cur_game, char* filename);
 
+void update_pieces_for_load(game* cur_game);
+
 #endif // FILE_HANDLER_H_INCLUDED
