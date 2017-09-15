@@ -18,7 +18,6 @@
 typedef enum {
     MOVE,
     SAVE,
-    LOAD,
     UNDO,
     RESET,
     GAME_QUIT,
