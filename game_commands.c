@@ -105,6 +105,16 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		free(str_copy);
 		return game_command;
 	}
+
+	if (strcmp(command_text, "load") == 0) {
+		strcpy(file_name, strtok(NULL, " \t\n"));
+		//DEBUG("in parse line, file_name is: %s\n", file_name);
+		game_command->cmd = LOAD;
+		game_command->validArg = true;
+		free(str_copy);
+		return game_command;
+	}
+
 	free(str_copy);
 	return game_command;
 }
