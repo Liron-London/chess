@@ -601,10 +601,10 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 
 	DEBUG("CURRENT_TURN IS %d CURRENT_COLOR IS %d\n", cur_game->current_turn, cur_game->user_color);
 
-	if (cur_move->source->row < 0 || cur_move->source->row > 7 || cur_move->dest->row < 0 || cur_move->dest->row > 7){
-		announce_illegal_place_on_board();
-		return false;
-	}
+	//if (cur_move->source->row < 0 || cur_move->source->row > 7 || cur_move->dest->row < 0 || cur_move->dest->row > 7){
+	//	announce_illegal_place_on_board();
+	//	return false;
+	//}
 
 	color = (cur_game->current_turn + cur_game->user_color + 1)%2;
 	if (source == EMPTY_ENTRY ||
