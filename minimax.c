@@ -20,7 +20,19 @@ int scoring_function(game* game) {
 	int white_sum = 0;
 	int black_sum = 0;
 	//calculate white pieces
+
+	// in case of mate give more points
+	if (has_valid_moves(game) == false && is_check(game) == true){
+		if (current_turn_color(game) == 1){
+			return 1000;
+		}
+		else{
+			return -1000;
+		}
+	}
+
 	for (int i = 0; i < 16; i++) {
+
 		char cur_piece_type = game->whites[i]->piece_type;
 		if (cur_piece_type == WHITE_PAWN && game->whites[i]->alive == 1) {
 			white_sum += 1;
@@ -140,6 +152,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					// check if mate
 					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
 						new_score = -1000;
+						printf("found mate!\n");
 					}
 
 					else{
@@ -224,6 +237,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					// check if mate
 					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
 						new_score = 1000;
+						printf("found mate!\n");
 					}
 
 					else{
