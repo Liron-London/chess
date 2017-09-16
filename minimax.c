@@ -152,7 +152,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
-
+					game_destroy(tmp_game);
 					// if best move is not initialized or
 					if (tmp_best_move->source->row == -1 || new_score < tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
@@ -171,9 +171,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_score = new_score;
 					}
 
-					game_destroy(tmp_game);
-
 					if (beta <= alpha){
+						tmp_best_move->source->row = -1;
 						tmp_score = beta;
 						quit = true;
 						break; // beta cut-off
@@ -234,6 +233,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+					game_destroy(tmp_game);
 
 					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
@@ -252,9 +252,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_score = new_score;
 					}
 
-					game_destroy(tmp_game);
-
 					if (beta <= alpha){
+						tmp_best_move->source->row = -1;
 						tmp_score = alpha;
 						quit = true;
 						break; // alpha cut-off
