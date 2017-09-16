@@ -22,17 +22,20 @@ int scoring_function(game* game) {
 	//calculate white pieces
 
 	// in case of mate give more points
-	/*
-	if (has_valid_moves(game) == false && is_check(game) == true){
-		printf("found mate!!!!\n");
-		if (current_turn_color(game) == 1){
-			return 1000;
+
+	if (has_valid_moves(game) == false){
+		change_turn(game);
+		if  (is_check(game) == true){
+			printf("found mate!!!!\n");
+			if (current_turn_color(game) == 1){
+				return 1000;
+			}
+			else{
+				return -1000;
+			}
 		}
-		else{
-			return -1000;
-		}
+		change_turn(game);
 	}
-	*/
 
 	for (int i = 0; i < 16; i++) {
 
