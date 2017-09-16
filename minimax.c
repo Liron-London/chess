@@ -182,10 +182,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		// mate!
 		if (total_possible_moves == 0){
 			printf("NO VALID MOVES!\n");
+			change_turn(node);
 			if (is_check(node) == true){
 				tmp_score = 1000;
 				printf("MATE!!\n");
 			}
+			change_turn(node);
 		}
 	}
 
@@ -262,10 +264,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		// mate!
 		if (total_possible_moves == 0){
 			printf("NO VALID MOVES!!\n");
+			change_turn(node);
 			if (is_check(node) == true){
 				tmp_score = -1000;
 				printf("MATE!!\n");
 			}
+			change_turn(node);
 		}
 	}
 	// freeing all variables
