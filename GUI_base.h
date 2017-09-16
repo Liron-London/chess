@@ -25,4 +25,17 @@ typedef enum {
  */
 bool check_mouse_button_event(SDL_Event event, SDL_Rect rect);
 
+/*
+ * verifies that the surface was created correctly
+ * if not - frees resources and returns EXIT
+ * else returns current screen
+ */
+screen verify_surface(SDL_Window* window, SDL_Renderer* renderer, SDL_Surface* surface, screen cur_screen);
+
+/*
+ * verifies that the texture was created correctly
+ * if not - frees resources and returns EXIT
+ * else returns current screen
+ */
+screen verify_texture(SDL_Window* window, SDL_Renderer* renderer, SDL_Surface* surface, SDL_Texture* texture, screen cur_screen);
 #endif /* GUI_BASE_H_ */

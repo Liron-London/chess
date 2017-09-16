@@ -18,7 +18,7 @@ int start_game(SDL_Window* window, SDL_Renderer* rend) {
 }
  */
 
-int set_difficulty_dialog(game* new_game) {
+screen set_difficulty_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "noob" },
 			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "easy" },
@@ -52,7 +52,7 @@ int set_difficulty_dialog(game* new_game) {
 	int buttonid;
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
 		SDL_Log("error displaying message box");
-		return 1;
+		return EXIT;
 	}
 	if (buttonid == -1) {
 		SDL_Log("no selection");
@@ -60,11 +60,12 @@ int set_difficulty_dialog(game* new_game) {
 		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->difficulty = buttonid + 1;
 		SDL_Log("Game difficulty is %d", new_game->difficulty);
+		return GAME_SCREEN;
 	}
-	return 0;
+	return MENU_SCREEN;
 }
 
-int set_game_mode_dialog(game* new_game) {
+screen set_game_mode_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "1 player" },
 			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "2 players" },
@@ -96,7 +97,7 @@ int set_game_mode_dialog(game* new_game) {
 	int buttonid;
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
 		SDL_Log("error displaying message box");
-		return 1;
+		return EXIT;
 	}
 	if (buttonid == -1) {
 		SDL_Log("no selection");
@@ -104,12 +105,13 @@ int set_game_mode_dialog(game* new_game) {
 	} else if (buttonid == 0) {
 		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->game_mode = 1;
-		set_difficulty_dialog(new_game);
+		return set_difficulty_dialog(new_game);
 	} else if (buttonid == 1) {
 		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->game_mode = 2;
+		return GAME_SCREEN;
 	}
-	return 0;
+	return MENU_SCREEN;
 }
 
 screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game) {
@@ -216,10 +218,7 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 					return EXIT;
 				}
 				else if (check_mouse_button_event(event, new_game_rec)) {
-					set_game_mode_dialog(new_game);
-					if (new_game->game_mode == 2) {
-						return GAME_SCREEN;
-					}
+					return set_game_mode_dialog(new_game);
 				}
 				else if (check_mouse_button_event(event, load_game_rec)) {
 					main_menu = false;
