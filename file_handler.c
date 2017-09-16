@@ -25,6 +25,7 @@ void update_pieces_for_load(game* cur_game){
 	// loop over the board
 	for (int i=0; i<8; i++){
 		for (int j=0; j<8;j++){
+			printf("ROW: %d, COL: %d\n", i, j);
 			// check if there is a tool in the every location
 			if (cur_game->board[i][j] != EMPTY_ENTRY){
 				if (cur_game->board[i][j] > 'a'){
@@ -188,6 +189,7 @@ int load_game(game* cur_game, char* filename) {
 		}
 
 	}
+	printf("before update pieces...\n");
 	update_pieces_for_load(cur_game);
 
 	for(int i=0; i<16; i++){
