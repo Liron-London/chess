@@ -7,11 +7,94 @@
 # include "file_handler.h"
 #include "debug.h"
 
+/*
+ * get a game and uses its board to update all pieces status
+ */
+void update_pieces_for_load(game* cur_game){
+	// kill all pieces
+	for (int i=0; i<16;i++){
+		cur_game->whites[i]->alive = 0;
+		cur_game->blacks[i]->alive = 0;
+	}
+
+	int white_index = 0;
+	int black_index = 0;
+
+	// UPDATE WHITES //
+
+	// loop over the board
+	for (int i=0; i<8; i++){
+		for (int j=0; j<8;j++){
+			// check if there is a tool in the every location
+			if (cur_game->board[i][j] != EMPTY_ENTRY){
+				if (cur_game->board[i][j] > 'a'){
+					// check if white king
+					if (cur_game->board[i][j] != 'k'){
+						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
+						cur_game->whites[white_index]->alive = 1;
+						cur_game->whites[white_index]->piece_location->row = i;
+						cur_game->whites[white_index]->piece_location->column = j;
+						// we must not change whites[4] - it reserved for the king
+						if (white_index != 3){
+							white_index += 1;
+						}
+						else{
+							white_index += 2;
+						}
+					}
+					// check other pieces
+					else{
+						cur_game->whites[4]->piece_type = 'k';
+						cur_game->whites[4]->alive = 1;
+						cur_game->whites[4]->piece_location->row = i;
+						cur_game->whites[4]->piece_location->column = j;
+					}
+				}
+			}
+		}
+	}
+
+	// UPDATE BLACKS //
+
+	for (int i=0; i<8; i++){
+		for (int j=0; j<8;j++){
+			// check if there is a tool in the every location
+			if (cur_game->board[i][j] != EMPTY_ENTRY){
+				if (cur_game->board[i][j] < 'a'){
+					// check if black king
+					if (cur_game->board[i][j] != 'K'){
+						cur_game->blacks[black_index]->piece_type = cur_game->board[i][j];
+						cur_game->blacks[black_index]->alive = 1;
+						cur_game->blacks[black_index]->piece_location->row = i;
+						cur_game->blacks[black_index]->piece_location->column = j;
+						// we must not change blacks[4] - it reserved for the king
+						if (black_index != 3){
+							black_index += 1;
+						}
+						else{
+							black_index += 2;
+						}
+					}
+					// check other pieces
+					else{
+						cur_game->blacks[4]->piece_type = 'K';
+						cur_game->blacks[4]->alive = 1;
+						cur_game->blacks[4]->piece_location->row = i;
+						cur_game->blacks[4]->piece_location->column = j;
+					}
+				}
+			}
+		}
+	}
+}
+
+
 int save_game(game* cur_game, char* filename) {
 	strcat(filename, ".xml");
 	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
+		printf("File cannot be created or modified\n");
 		return 1;
 	}
 	fprintf(fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -70,6 +153,7 @@ int load_game(game* cur_game, char* filename) {
 	DEBUG("in load_game, filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
+		printf("Eror: File doesn’t exist or cannot be opened\n");
 		return 1;
 	}
 	char input_file_text[50];
@@ -95,6 +179,7 @@ int load_game(game* cur_game, char* filename) {
 
 	fgets(input_file_text, 50, fp); // gets the <board> line
 
+	// fill board
 	for (int i = 8; i >= 1; i--) {
 	fgets(input_file_text, 50, fp); // gets the <row_i> line
 		char row_x[5];
@@ -105,10 +190,13 @@ int load_game(game* cur_game, char* filename) {
 		}
 
 	}
-
+	printf("before update pieces...\n");
+	update_pieces_for_load(cur_game);
 
 	print_settings(cur_game);
-	print_board(cur_game);
+	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
+		print_board(cur_game);
+	}
 	game_play(cur_game);
 	return 0;
 }

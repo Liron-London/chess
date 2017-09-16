@@ -20,7 +20,25 @@ int scoring_function(game* game) {
 	int white_sum = 0;
 	int black_sum = 0;
 	//calculate white pieces
+
+	// in case of mate give more points
+
+	if (has_valid_moves(game) == false){
+		change_turn(game);
+		if  (is_check(game) == true){
+			printf("found mate!!!!\n");
+			if (current_turn_color(game) == 1){
+				return 1000;
+			}
+			else{
+				return -1000;
+			}
+		}
+		change_turn(game);
+	}
+
 	for (int i = 0; i < 16; i++) {
+
 		char cur_piece_type = game->whites[i]->piece_type;
 		if (cur_piece_type == WHITE_PAWN && game->whites[i]->alive == 1) {
 			white_sum += 1;
@@ -74,12 +92,8 @@ int scoring_function(game* game) {
 // returns the move the computer should do, the move will be in best_move
 int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move* best_move){
 	if (depth == 0){
-		//DEBUG2("Score is %d\n", scoring_function(node));
 		return scoring_function(node);
 	}
-
-	DEBUG2("In alphabeta\n");
-	DEBUG2("depth is %d\n", depth);
 
 	// variables definition
 	int tmp_score;
@@ -91,6 +105,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	location** valid_locs = malloc(64*sizeof(location*));
 	move* tmp_best_move = create_move();
 	bool quit = false;
+	int total_possible_moves = 0;
 
 	// allocating memory for moves
 	for (int i=0; i<64; i++){
@@ -99,7 +114,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 	// maximize
 	if (maximizing_player == true){
-		DEBUG2("******************\n");
 		tmp_score = -10000000;
 		if (color == 0){
 			your_pieces = node->blacks;
@@ -107,7 +121,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		else{
 			your_pieces = node->whites;
 		}
-
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
@@ -134,21 +147,20 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->row = valid_locs[j]->row;
 
 					j += 1;
+					total_possible_moves += 1;
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
-					DEBUG2("PC current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_move->source->row, tmp_move->source->column, tmp_move->dest->row, tmp_move->dest->column);
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
 
-					// if best move is not initialized or
+					game_destroy(tmp_game);
+
 					if (tmp_best_move->source->row == -1 || new_score < tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
-						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
 
 					if (new_score > alpha){
@@ -158,17 +170,11 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						alpha = new_score;
 						tmp_score = new_score;
-						DEBUG2("tmp score is greater than alpha\n");
-						DEBUG2("alpha is %d\n", alpha);
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
-					game_destroy(tmp_game);
-
 					if (beta <= alpha){
+						tmp_best_move->source->row = -1;
 						tmp_score = beta;
-						DEBUG2("In max\n");
-						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
 						quit = true;
 						break; // beta cut-off
 					}
@@ -178,7 +184,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	}
 
 	else{
-		DEBUG2("####################\n");
 		tmp_score = 10000000;
 		if (color == 0){
 			your_pieces = node->blacks;
@@ -213,11 +218,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->row = valid_locs[j]->row;
 
 					j += 1;
+					total_possible_moves += 1;
+
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					DEBUG2("User current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_move->source->row, tmp_move->source->column, tmp_move->dest->row, tmp_move->dest->column);
+					new_score = alphabeta(tmp_game, depth-1, alpha, beta, true, best_move);
 
-					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+					game_destroy(tmp_game);
 
 					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
@@ -225,8 +232,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
-						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
 
 					if (new_score < beta){
@@ -236,19 +241,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						beta = new_score;
 						tmp_score = new_score;
-						DEBUG2("tmp score is lower than beta\n");
-						DEBUG2("beta is %d\n", beta);
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
-					game_destroy(tmp_game);
-
 					if (beta <= alpha){
+						tmp_best_move->source->row = -1;
 						tmp_score = alpha;
-						DEBUG2("In min\n");
-						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
 						quit = true;
-						break; // beta cut-off
+						break; // alpha cut-off
 					}
 				}
 			}
@@ -258,20 +257,40 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	for (int i=0; i<64; i++){
 		destroy_location(valid_locs[i]);
 	}
+
 	free(valid_locs);
 	destroy_move(tmp_move);
 
-	best_move->dest->row = tmp_best_move->dest->row;
-	best_move->dest->column = tmp_best_move->dest->column;
+	// if no moves were checked don't update tmp_best_move!
+	if (total_possible_moves != 0){
+		best_move->dest->row = tmp_best_move->dest->row;
+		best_move->dest->column = tmp_best_move->dest->column;
 
-	best_move->source->row = tmp_best_move->source->row;
-	best_move->source->column = tmp_best_move->source->column;
+		best_move->source->row = tmp_best_move->source->row;
+		best_move->source->column = tmp_best_move->source->column;
+	}
 	destroy_move(tmp_best_move);
 	return tmp_score;
 }
 
 move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
-	alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
+	// user is black
+	if (game->user_color == 0){
+		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
+	}
+
+	// user is white
+	if (game->user_color == 1){
+		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
+	}
 	return comp_move;
 }
+
+
+
+
+
+
+
+

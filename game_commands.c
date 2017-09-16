@@ -105,6 +105,7 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		free(str_copy);
 		return game_command;
 	}
+
 	free(str_copy);
 	return game_command;
 }
@@ -184,10 +185,6 @@ void announce_reset() {
 
 void announce_invalid_location() {
 	printf("Invalid position on the board\n");
-}
-
-void announce_invalid_move() {
-	printf("Illegal move\n");
 }
 
 void announce_mate(int color) {
@@ -315,11 +312,6 @@ int game_play(game* game){
 				if (is_check(game) == true){
 					announce_check(color);
 				}
-
-			}
-
-			else {
-				announce_invalid_move();
 			}
 		}
 

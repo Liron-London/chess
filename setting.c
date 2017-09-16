@@ -38,7 +38,7 @@ bool parser_is_int(const char* str) {
 void print_settings(game* cur_game){
 	printf("SETTINGS:\n");
 	printf("GAME_MODE: %i\n", cur_game->game_mode);
-	if (cur_game->game_mode == 2) {
+	if (cur_game->game_mode == 1) {
 		printf("DIFFICULTY_LVL: %i\n", cur_game->difficulty);
 		if (cur_game->user_color == 1){
 			printf("USER_CLR: WHITE\n");

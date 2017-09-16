@@ -6,6 +6,12 @@
 #include <limits.h>
 #include "debug.h"
 
+typedef struct best_move_t {
+    move* best_move;
+    int best_score;
+} best_move;
+
+
 /*
  * runs MiniMax and call set move
  */
