@@ -28,9 +28,6 @@ void update_pieces_for_load(game* cur_game){
 			// check if there is a tool in the every location
 			if (cur_game->board[i][j] != EMPTY_ENTRY){
 				if (cur_game->board[i][j] > 'a'){
-					printf("ROW: %d, COL: %d\n", i, j);
-					printf("white index is: %d\n", white_index);
-					printf("found %c\n", cur_game->board[i][j]);
 					// check if white king
 					if (cur_game->board[i][j] != 'k'){
 						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
@@ -47,7 +44,6 @@ void update_pieces_for_load(game* cur_game){
 					}
 					// check other pieces
 					else{
-						printf("found white king!\n");
 						cur_game->whites[4]->piece_type = 'k';
 						cur_game->whites[4]->alive = 1;
 						cur_game->whites[4]->piece_location->row = i;
@@ -58,7 +54,6 @@ void update_pieces_for_load(game* cur_game){
 		}
 	}
 
-	printf("Done\n");
 	// UPDATE BLACKS //
 
 	for (int i=0; i<8; i++){
