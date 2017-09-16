@@ -55,6 +55,7 @@ void update_pieces_for_load(game* cur_game){
 		}
 	}
 
+	printf("Done\n");
 	// UPDATE BLACKS //
 
 	for (int i=0; i<8; i++){
