@@ -87,12 +87,8 @@ int scoring_function(game* game) {
 // returns the move the computer should do, the move will be in best_move
 int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move* best_move){
 	if (depth == 0){
-		//DEBUG2("Score is %d\n", scoring_function(node));
 		return scoring_function(node);
 	}
-
-	DEBUG2("In alphabeta\n");
-	DEBUG2("depth is %d\n", depth);
 
 	// variables definition
 	int tmp_score;
@@ -112,7 +108,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 	// maximize
 	if (maximizing_player == true){
-		DEBUG2("******************\n");
 		tmp_score = -10000000;
 		if (color == 0){
 			your_pieces = node->blacks;
@@ -150,15 +145,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					// check if mate
-					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
-						new_score = -1000;
-						printf("found mate!\n");
-					}
-
-					else{
-						new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
-					}
+					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
 
 					// if best move is not initialized or
 					if (tmp_best_move->source->row == -1 || new_score < tmp_score){
@@ -167,8 +154,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
-						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
 
 					if (new_score > alpha){
@@ -178,27 +163,27 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						alpha = new_score;
 						tmp_score = new_score;
-						DEBUG2("tmp score is greater than alpha\n");
-						DEBUG2("alpha is %d\n", alpha);
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					game_destroy(tmp_game);
 
 					if (beta <= alpha){
 						tmp_score = beta;
-						DEBUG2("In max\n");
-						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
 						quit = true;
 						break; // beta cut-off
 					}
+				}
+
+				// mate!
+				if (j == 0 && is_check(node) == true){
+					tmp_score = 1000;
+					printf("MATE!!");
 				}
 			}
 		}
 	}
 
 	else{
-		DEBUG2("####################\n");
 		tmp_score = 10000000;
 		if (color == 0){
 			your_pieces = node->blacks;
@@ -235,15 +220,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					// check if mate
-					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
-						new_score = 1000;
-						printf("found mate!\n");
-					}
-
-					else{
-						new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
-					}
+					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
 
 					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
@@ -251,8 +228,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
-						DEBUG2("TMP SCORE IS: %d\n", tmp_score);
 					}
 
 					if (new_score < beta){
@@ -262,21 +237,23 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						beta = new_score;
 						tmp_score = new_score;
-						DEBUG2("tmp score is lower than beta\n");
-						DEBUG2("beta is %d\n", beta);
-						DEBUG2("tmp_best_move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_best_move->source->row, tmp_best_move->source->column, tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					game_destroy(tmp_game);
 
 					if (beta <= alpha){
 						tmp_score = alpha;
-						DEBUG2("In min\n");
-						DEBUG2("Beta is %d, Alpha is %d\n", beta, alpha);
 						quit = true;
-						break; // beta cut-off
+						break; // alpha cut-off
 					}
 				}
+
+				// mate!
+				if (j == 0 && is_check(node) == true){
+					tmp_score = -1000;
+					printf("MATE!");
+				}
+
 			}
 		}
 	}
