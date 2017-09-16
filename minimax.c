@@ -136,9 +136,15 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
-					DEBUG2("PC current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_move->source->row, tmp_move->source->column, tmp_move->dest->row, tmp_move->dest->column);
 
-					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
+					// check if mate
+					if (has_valid_moves(tmp_game) == true && is_check(tmp_game) == true){
+						new_score = -100;
+					}
+
+					else{
+						new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
+					}
 
 					// if best move is not initialized or
 					if (tmp_best_move->source->row == -1 || new_score < tmp_score){
@@ -215,9 +221,14 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					DEBUG2("User current move is: ROW:%d COL: %d to ROW: %d COL: %d\n", tmp_move->source->row, tmp_move->source->column, tmp_move->dest->row, tmp_move->dest->column);
+					// check if mate
+					if (has_valid_moves(tmp_game) == true && is_check(tmp_game) == true){
+						new_score = 100;
+					}
 
-					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+					else{
+						new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
+					}
 
 					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
