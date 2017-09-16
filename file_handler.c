@@ -190,6 +190,11 @@ int load_game(game* cur_game, char* filename) {
 	}
 	update_pieces_for_load(cur_game);
 
+	for(int i=0; i<16; i++){
+		printf("WHITES[i] is: %c\n", cur_game->whites[i]->piece_type);
+		printf("BLACKS[i] is: %c\n", cur_game->blacks[i]->piece_type);
+	}
+
 
 	print_settings(cur_game);
 	print_board(cur_game);
