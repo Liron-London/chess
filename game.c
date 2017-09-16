@@ -468,7 +468,7 @@ bool is_check(game* cur_game){
 	piece** enemies;
 
 	// white turn
-	int color = (cur_game->current_turn + cur_game->user_color + 1) %2;
+	int color = (cur_game->current_turn + cur_game->user_color) %2;
 
 	if (color == 1){
 		king_loc = cur_game->whites[4]->piece_location;

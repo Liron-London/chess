@@ -117,6 +117,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		else{
 			your_pieces = node->whites;
 		}
+		int total_possible_moves = 0;
 
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
@@ -144,6 +145,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->row = valid_locs[j]->row;
 
 					j += 1;
+					total_possible_moves += 1;
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
@@ -175,15 +177,14 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						break; // beta cut-off
 					}
 				}
-
-				// mate!
-				if (j == 0){
-					printf("NO VALID MOVES!\n");
-					if (is_check(node) == true){
-						tmp_score = 1000;
-						printf("MATE!!\n");
-					}
-				}
+			}
+		}
+		// mate!
+		if (total_possible_moves == 0){
+			printf("NO VALID MOVES!\n");
+			if (is_check(node) == true){
+				tmp_score = 1000;
+				printf("MATE!!\n");
 			}
 		}
 	}
@@ -197,6 +198,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		else{
 			your_pieces = node->whites;
 		}
+
+		int total_possible_moves = 0
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
@@ -223,6 +226,8 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					tmp_move->dest->row = valid_locs[j]->row;
 
 					j += 1;
+					total_possible_moves += 1;
+
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, false, best_move));
@@ -252,16 +257,14 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						break; // alpha cut-off
 					}
 				}
-
-				// mate!
-				if (j == 0){
-					printf("NO VALID MOVES!!\n");
-					if (is_check(node) == true){
-						tmp_score = -1000;
-						printf("MATE!!\n");
-					}
-				}
-
+			}
+		}
+		// mate!
+		if (total_possible_moves == 0){
+			printf("NO VALID MOVES!!\n");
+			if (is_check(node) == true){
+				tmp_score = -1000;
+				printf("MATE!!\n");
 			}
 		}
 	}
