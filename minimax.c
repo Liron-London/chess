@@ -125,6 +125,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
 			if (quit == true){
+				printf("prune worked!\n");
 				break;
 			}
 			if (your_pieces[i]->alive){
@@ -152,8 +153,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
+
 					game_destroy(tmp_game);
-					// if best move is not initialized or
+
 					if (tmp_best_move->source->row == -1 || new_score < tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
@@ -206,6 +208,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
 			if (quit == true){
+				printf("prune worked!\n");
 				break;
 			}
 			if (your_pieces[i]->alive){
@@ -233,6 +236,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, true, best_move);
+
 					game_destroy(tmp_game);
 
 					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
@@ -277,6 +281,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	for (int i=0; i<64; i++){
 		destroy_location(valid_locs[i]);
 	}
+
 	free(valid_locs);
 	destroy_move(tmp_move);
 
