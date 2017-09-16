@@ -31,12 +31,18 @@ gui_piece black_grid[16];
 
 //save_rec, load_game_rec, undo_move_rec, main_menu_rec, quit_rec;
 
-int move_piece_gui(game* cur_game, move* move) {
+game* restart_game(game* cur_game) {
+	game* new_game = game_create();
+	new_game->game_mode = cur_game->game_mode;
+	new_game->user_color = cur_game->user_color;
+	new_game->difficulty = cur_game->difficulty;
+	game_destroy(cur_game);
+	return new_game;
+}
+
+int update_pieces_rects(game* cur_game) {
 	int x_0 = ORIGIN_X;
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
-	piece* cur_piece = location_to_piece(cur_game, move->source);
-	move_piece(cur_game, move, cur_piece);
-	print_board(cur_game);
 	//whites
 	for (int i = 0; i < 16; i++) {
 		int piece_row = cur_game->whites[i]->piece_location->row;
@@ -51,7 +57,7 @@ int move_piece_gui(game* cur_game, move* move) {
 		black_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
 		black_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
 	}
-	SDL_Log("Exiting move_piece_gui");
+	SDL_Log("Exiting render_current_game");
 	return 0;
 }
 
@@ -360,7 +366,7 @@ screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
 	return GAME_SCREEN;
 }
 
-screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer) {
+screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_game) {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
 	SDL_RenderClear(renderer);
 	screen display_screen;
@@ -368,8 +374,12 @@ screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer) {
 	display_screen = display_game_board(window, renderer);
 //	initialize_pieces(window, renderer);
 	for (int i = 0; i < 16; i++) {
-		SDL_RenderCopy(renderer, black_grid[i].texture, NULL, &black_grid[i].rect);
-		SDL_RenderCopy(renderer, white_grid[i].texture, NULL, &white_grid[i].rect);
+		if (cur_game->whites[i]->alive) {
+			SDL_RenderCopy(renderer, white_grid[i].texture, NULL, &white_grid[i].rect);
+		}
+		if (cur_game->blacks[i]->alive) {
+			SDL_RenderCopy(renderer, black_grid[i].texture, NULL, &black_grid[i].rect);
+		}
 	}
 	SDL_RenderPresent(renderer);
 	return display_screen;
@@ -379,7 +389,7 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 	screen display_screen = GAME_SCREEN;
 	move* new_move = create_move(); //need to free later
 	display_screen = initialize_pieces(window, renderer);
-	display_screen = render_game_screen(window, renderer);
+	display_screen = render_game_screen(window, renderer, game);
 	int mouse_x, mouse_y;
 
 	bool game_running = true;
@@ -407,11 +417,12 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT) {
 					mouse_location_on_board(mouse_x, mouse_y, new_move->dest);
 					SDL_Log("current turn is %d, user color is %d", game->current_turn, game->user_color);
-					SDL_Log("new move: source = (%d, %d), dest = (%d, %d)", new_move->source->row, new_move->source->column, new_move->dest->row, new_move->dest->column);
 					if (is_valid_move(game, new_move)) {
-						move_piece_gui(game, new_move);
-						SDL_Log("after move_piece_gui");
-						render_game_screen(window, renderer);
+						piece* cur_piece = location_to_piece(game, new_move->source);
+						move_piece(game, new_move, cur_piece);
+						print_board(game);
+						update_pieces_rects(game);
+						render_game_screen(window, renderer, game);
 					}
 				}
 				//checking buttons
@@ -420,7 +431,9 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					game_running = false;
 					return EXIT;
 				} else if (check_mouse_button_event(event, restart_game_rec)) {
-					//TODO
+					game = restart_game(game);
+					update_pieces_rects(game);
+					render_game_screen(window, renderer, game);
 				} else if (check_mouse_button_event(event, load_game_rec)) {
 					//TODO
 				} else if (check_mouse_button_event(event, save_game_rec)) {
@@ -432,30 +445,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				}
 			}
 		}
-
-
-		//			// determine velocity toward mouse
-		//			int target_x = mouse_x - dest.w / 2;
-		//			int target_y = mouse_y - dest.h / 2;
-		//			float delta_x = target_x - x_pos;
-		//			float delta_y = target_y - y_pos;
-		//			float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
-		//
-		//			// prevent jitter
-		//			if (distance < 5)
-		//			{
-		//				x_vel = y_vel = 0;
-		//			}
-		//			else
-		//			{
-		//				x_vel = delta_x * SPEED / distance;
-		//				y_vel = delta_y * SPEED / distance;
-		//			}
-		//
-		//			// reverse velocity if mouse button 1 pressed
-
-
-
 	}
 
 	return display_screen;
