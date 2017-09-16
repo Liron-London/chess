@@ -102,6 +102,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	location** valid_locs = malloc(64*sizeof(location*));
 	move* tmp_best_move = create_move();
 	bool quit = false;
+	int total_possible_moves = 0;
 
 	// allocating memory for moves
 	for (int i=0; i<64; i++){
@@ -117,8 +118,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		else{
 			your_pieces = node->whites;
 		}
-		int total_possible_moves = 0;
-
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
@@ -201,8 +200,6 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			your_pieces = node->whites;
 		}
 
-		int total_possible_moves = 0;
-
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
 			if (quit == true){
@@ -279,11 +276,14 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	free(valid_locs);
 	destroy_move(tmp_move);
 
-	best_move->dest->row = tmp_best_move->dest->row;
-	best_move->dest->column = tmp_best_move->dest->column;
+	// if no moves were checked don't update tmp_best_move!
+	if (total_possible_moves != 0){
+		best_move->dest->row = tmp_best_move->dest->row;
+		best_move->dest->column = tmp_best_move->dest->column;
 
-	best_move->source->row = tmp_best_move->source->row;
-	best_move->source->column = tmp_best_move->source->column;
+		best_move->source->row = tmp_best_move->source->row;
+		best_move->source->column = tmp_best_move->source->column;
+	}
 	destroy_move(tmp_best_move);
 	return tmp_score;
 }
