@@ -30,6 +30,7 @@ void update_pieces_for_load(game* cur_game){
 				if (cur_game->board[i][j] > 'a'){
 					printf("ROW: %d, COL: %d\n", i, j);
 					printf("white index is: %d\n", white_index);
+					printf("found %c\n", cur_game->board[i][j]);
 					// check if white king
 					if (cur_game->whites[white_index]->piece_type != 'k'){
 						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
