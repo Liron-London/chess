@@ -468,18 +468,14 @@ bool is_check(game* cur_game){
 	piece** enemies;
 
 	// white turn
-	int color = (cur_game->current_turn + cur_game->user_color)%2;
-
-	DEBUG("current turn is %d\n", cur_game->current_turn);
+	int color = (cur_game->current_turn + cur_game->user_color) + 1%2;
 
 	if (color == 1){
-		DEBUG("KING IS WHITE\n");
 		king_loc = cur_game->whites[4]->piece_location;
 		enemies = cur_game->blacks;
 	}
 	// black turn
 	else{
-		DEBUG("KING IS BLACK\n");
 		king_loc = cur_game->blacks[4]->piece_location;
 		enemies = cur_game->whites;
 	}
