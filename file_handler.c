@@ -195,7 +195,7 @@ int load_game(game* cur_game, char* filename) {
 
 	print_settings(cur_game);
 	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
-		print_board(game);
+		print_board(cur_game);
 	}
 	game_play(cur_game);
 	return 0;
