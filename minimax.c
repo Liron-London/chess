@@ -182,7 +182,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		if (total_possible_moves == 0){
 			change_turn(node);
 			if (is_check(node) == true){
-				tmp_score = 1000;
+				tmp_score = -1000;
 				print_board(node);
 				printf("MATE!!\n");
 				printf("depth is %d\n", depth);
@@ -263,7 +263,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		if (total_possible_moves == 0){
 			change_turn(node);
 			if (is_check(node) == true){
-				tmp_score = -1000;
+				tmp_score = 1000;
 				print_board(node);
 				printf("MATE!!!!\n");
 				printf("depth is %d\n", depth);
