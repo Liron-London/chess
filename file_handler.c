@@ -152,6 +152,7 @@ int load_game(game* cur_game, char* filename) {
 	DEBUG("in load_game, filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
+		printf("Eror: File doesn’t exist or cannot be opened\n");
 		return 1;
 	}
 	char input_file_text[50];
@@ -191,14 +192,8 @@ int load_game(game* cur_game, char* filename) {
 	printf("before update pieces...\n");
 	update_pieces_for_load(cur_game);
 
-	for(int i=0; i<16; i++){
-		printf("WHITES[i] is: %c\n", cur_game->whites[i]->piece_type);
-		printf("BLACKS[i] is: %c\n", cur_game->blacks[i]->piece_type);
-	}
-
-
 	print_settings(cur_game);
-	print_board(cur_game);
+	// print_board(cur_game);
 	game_play(cur_game);
 	return 0;
 }
