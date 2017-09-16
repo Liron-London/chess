@@ -31,13 +31,31 @@ gui_piece black_grid[16];
 
 //save_rec, load_game_rec, undo_move_rec, main_menu_rec, quit_rec;
 
-game* restart_game(game* cur_game) {
+void restart_game(game* cur_game) {
 	game* new_game = game_create();
-	new_game->game_mode = cur_game->game_mode;
-	new_game->user_color = cur_game->user_color;
-	new_game->difficulty = cur_game->difficulty;
-	game_destroy(cur_game);
-	return new_game;
+
+	// copying board
+	for (int i=0; i<8; i++){
+		for (int j=0; j<8; j++){
+			cur_game->board[i][j] = new_game->board[i][j];
+		}
+	}
+
+	for (int i=0; i<16; i++){
+		cur_game->whites[i]->alive = new_game->whites[i]->alive;
+		cur_game->whites[i]->color = new_game->whites[i]->color;
+		cur_game->whites[i]->piece_location->row = new_game->whites[i]->piece_location->row;
+		cur_game->whites[i]->piece_location->column = new_game->whites[i]->piece_location->column;
+		cur_game->whites[i]->piece_type = new_game->whites[i]->piece_type;
+
+		cur_game->blacks[i]->alive = new_game->blacks[i]->alive;
+		cur_game->blacks[i]->color = new_game->blacks[i]->color;
+		cur_game->blacks[i]->piece_location->row = new_game->blacks[i]->piece_location->row;
+		cur_game->blacks[i]->piece_location->column = new_game->blacks[i]->piece_location->column;
+		cur_game->blacks[i]->piece_type = new_game->blacks[i]->piece_type;
+	}
+
+	game_destroy(new_game);
 }
 
 int update_pieces_rects(game* cur_game) {
@@ -431,7 +449,7 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					game_running = false;
 					return EXIT;
 				} else if (check_mouse_button_event(event, restart_game_rec)) {
-					game = restart_game(game);
+					restart_game(game);
 					update_pieces_rects(game);
 					render_game_screen(window, renderer, game);
 				} else if (check_mouse_button_event(event, load_game_rec)) {
@@ -445,6 +463,12 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				}
 			}
 		}
+	}
+	//free all resources
+	destroy_move(new_move);
+	for (int i = 0; i < 16; i++) {
+		SDL_DestroyTexture(white_grid[i].texture);
+		SDL_DestroyTexture(black_grid[i].texture);
 	}
 
 	return display_screen;
