@@ -139,7 +139,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					// check if mate
 					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
-						new_score = -100;
+						new_score = -1000;
 					}
 
 					else{
@@ -223,7 +223,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					// check if mate
 					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
-						new_score = 100;
+						new_score = 1000;
 					}
 
 					else{
