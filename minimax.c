@@ -175,9 +175,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				}
 
 				// mate!
-				if (j == 0 && is_check(node) == true){
-					tmp_score = 1000;
-					printf("MATE!!");
+				if (j == 0){
+					printf("NO VALID MOVES!\n");
+					if (is_check(node) == true){
+						tmp_score = 1000;
+						printf("MATE!!\n");
+					}
 				}
 			}
 		}
@@ -249,9 +252,12 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				}
 
 				// mate!
-				if (j == 0 && is_check(node) == true){
-					tmp_score = -1000;
-					printf("MATE!");
+				if (j == 0){
+					printf("NO VALID MOVES!!\n");
+					if (is_check(node) == true){
+						tmp_score = -1000;
+						printf("MATE!!\n");
+					}
 				}
 
 			}
