@@ -138,7 +138,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					// check if mate
-					if (has_valid_moves(tmp_game) == true && is_check(tmp_game) == true){
+					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
 						new_score = -100;
 					}
 
@@ -222,7 +222,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					// check if mate
-					if (has_valid_moves(tmp_game) == true && is_check(tmp_game) == true){
+					if (has_valid_moves(tmp_game) == false && is_check(tmp_game) == true){
 						new_score = 100;
 					}
 
