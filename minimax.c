@@ -232,7 +232,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					new_score = min(tmp_score, alphabeta(tmp_game, depth-1, alpha, beta, true, best_move));
+					new_score = alphabeta(tmp_game, depth-1, alpha, beta, true, best_move);
 					game_destroy(tmp_game);
 
 					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
