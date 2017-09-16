@@ -23,6 +23,7 @@ int scoring_function(game* game) {
 
 	// in case of mate give more points
 	if (has_valid_moves(game) == false && is_check(game) == true){
+		printf("found mate!!!!\n");
 		if (current_turn_color(game) == 1){
 			return 1000;
 		}
