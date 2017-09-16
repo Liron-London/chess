@@ -199,7 +199,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			your_pieces = node->whites;
 		}
 
-		int total_possible_moves = 0
+		int total_possible_moves = 0;
 
 		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
 		for (int i=0; i<16; i++){
