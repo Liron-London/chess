@@ -32,7 +32,7 @@ void update_pieces_for_load(game* cur_game){
 					printf("white index is: %d\n", white_index);
 					printf("found %c\n", cur_game->board[i][j]);
 					// check if white king
-					if (cur_game->whites[white_index]->piece_type != 'k'){
+					if (cur_game->board[i][j] != 'k'){
 						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
 						cur_game->whites[white_index]->alive = 1;
 						cur_game->whites[white_index]->piece_location->row = i;
@@ -67,7 +67,7 @@ void update_pieces_for_load(game* cur_game){
 			if (cur_game->board[i][j] != EMPTY_ENTRY){
 				if (cur_game->board[i][j] < 'a'){
 					// check if black king
-					if (cur_game->blacks[black_index]->piece_type != 'K'){
+					if (cur_game->board[i][j] != 'K'){
 						cur_game->blacks[black_index]->piece_type = cur_game->board[i][j];
 						cur_game->blacks[black_index]->alive = 1;
 						cur_game->blacks[black_index]->piece_location->row = i;
