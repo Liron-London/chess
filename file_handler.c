@@ -94,6 +94,7 @@ int save_game(game* cur_game, char* filename) {
 	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
+		printf("File cannot be created or modified\n");
 		return 1;
 	}
 	fprintf(fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
