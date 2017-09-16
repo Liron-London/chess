@@ -182,6 +182,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			}
 		}
 		// mate!
+		/*
 		if (total_possible_moves == 0){
 			change_turn(node);
 			if (is_check(node) == true){
@@ -191,7 +192,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 				printf("depth is %d\n", depth);
 			}
 			change_turn(node);
-		}
+		}*/
 	}
 
 	else{
@@ -264,6 +265,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			}
 		}
 		// mate!
+		/*
 		if (total_possible_moves == 0){
 			change_turn(node);
 			if (is_check(node) == true){
@@ -274,6 +276,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			}
 			change_turn(node);
 		}
+		*/
 	}
 	// freeing all variables
 	for (int i=0; i<64; i++){
