@@ -23,7 +23,6 @@ int scoring_function(game* game) {
 
 	// in case of mate give more points
 
-	/*
 	if (has_valid_moves(game) == false){
 		change_turn(game);
 		if  (is_check(game) == true){
@@ -36,7 +35,7 @@ int scoring_function(game* game) {
 			}
 		}
 		change_turn(game);
-	}*/
+	}
 
 	for (int i = 0; i < 16; i++) {
 
@@ -278,12 +277,12 @@ move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
 	// user is black
 	if (game->user_color == 0){
-		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
+		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	}
 
 	// user is white
 	if (game->user_color == 0){
-		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
+		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
 	}
 	return comp_move;
 }
