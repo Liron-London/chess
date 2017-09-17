@@ -10,6 +10,14 @@
 
 #include <SDL2/SDL.h>
 
+typedef struct gui_piece_t {
+	SDL_Rect rect;
+	SDL_Texture* texture;
+} gui_piece;
+
+/*
+ * displays the game screen's buttons (save, load etc.)
+ */
 screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer);
 
 /*

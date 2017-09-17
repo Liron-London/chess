@@ -17,3 +17,26 @@ bool check_mouse_button_event(SDL_Event event, SDL_Rect rect) {
 	}
 	return in_button;
 }
+
+screen verify_surface(SDL_Window* window, SDL_Renderer* renderer, SDL_Surface* surface, screen cur_screen) {
+	if (!surface) {
+		printf("Error creating SDL surface: %s\n", SDL_GetError());
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		return EXIT;
+	}
+	return cur_screen;
+}
+
+screen verify_texture(SDL_Window* window, SDL_Renderer* renderer, SDL_Surface* surface, SDL_Texture* texture, screen cur_screen) {
+	if (!texture) {
+		printf("Error creating SDL texture: %s\n", SDL_GetError());
+		SDL_FreeSurface(surface);
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		return EXIT;
+	}
+	return cur_screen;
+}
