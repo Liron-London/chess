@@ -259,7 +259,7 @@ int game_play(game* game){
 			game_command_destroy(game_command);
 			game_destroy(game);
 			announce_quit();
-			exit();
+			exit(1);
 			//return 1;
 		}
 
