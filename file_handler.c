@@ -188,12 +188,9 @@ int load_game(game* cur_game, char* filename) {
 		for (int j = 0; j <= 7; j++) {
 			cur_game->board[i-1][j] = tag_content[j];
 		}
-
 	}
-	printf("before update pieces...\n");
 	update_pieces_for_load(cur_game);
 
-	print_settings(cur_game);
 	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
 		print_board(cur_game);
 	}
