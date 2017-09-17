@@ -6,6 +6,7 @@
  */
 # include "file_handler.h"
 #include "debug.h"
+#include <string.h>
 
 /*
  * get a game and uses its board to update all pieces status
@@ -151,9 +152,10 @@ char* tag_finder(char* input_file_text, char* tag) {
 
 int load_game(game* cur_game, char* filename) {
 	DEBUG("in load_game, filename is: %s\n", filename);
+	//strcat(filename, ".xml");
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
-		printf("Eror: File doesn’t exist or cannot be opened\n");
+		printf("Error: File doesn't exist or cannot be opened\n");
 		return 1;
 	}
 	char input_file_text[50];
