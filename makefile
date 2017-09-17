@@ -33,7 +33,7 @@ game_unit_test: $(GAME_TEST_OBJ)
 game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
 	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@
 gui_test: $(GUI_OBJS)
-	$(CC) $(GUI_OBJS) $(SDL_LIB) -o $@  
+	$(CC) $(GUI_OBJS) $(SDL_LIB) -o $@ -lm
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c

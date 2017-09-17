@@ -6,12 +6,12 @@
  */
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
 //#include <SDL2/SDL.h>
 #include "GUI_base.h"
 #include "GUI_display_game.h"
 #include "game.h"
 #include "moves.h"
-
 #define CELL_WIDTH (65)
 #define CELL_HEIGHT (65)
 #define BOARD_WIDTH (600)
@@ -19,6 +19,8 @@
 #define ORIGIN_X (72)
 #define ORIGIN_Y (527)
 //old ORIGIN_Y = 463
+// speed in pixels/second
+#define SPEED (300)
 SDL_Rect restart_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
 SDL_Rect save_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
 SDL_Rect load_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
@@ -30,6 +32,82 @@ gui_piece white_grid[16];
 gui_piece black_grid[16];
 
 //save_rec, load_game_rec, undo_move_rec, main_menu_rec, quit_rec;
+screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx) {
+	int mouse_x, mouse_y;
+	SDL_GetMouseState(&mouse_x, &mouse_y);
+	SDL_Log("Mouse state: x=%d, y=%d", mouse_x, mouse_y);
+	screen display_screen = GAME_SCREEN;
+
+	SDL_Texture* tex;
+	if(moving_rect_color == 1) {
+		tex = white_grid[moving_rect_idx].texture;
+	} else {
+		tex = black_grid[moving_rect_idx].texture;
+	}
+
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+	SDL_RenderClear(renderer);
+	display_screen = display_game_buttons(window, renderer);
+	display_screen = display_game_board(window, renderer);
+
+	for (int i = 0; i < 16; i++) {
+		if (cur_game->whites[i]->alive && (moving_rect_color == 0 || moving_rect_idx != i)) {
+			SDL_RenderCopy(renderer, white_grid[i].texture, NULL, &white_grid[i].rect);
+		}
+		if (cur_game->blacks[i]->alive && (moving_rect_color == 1 || moving_rect_idx != i)) {
+			SDL_RenderCopy(renderer, black_grid[i].texture, NULL, &black_grid[i].rect);
+		}
+	}
+
+	// start sprite in center of screen
+	//	float x_pos = (BOARD_WIDTH - dest.w) / 2;
+//	//	float y_pos = (BOARD_HEIGHT - dest.h) / 2;
+//	float x_pos = dest.x;
+//	float y_pos = dest.y;
+//	float x_vel = 0;
+//	float y_vel = 0;
+//
+//	// determine velocity toward mouse
+//	int target_x = mouse_x - dest.w / 2;
+//	int target_y = mouse_y - dest.h / 2;
+//	float delta_x = target_x - x_pos;
+//	float delta_y = target_y - y_pos;
+//	float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
+//	SDL_Log("distance is %f", distance);
+//
+//	// prevent jitter
+//	if (distance < 5)
+//	{
+//		x_vel = y_vel = 0;
+//	}
+//	else
+//	{
+//		x_vel = delta_x * SPEED / distance;
+//		y_vel = delta_y * SPEED / distance;
+////		SDL_Log("x_vel is %f, y_vel is %f", x_vel, y_vel);
+//
+//	}
+//
+//	// update positions
+//	x_pos += x_vel / 60;
+//	y_pos += y_vel / 60;
+//
+//	// collision detection with bounds
+//	if (x_pos <= 0) x_pos = 0;
+//	if (y_pos <= 0) y_pos = 0;
+//	if (x_pos >= BOARD_WIDTH - dest.w) x_pos = BOARD_WIDTH - dest.w;
+//	if (y_pos >= BOARD_HEIGHT - dest.h) y_pos = BOARD_HEIGHT - dest.h;
+//	dest.x = x_pos;
+//	dest.y = y_pos;
+	dest.x = mouse_x - dest.w / 2;
+	dest.y = mouse_y - dest.h / 2;
+	SDL_RenderCopy(renderer, tex, NULL, &dest);
+	SDL_Log("copied rect with x=%d, y=%d", dest.x, dest.y);
+	SDL_RenderPresent(renderer);
+
+	return display_screen;
+}
+
 
 void restart_game(game* cur_game) {
 	game* new_game = game_create();
@@ -390,7 +468,7 @@ screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_
 	screen display_screen;
 	display_screen = display_game_buttons(window, renderer);
 	display_screen = display_game_board(window, renderer);
-//	initialize_pieces(window, renderer);
+	//	initialize_pieces(window, renderer);
 	for (int i = 0; i < 16; i++) {
 		if (cur_game->whites[i]->alive) {
 			SDL_RenderCopy(renderer, white_grid[i].texture, NULL, &white_grid[i].rect);
@@ -409,6 +487,10 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 	display_screen = initialize_pieces(window, renderer);
 	display_screen = render_game_screen(window, renderer, game);
 	int mouse_x, mouse_y;
+	bool click = false;
+	int moving_rect_idx;
+	int moving_rect_color; //0 black, 1 white
+	SDL_Rect dest;
 
 	bool game_running = true;
 	while(game_running) {
@@ -423,11 +505,31 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				SDL_Log("button down event");
 				mouse_x = event.button.x;
 				mouse_y = event.button.y;
-				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT) {
+				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT && click == false) {
 					mouse_location_on_board(mouse_x, mouse_y, new_move->source);
+
+					// get cursor position relative to window
+
+					for(int i = 0; i < 16; i++) {
+						if (check_mouse_button_event(event, white_grid[i].rect)) {
+							SDL_Log("in if -> white grid");
+							dest = white_grid[i].rect;
+							moving_rect_idx = i;
+							moving_rect_color = 1;
+							break;
+						} else if (check_mouse_button_event(event, black_grid[i].rect)) {
+							SDL_Log("in if -> black grid");
+							dest = black_grid[i].rect;
+							moving_rect_idx = i;
+							moving_rect_color = 0;
+							break;
+						}
+					}
+					click = true;
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
+				click = false;
 				SDL_Log("button up event");
 				//checking if mouse was released within game board
 				mouse_x = event.button.x;
@@ -435,13 +537,14 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT) {
 					mouse_location_on_board(mouse_x, mouse_y, new_move->dest);
 					SDL_Log("current turn is %d, user color is %d", game->current_turn, game->user_color);
+					click = false;
 					if (is_valid_move(game, new_move)) {
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
 						print_board(game);
-						update_pieces_rects(game);
-						render_game_screen(window, renderer, game);
 					}
+					update_pieces_rects(game);
+					render_game_screen(window, renderer, game);
 				}
 				//checking buttons
 				else if (check_mouse_button_event(event, quit_rec)) {
@@ -463,6 +566,11 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				}
 			}
 		}
+		if (click) {
+
+			drag_piece(window, renderer, game, dest, moving_rect_color, moving_rect_idx);
+		}
+
 	}
 	//free all resources
 	destroy_move(new_move);

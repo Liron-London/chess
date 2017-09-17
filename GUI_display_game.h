@@ -19,6 +19,10 @@ typedef struct gui_piece_t {
  * displays the game screen's buttons (save, load etc.)
  */
 screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer);
+/*
+ * creates the objects to display in the game pane of the screen
+ */
+screen display_game_board(SDL_Window* window, SDL_Renderer* renderer);
 
 /*
  * calls the displayers and manages events

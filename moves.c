@@ -11,8 +11,10 @@
 int color_by_type(char piece_type) {
 	if ('A' <= piece_type && piece_type <= 'Z') {
 		return 0;
+	} else if ('a' <= piece_type && piece_type <= 'z') {
+		return 1;
 	}
-	return 1;
+	return 2;
 }
 
 bool check_capturing(char piece_in_next_loc, int color) {
@@ -119,7 +121,7 @@ void pawn_valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	int col = cur_piece->piece_location->column;
 
 	DEBUG("ROW IS %d\n COL IS %d\n", row, col);
-	int color = (cur_game->current_turn + cur_game->user_color)%2;
+	int color = current_turn_color(cur_game);
 
 	if (type == WHITE_PAWN && color == 0) {
 		if (row == 1 && cur_game->board[2][col] == EMPTY_ENTRY &&
