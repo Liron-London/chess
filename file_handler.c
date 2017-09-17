@@ -91,7 +91,7 @@ void update_pieces_for_load(game* cur_game){
 
 
 int save_game(game* cur_game, char* filename) {
-	strcat(filename, ".xml");
+	//strcat(filename, ".xml");
 	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
