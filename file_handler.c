@@ -6,6 +6,7 @@
  */
 # include "file_handler.h"
 #include "debug.h"
+#include <string.h>
 
 /*
  * get a game and uses its board to update all pieces status
@@ -90,7 +91,7 @@ void update_pieces_for_load(game* cur_game){
 
 
 int save_game(game* cur_game, char* filename) {
-	strcat(filename, ".xml");
+	//strcat(filename, ".xml");
 	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
@@ -151,9 +152,10 @@ char* tag_finder(char* input_file_text, char* tag) {
 
 int load_game(game* cur_game, char* filename) {
 	DEBUG("in load_game, filename is: %s\n", filename);
+	//strcat(filename, ".xml");
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
-		printf("Eror: File doesn’t exist or cannot be opened\n");
+		printf("Error: File doesn't exist or cannot be opened\n");
 		return 1;
 	}
 	char input_file_text[50];
@@ -188,12 +190,9 @@ int load_game(game* cur_game, char* filename) {
 		for (int j = 0; j <= 7; j++) {
 			cur_game->board[i-1][j] = tag_content[j];
 		}
-
 	}
-	printf("before update pieces...\n");
 	update_pieces_for_load(cur_game);
 
-	print_settings(cur_game);
 	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
 		print_board(cur_game);
 	}

@@ -26,7 +26,6 @@ int scoring_function(game* game) {
 	if (has_valid_moves(game) == false){
 		change_turn(game);
 		if  (is_check(game) == true){
-			printf("found mate!!!!\n");
 			if (current_turn_color(game) == 1){
 				return 1000;
 			}
