@@ -65,5 +65,7 @@ GUI.o: GUI.c GUI.h game.c game.h GUI_base.h GUI_base.c
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 GUI_display_game.o: GUI_display_game.c GUI_display_game.h GUI_base.h GUI_base.c
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+GUI_load.o: GUI_load.c GUI_base.c GUI_base.h GUI_display_game.c GUI_display_game.h GUI.c GUI.h
+	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)

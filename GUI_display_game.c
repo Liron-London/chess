@@ -15,6 +15,7 @@
 #include "game_commands.h"
 #include "moves.h"
 #include "minimax.h"
+#include "file_handler.h"
 #define CELL_WIDTH (65)
 #define CELL_HEIGHT (65)
 #define BOARD_WIDTH (600)
@@ -610,7 +611,8 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				} else if (check_mouse_button_event(event, load_game_rec)) {
 					//TODO
 				} else if (check_mouse_button_event(event, save_game_rec)) {
-					//TODO
+					int num_games = get_num_games();
+					default_save(game, num_games);
 				} else if (check_mouse_button_event(event, undo_move_rec)) {
 					game = undo_move(history, game);
 					SDL_Log("current turn is player %d", game->current_turn);
