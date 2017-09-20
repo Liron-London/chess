@@ -202,7 +202,7 @@ int load_game(game* cur_game, char* filename) {
 
 int default_save(game* game, int game_index){
 	char filename[13]= "chess_game_";
-	strcat(filename, (char)(game_index));
+	strcat(filename, &(char)(game_index + '0'));
 	save_game(game, filename);
 	return 0;
 }
@@ -215,7 +215,7 @@ int switch_games(game* game){
 
 	for (int i=3; i>=0 ;i--){
 		char from_filename[13]= "chess_game_";
-		strcat(from_filename, (char)(i));
+		strcat(from_filename, &(char)(i + '0'));
 		load_game(game, from_filename);
 		default_save(game, i + 1);
 	}
@@ -225,11 +225,11 @@ int switch_games(game* game){
 	return 0;
 }
 
-int get_index(){
+int get_num_games(){
 	int index = 0;
 	for (int i=0; i<5; i++){
 		char filename[13]= "chess_game_";
-		strcat(filename, (char)(i));
+		strcat(filename, &(char)(i + '0'));
 		FILE* fp = fopen(filename, "r");
 		if (fp == NULL){
 			break;
