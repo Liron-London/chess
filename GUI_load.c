@@ -23,7 +23,7 @@ screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, game* ga
 	int y = 15;
 	for (int i = 0; i < num_games; i++) {
 		char image_name[39] = "./images/game buttons/button-game";
-		strcat(image_name, (char)(i));
+		strcat(image_name, &(char)(i));
 		strcat(image_name, ".bmp");
 
 		SDL_Surface* surface = SDL_LoadBMP(image_name);
