@@ -89,7 +89,6 @@ void update_pieces_for_load(game* cur_game){
 	}
 }
 
-
 int save_game(game* cur_game, char* filename) {
 	//strcat(filename, ".xml");
 	DEBUG("filename is: %s\n", filename);
@@ -200,3 +199,42 @@ int load_game(game* cur_game, char* filename) {
 	return 0;
 }
 
+
+int default_save(game* game, int game_index){
+	char filename[13]= "chess_game_";
+	strcat(filename, (char)(game_index));
+	save_game(game, filename);
+	return 0;
+}
+
+/*
+ * called in case 5 games are saved, save the new game to chess_game_0 and shift all the others
+ */
+int switch_games(game* game){
+	save_game(game, "tmp_game");
+
+	for (int i=3; i>=0 ;i--){
+		char from_filename[13]= "chess_game_";
+		strcat(from_filename, (char)(i));
+		load_game(game, from_filename);
+		default_save(game, i + 1);
+	}
+
+	load_game(game, "tmp_game");
+	default_save(game, 0);
+	return 0;
+}
+
+int get_index(){
+	int index = 0;
+	for (int i=0; i<5; i++){
+		char filename[13]= "chess_game_";
+		strcat(filename, (char)(i));
+		FILE* fp = fopen(filename, "r");
+		if (fp == NULL){
+			break;
+		}
+		index += 1;
+	}
+	return index;
+}
