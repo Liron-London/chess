@@ -48,6 +48,11 @@ void game_command_destroy(Gamecommand* command);
  */
 int game_play(game* game);
 
+/*
+ * prints what move was undone
+ */
+void announce_undo_move(int player, move* tmp_move);
+
 void announce_invalid_location();
 
 void announce_computer_move(game* game, move* move);

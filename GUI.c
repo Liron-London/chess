@@ -7,16 +7,65 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include "GUI.h"
 #include "GUI_base.h"
 #include "GUI_display_game.h"
 
 //#include <SDL2/SDL_video.h>
 //#include <SDL2/SDL_timer.h>
-/*
-int start_game(SDL_Window* window, SDL_Renderer* rend) {
-	display_game_buttons(window, rend);
+
+
+screen set_game_mode_dialog(game* new_game);
+screen set_difficulty_dialog(game* new_game);
+
+screen set_user_color_dialog(game* new_game) {
+	const SDL_MessageBoxButtonData buttons[] = {
+			{ /* .flags, .buttonid, .text */        0, 0, "black"},
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "white"},
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "back"}
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+			{ /* .colors (.r, .g, .b) */
+					/* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+					{255, 255, 255},
+					/* [SDL_MESSAGEBOX_COLOR_TEXT] */
+					{50, 50, 50},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+					{153, 255, 255}
+			}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION, /* .flags */
+			NULL, /* .window */
+			"Setting New Game", /* .title */
+			"Please select user color", /* .message */
+			SDL_arraysize(buttons), /* .numbuttons */
+			buttons, /* .buttons */
+			&colorScheme /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		SDL_Log("error displaying message box");
+		return EXIT;
+	} else if (buttonid == 0) {
+		new_game->user_color = 0;
+		new_game->current_turn = 0;
+		SDL_Log("User color is black");
+		return GAME_SCREEN;
+	} else if (buttonid == 1) {
+		new_game->user_color = 1;
+		SDL_Log("User color is white");
+		return GAME_SCREEN;
+	} else {
+		return set_difficulty_dialog(new_game);
+	}
+	return MENU_SCREEN;
 }
- */
+
 
 screen set_difficulty_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
@@ -60,7 +109,9 @@ screen set_difficulty_dialog(game* new_game) {
 		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->difficulty = buttonid + 1;
 		SDL_Log("Game difficulty is %d", new_game->difficulty);
-		return GAME_SCREEN;
+		return set_user_color_dialog(new_game);
+	} else {
+		return set_game_mode_dialog(new_game);
 	}
 	return MENU_SCREEN;
 }
@@ -255,7 +306,6 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 
 //int main(int argc, char* argv[]) {
 int main() {
-	game* new_game = game_create();
 	//Start SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		printf("ERROR: unable to initialize SDL: %s\n", SDL_GetError());
@@ -288,6 +338,7 @@ int main() {
 
 	int running = MENU_SCREEN;
 	while(running != EXIT) {
+		game* new_game = game_create();
 		SDL_Event event;
 		//loop runs as long as event queue isn't empty
 		while (SDL_PollEvent(&event)) {
@@ -301,6 +352,7 @@ int main() {
 		running = display_main_menu(window, renderer, new_game);
 		if (running == GAME_SCREEN) {
 			running = game_screen(window, renderer, new_game);
+			game_destroy(new_game);
 		}
 	}
 	//free resources
@@ -308,6 +360,5 @@ int main() {
 	SDL_DestroyWindow(window);
 	//Quit SDL
 	SDL_Quit();
-	game_destroy(new_game);
 	return 0;
 }

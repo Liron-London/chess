@@ -8,10 +8,13 @@
 #include <stdio.h>
 #include <math.h>
 //#include <SDL2/SDL.h>
+#include "array_list.h"
 #include "GUI_base.h"
 #include "GUI_display_game.h"
 #include "game.h"
+#include "game_commands.h"
 #include "moves.h"
+#include "minimax.h"
 #define CELL_WIDTH (65)
 #define CELL_HEIGHT (65)
 #define BOARD_WIDTH (600)
@@ -31,8 +34,36 @@ SDL_Rect game_board_rec = { .x = 0, .y = 0, .w = 600, .h = 600};
 gui_piece white_grid[16];
 gui_piece black_grid[16];
 
+game* undo_move (array_list* history, game* game) {
+	if (history->actualSize == 0) {
+		return game;
+	}
+	move* tmp_move = create_move();
+	tmp_move = array_list_get_last_move(history);
+	announce_undo_move(current_turn_color(game), tmp_move);
+	array_list_remove_last(history);
+
+	tmp_move = array_list_get_last_move(history);
+	announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
+	game = array_list_get_last_game(history);
+	array_list_remove_last(history);
+
+	//updating game and history
+	destroy_move(tmp_move);
+	return game;
+}
+
+void update_history(move* move, game* game, array_list* history) {
+	// update history
+
+	if (array_list_is_full(history) == true){
+		array_list_remove_first(history);
+	}
+	array_list_add_last(history, game_copy(game), copy_move(move));
+}
+
 //save_rec, load_game_rec, undo_move_rec, main_menu_rec, quit_rec;
-screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx) {
+screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx, int history_size) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 	SDL_Log("Mouse state: x=%d, y=%d", mouse_x, mouse_y);
@@ -47,7 +78,7 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
 	SDL_RenderClear(renderer);
-	display_screen = display_game_buttons(window, renderer);
+	display_screen = display_game_buttons(window, renderer, history_size);
 	display_screen = display_game_board(window, renderer);
 
 	for (int i = 0; i < 16; i++) {
@@ -61,44 +92,44 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 
 	// start sprite in center of screen
 	//	float x_pos = (BOARD_WIDTH - dest.w) / 2;
-//	//	float y_pos = (BOARD_HEIGHT - dest.h) / 2;
-//	float x_pos = dest.x;
-//	float y_pos = dest.y;
-//	float x_vel = 0;
-//	float y_vel = 0;
-//
-//	// determine velocity toward mouse
-//	int target_x = mouse_x - dest.w / 2;
-//	int target_y = mouse_y - dest.h / 2;
-//	float delta_x = target_x - x_pos;
-//	float delta_y = target_y - y_pos;
-//	float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
-//	SDL_Log("distance is %f", distance);
-//
-//	// prevent jitter
-//	if (distance < 5)
-//	{
-//		x_vel = y_vel = 0;
-//	}
-//	else
-//	{
-//		x_vel = delta_x * SPEED / distance;
-//		y_vel = delta_y * SPEED / distance;
-////		SDL_Log("x_vel is %f, y_vel is %f", x_vel, y_vel);
-//
-//	}
-//
-//	// update positions
-//	x_pos += x_vel / 60;
-//	y_pos += y_vel / 60;
-//
-//	// collision detection with bounds
-//	if (x_pos <= 0) x_pos = 0;
-//	if (y_pos <= 0) y_pos = 0;
-//	if (x_pos >= BOARD_WIDTH - dest.w) x_pos = BOARD_WIDTH - dest.w;
-//	if (y_pos >= BOARD_HEIGHT - dest.h) y_pos = BOARD_HEIGHT - dest.h;
-//	dest.x = x_pos;
-//	dest.y = y_pos;
+	//	//	float y_pos = (BOARD_HEIGHT - dest.h) / 2;
+	//	float x_pos = dest.x;
+	//	float y_pos = dest.y;
+	//	float x_vel = 0;
+	//	float y_vel = 0;
+	//
+	//	// determine velocity toward mouse
+	//	int target_x = mouse_x - dest.w / 2;
+	//	int target_y = mouse_y - dest.h / 2;
+	//	float delta_x = target_x - x_pos;
+	//	float delta_y = target_y - y_pos;
+	//	float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
+	//	SDL_Log("distance is %f", distance);
+	//
+	//	// prevent jitter
+	//	if (distance < 5)
+	//	{
+	//		x_vel = y_vel = 0;
+	//	}
+	//	else
+	//	{
+	//		x_vel = delta_x * SPEED / distance;
+	//		y_vel = delta_y * SPEED / distance;
+	////		SDL_Log("x_vel is %f, y_vel is %f", x_vel, y_vel);
+	//
+	//	}
+	//
+	//	// update positions
+	//	x_pos += x_vel / 60;
+	//	y_pos += y_vel / 60;
+	//
+	//	// collision detection with bounds
+	//	if (x_pos <= 0) x_pos = 0;
+	//	if (y_pos <= 0) y_pos = 0;
+	//	if (x_pos >= BOARD_WIDTH - dest.w) x_pos = BOARD_WIDTH - dest.w;
+	//	if (y_pos >= BOARD_HEIGHT - dest.h) y_pos = BOARD_HEIGHT - dest.h;
+	//	dest.x = x_pos;
+	//	dest.y = y_pos;
 	dest.x = mouse_x - dest.w / 2;
 	dest.y = mouse_y - dest.h / 2;
 	SDL_RenderCopy(renderer, tex, NULL, &dest);
@@ -141,17 +172,27 @@ int update_pieces_rects(game* cur_game) {
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
 	//whites
 	for (int i = 0; i < 16; i++) {
-		int piece_row = cur_game->whites[i]->piece_location->row;
-		int piece_col = cur_game->whites[i]->piece_location->column;
-		white_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
-		white_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
+		if (cur_game->whites[i]->alive) {
+			int piece_row = cur_game->whites[i]->piece_location->row;
+			int piece_col = cur_game->whites[i]->piece_location->column;
+			white_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
+			white_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
+		} else {
+			white_grid[i].rect.x = BOARD_WIDTH;
+			white_grid[i].rect.y = BOARD_HEIGHT;
+		}
 	}
 	//blacks
 	for (int i = 0; i < 16; i++) {
-		int piece_row = cur_game->blacks[i]->piece_location->row;
-		int piece_col = cur_game->blacks[i]->piece_location->column;
-		black_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
-		black_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
+		if (cur_game->blacks[i]->alive) {
+			int piece_row = cur_game->blacks[i]->piece_location->row;
+			int piece_col = cur_game->blacks[i]->piece_location->column;
+			black_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
+			black_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
+		} else {
+			black_grid[i].rect.x = BOARD_WIDTH;
+			black_grid[i].rect.y = BOARD_HEIGHT;
+		}
 	}
 	SDL_Log("Exiting render_current_game");
 	return 0;
@@ -240,7 +281,7 @@ screen initialize_pieces(SDL_Window* window, SDL_Renderer* renderer){
 }
 
 
-screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer) {
+screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer, int history_size) {
 	//Load RESTART GAME button image as surface
 	SDL_Surface* restart_game_surface = SDL_LoadBMP("./images/game buttons/button-restart.bmp");
 	if (!restart_game_surface) {
@@ -326,7 +367,12 @@ screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer) {
 	load_game_rec.y = (save_game_rec.y + save_game_rec.h) + 15;
 
 	//Load UNDO MOVE button image as surface
-	SDL_Surface* undo_move_surface = SDL_LoadBMP("./images/game buttons/button-undo-move.bmp");
+	SDL_Surface* undo_move_surface;
+	if (history_size > 0) {
+		undo_move_surface = SDL_LoadBMP("./images/game buttons/button-undo-move.bmp");
+	} else {
+		undo_move_surface = SDL_LoadBMP("./images/game buttons/undo-disabled-button.bmp");
+	}
 	if (!undo_move_surface) {
 		printf("Error creating SDL surface: %s\n", SDL_GetError());
 		SDL_DestroyRenderer(renderer);
@@ -462,11 +508,11 @@ screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
 	return GAME_SCREEN;
 }
 
-screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_game) {
+screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, int history_size) {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
 	SDL_RenderClear(renderer);
 	screen display_screen;
-	display_screen = display_game_buttons(window, renderer);
+	display_screen = display_game_buttons(window, renderer, history_size);
 	display_screen = display_game_board(window, renderer);
 	//	initialize_pieces(window, renderer);
 	for (int i = 0; i < 16; i++) {
@@ -483,9 +529,10 @@ screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_
 
 screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 	screen display_screen = GAME_SCREEN;
-	move* new_move = create_move(); //need to free later
+	move* new_move = create_move();
+	array_list* history = array_list_create(6); //need to free later
 	display_screen = initialize_pieces(window, renderer);
-	display_screen = render_game_screen(window, renderer, game);
+	display_screen = render_game_screen(window, renderer, game, history->actualSize);
 	int mouse_x, mouse_y;
 	bool click = false;
 	int moving_rect_idx;
@@ -539,12 +586,17 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					SDL_Log("current turn is %d, user color is %d", game->current_turn, game->user_color);
 					click = false;
 					if (is_valid_move(game, new_move)) {
+						if (game->game_mode == 1){
+							update_history(new_move, game, history);
+							SDL_Log("history's size is %d", history->actualSize);
+						}
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
 						print_board(game);
+						// update history
 					}
 					update_pieces_rects(game);
-					render_game_screen(window, renderer, game);
+					render_game_screen(window, renderer, game, history->actualSize);
 				}
 				//checking buttons
 				else if (check_mouse_button_event(event, quit_rec)) {
@@ -554,26 +606,44 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				} else if (check_mouse_button_event(event, restart_game_rec)) {
 					restart_game(game);
 					update_pieces_rects(game);
-					render_game_screen(window, renderer, game);
+					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, load_game_rec)) {
 					//TODO
 				} else if (check_mouse_button_event(event, save_game_rec)) {
 					//TODO
 				} else if (check_mouse_button_event(event, undo_move_rec)) {
-					//TODO
+					game = undo_move(history, game);
+					SDL_Log("current turn is player %d", game->current_turn);
+					update_pieces_rects(game);
+					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, main_menu_rec)) {
 					game_running = false;
 				}
 			}
 		}
 		if (click) {
-
-			drag_piece(window, renderer, game, dest, moving_rect_color, moving_rect_idx);
+			drag_piece(window, renderer, game, dest, moving_rect_color, moving_rect_idx, history->actualSize);
 		}
+		// computer's turn
+		if (game->game_mode == 1 && game->current_turn == 0){
+			move* comp_move;
+			comp_move = get_recommended_move_for_comp(game, game->difficulty);
+			//			announce_computer_move(game, comp_move);
+			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
+			print_board(game);
+			update_pieces_rects(game);
+			render_game_screen(window, renderer, game, history->actualSize);
+			// update history
+			update_history(comp_move, game, history);
+			SDL_Log("history's size is %d", history->actualSize);
+			destroy_move(comp_move);
 
+		}
 	}
 	//free all resources
 	destroy_move(new_move);
+	array_list_destroy(history);
+	SDL_Log("finished outer while loop");
 	for (int i = 0; i < 16; i++) {
 		SDL_DestroyTexture(white_grid[i].texture);
 		SDL_DestroyTexture(black_grid[i].texture);

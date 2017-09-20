@@ -12,4 +12,15 @@
 
 bool check_mouse_button_event(SDL_Event event, SDL_Rect rect);
 
+///*
+// * presents the "select game difficulty" pop up
+// * on "back" - returns to "select game mode"
+// */
+//screen set_difficulty_dialog(game* new_game)
+//
+///*
+// * presents the "select game mode" pop up
+// */
+//screen set_game_mode_dialog(game* new_game);
+
 #endif /* GUI_H_ */
