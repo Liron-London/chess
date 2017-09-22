@@ -337,7 +337,7 @@ int main() {
 		return 1;
 	}
 
-	int running = MENU_SCREEN;
+	screen running = MENU_SCREEN;
 	while(running != EXIT) {
 		game* new_game = game_create();
 		SDL_Event event;
@@ -355,8 +355,7 @@ int main() {
 			running = game_screen(window, renderer, new_game);
 			game_destroy(new_game);
 		} else if (running == LOAD_SCREEN) {
-			display_load_buttons(window, renderer);
-			SDL_Delay(4000);
+			running = loading_screen(window, renderer, MENU_SCREEN, new_game);
 		}
 	}
 	//free resources

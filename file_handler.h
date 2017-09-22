@@ -23,10 +23,21 @@ char* tag_finder(char* input_file_text, char* tag);
 */
 int load_game(game* cur_game, char* filename);
 
+/*
+ * same as load_game, without starting the game
+ */
+int gui_load_game(game* cur_game, char* filename);
+
 void update_pieces_for_load(game* cur_game);
 
 int get_num_games();
 
 void default_save(game* game, int game_index);
+
+/*
+ * @params: index of requested file, char* to put the name in
+ * fills the filename array with the full name of the requested file
+ */
+void generate_filename(int index, char* filename);
 
 #endif // FILE_HANDLER_H_INCLUDED

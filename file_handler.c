@@ -199,12 +199,59 @@ int load_game(game* cur_game, char* filename) {
 	return 0;
 }
 
-void generate_filename(int index, char* filename){
-	printf("In generate_filename\n");
-	filename = "chess_game_";
-	char idx[2] = {i + '0', '\0'};
-	printf("before strcat\n");
-	strcat(filename, idx);
+int gui_load_game(game* cur_game, char* filename) {
+	DEBUG("in load_game, filename is: %s\n", filename);
+	//strcat(filename, ".xml");
+	FILE* fp = fopen(filename, "r");
+	if (fp == NULL) {
+		printf("Error: File doesn't exist or cannot be opened\n"); //TODO: message instead of print
+		return 1;
+	}
+	char input_file_text[50];
+	char* tag_content;
+
+	fgets(input_file_text, 50, fp); // gets the formatting line
+	fgets(input_file_text, 50, fp); // gets the <game> line
+	fgets(input_file_text, 50, fp); // gets the <current_turn> line
+	tag_content = tag_finder(input_file_text, "current_turn");
+	cur_game->current_turn = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <game_mode> line
+	tag_content = tag_finder(input_file_text, "game_mode");
+	cur_game->game_mode = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <difficulty> line
+	tag_content = tag_finder(input_file_text, "difficulty");
+	cur_game->difficulty = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <user_color> line
+	tag_content = tag_finder(input_file_text, "user_color");
+	cur_game->user_color = atoi(tag_content);
+
+	fgets(input_file_text, 50, fp); // gets the <board> line
+
+	// fill board
+	for (int i = 8; i >= 1; i--) {
+	fgets(input_file_text, 50, fp); // gets the <row_i> line
+		char row_x[5];
+		sprintf(row_x, "row_%d", i);
+		tag_content = tag_finder(input_file_text, row_x);
+		for (int j = 0; j <= 7; j++) {
+			cur_game->board[i-1][j] = tag_content[j];
+		}
+	}
+	update_pieces_for_load(cur_game);
+	return 0;
+}
+
+void generate_filename(int index, char* filename) {
+	sprintf(filename, "chess_game_%c", index + '0');
+
+//	printf("In generate_filename\n");
+//	strcpy(filename, "chess_game_");
+//	char idx[2] = {index + '0', '\0'};
+//	printf("before strcat\n");
+//	strcat(filename, idx);
 	printf("filename is %s\n", filename);
 }
 
@@ -217,14 +264,14 @@ void default_save(game* game, int num_games){
 
 	for (int i=num_games; i > 0 ;i--){
 		generate_filename(i, filename);
-		load_game(game, filename);
+		gui_load_game(game, filename);
 		if (num_games < 5){
 			generate_filename(i+1, filename);
 			save_game(game, filename);
 		}
 	}
 
-	load_game(game, "tmp_game");
+	gui_load_game(game, "tmp_game");
 	generate_filename(1, filename);
 	save_game(game, filename);
 }

@@ -11,11 +11,13 @@
 #include "array_list.h"
 #include "GUI_base.h"
 #include "GUI_display_game.h"
+#include "GUI_load.h"
 #include "game.h"
 #include "game_commands.h"
 #include "moves.h"
 #include "minimax.h"
 #include "file_handler.h"
+
 #define CELL_WIDTH (65)
 #define CELL_HEIGHT (65)
 #define BOARD_WIDTH (600)
@@ -67,7 +69,7 @@ void update_history(move* move, game* game, array_list* history) {
 screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx, int history_size) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
-	SDL_Log("Mouse state: x=%d, y=%d", mouse_x, mouse_y);
+//	SDL_Log("Mouse state: x=%d, y=%d", mouse_x, mouse_y);
 	screen display_screen = GAME_SCREEN;
 
 	SDL_Texture* tex;
@@ -91,50 +93,10 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 		}
 	}
 
-	// start sprite in center of screen
-	//	float x_pos = (BOARD_WIDTH - dest.w) / 2;
-	//	//	float y_pos = (BOARD_HEIGHT - dest.h) / 2;
-	//	float x_pos = dest.x;
-	//	float y_pos = dest.y;
-	//	float x_vel = 0;
-	//	float y_vel = 0;
-	//
-	//	// determine velocity toward mouse
-	//	int target_x = mouse_x - dest.w / 2;
-	//	int target_y = mouse_y - dest.h / 2;
-	//	float delta_x = target_x - x_pos;
-	//	float delta_y = target_y - y_pos;
-	//	float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
-	//	SDL_Log("distance is %f", distance);
-	//
-	//	// prevent jitter
-	//	if (distance < 5)
-	//	{
-	//		x_vel = y_vel = 0;
-	//	}
-	//	else
-	//	{
-	//		x_vel = delta_x * SPEED / distance;
-	//		y_vel = delta_y * SPEED / distance;
-	////		SDL_Log("x_vel is %f, y_vel is %f", x_vel, y_vel);
-	//
-	//	}
-	//
-	//	// update positions
-	//	x_pos += x_vel / 60;
-	//	y_pos += y_vel / 60;
-	//
-	//	// collision detection with bounds
-	//	if (x_pos <= 0) x_pos = 0;
-	//	if (y_pos <= 0) y_pos = 0;
-	//	if (x_pos >= BOARD_WIDTH - dest.w) x_pos = BOARD_WIDTH - dest.w;
-	//	if (y_pos >= BOARD_HEIGHT - dest.h) y_pos = BOARD_HEIGHT - dest.h;
-	//	dest.x = x_pos;
-	//	dest.y = y_pos;
 	dest.x = mouse_x - dest.w / 2;
 	dest.y = mouse_y - dest.h / 2;
 	SDL_RenderCopy(renderer, tex, NULL, &dest);
-	SDL_Log("copied rect with x=%d, y=%d", dest.x, dest.y);
+//	SDL_Log("copied rect with x=%d, y=%d", dest.x, dest.y);
 	SDL_RenderPresent(renderer);
 
 	return display_screen;
@@ -168,6 +130,10 @@ void restart_game(game* cur_game) {
 	game_destroy(new_game);
 }
 
+/*
+ * iterates over the game object's pieces
+ * updates the corresponding Rect's location accordingly
+ */
 int update_pieces_rects(game* cur_game) {
 	int x_0 = ORIGIN_X;
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
@@ -195,7 +161,7 @@ int update_pieces_rects(game* cur_game) {
 			black_grid[i].rect.y = BOARD_HEIGHT;
 		}
 	}
-	SDL_Log("Exiting render_current_game");
+//	SDL_Log("Exiting render_current_game");
 	return 0;
 }
 
@@ -203,7 +169,7 @@ void mouse_location_on_board(int mouse_x, int mouse_y, location* source) {
 	//	SDL_Log("Mouse coordinates are x=%d, y=%d", mouse_x, mouse_y);
 	source->row = (ORIGIN_Y - mouse_y) / CELL_HEIGHT;
 	source->column = (mouse_x - ORIGIN_X) / CELL_WIDTH;
-	SDL_Log("Mouse location is row=%d, col=%d", source->row, source->column);
+//	SDL_Log("Mouse location is row=%d, col=%d", source->row, source->column);
 }
 
 screen draw_piece(SDL_Window* window, SDL_Renderer* renderer, gui_piece* guipiece, char* filename) {
@@ -227,8 +193,10 @@ screen draw_piece(SDL_Window* window, SDL_Renderer* renderer, gui_piece* guipiec
 	return GAME_SCREEN;
 }
 
+/*
+ * loads all the pieces' images to the relevant Rects
+ */
 screen initialize_pieces(SDL_Window* window, SDL_Renderer* renderer){
-	//	SDL_Surface* black_bishop_surface = SDL_LoadBMP("./images/Diagramkit V2-5/Figurines/Black B.bmp")
 	int x_0 = ORIGIN_X;
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
 	for (int i = 0; i < 16; i++) {
@@ -509,6 +477,13 @@ screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
 	return GAME_SCREEN;
 }
 
+/*
+ * clears the previous board
+ * calls display_game_buttons, display_game_board, updates_pieces_rects
+ * copies all the Rects to the renderer
+ * presents the renderer
+ * returns GAME_SCREEN if all is ok, else EXIT
+ */
 screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, int history_size) {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
 	SDL_RenderClear(renderer);
@@ -516,14 +491,13 @@ screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_
 	display_screen = display_game_buttons(window, renderer, history_size);
 	display_screen = display_game_board(window, renderer);
 	//	initialize_pieces(window, renderer);
+	update_pieces_rects(cur_game);
+
 	for (int i = 0; i < 16; i++) {
-		if (cur_game->whites[i]->alive) {
-			SDL_RenderCopy(renderer, white_grid[i].texture, NULL, &white_grid[i].rect);
-		}
-		if (cur_game->blacks[i]->alive) {
-			SDL_RenderCopy(renderer, black_grid[i].texture, NULL, &black_grid[i].rect);
-		}
+		SDL_RenderCopy(renderer, white_grid[i].texture, NULL, &white_grid[i].rect);
+		SDL_RenderCopy(renderer, black_grid[i].texture, NULL, &black_grid[i].rect);
 	}
+
 	SDL_RenderPresent(renderer);
 	return display_screen;
 }
@@ -560,13 +534,13 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 
 					for(int i = 0; i < 16; i++) {
 						if (check_mouse_button_event(event, white_grid[i].rect)) {
-							SDL_Log("in if -> white grid");
+//							SDL_Log("in if -> white grid");
 							dest = white_grid[i].rect;
 							moving_rect_idx = i;
 							moving_rect_color = 1;
 							break;
 						} else if (check_mouse_button_event(event, black_grid[i].rect)) {
-							SDL_Log("in if -> black grid");
+//							SDL_Log("in if -> black grid");
 							dest = black_grid[i].rect;
 							moving_rect_idx = i;
 							moving_rect_color = 0;
@@ -609,7 +583,9 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					update_pieces_rects(game);
 					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, load_game_rec)) {
-					//TODO
+					display_screen = loading_screen(window, renderer, GAME_SCREEN, game);
+
+					render_game_screen(window, renderer, game, 0);
 				} else if (check_mouse_button_event(event, save_game_rec)) {
 					int num_games = get_num_games();
 					SDL_Log("num games is: %d", num_games);
