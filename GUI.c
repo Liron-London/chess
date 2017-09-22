@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include "GUI.h"
 #include "GUI_base.h"
+#include "GUI_load.h"
 #include "GUI_display_game.h"
 
 //#include <SDL2/SDL_video.h>
@@ -273,7 +274,7 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 				}
 				else if (check_mouse_button_event(event, load_game_rec)) {
 					main_menu = false;
-					return EXIT;
+					return LOAD_SCREEN;
 				}
 			}
 		}
@@ -353,6 +354,9 @@ int main() {
 		if (running == GAME_SCREEN) {
 			running = game_screen(window, renderer, new_game);
 			game_destroy(new_game);
+		} else if (running == LOAD_SCREEN) {
+			display_load_buttons(window, renderer);
+			SDL_Delay(4000);
 		}
 	}
 	//free resources

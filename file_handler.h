@@ -27,8 +27,6 @@ void update_pieces_for_load(game* cur_game);
 
 int get_num_games();
 
-int switch_games(game* game);
-
-int default_save(game* game, int game_index);
+void default_save(game* game, int game_index);
 
 #endif // FILE_HANDLER_H_INCLUDED

@@ -612,7 +612,9 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					//TODO
 				} else if (check_mouse_button_event(event, save_game_rec)) {
 					int num_games = get_num_games();
+					SDL_Log("num games is: %d", num_games);
 					default_save(game, num_games);
+					SDL_Log("finished saving game");
 				} else if (check_mouse_button_event(event, undo_move_rec)) {
 					game = undo_move(history, game);
 					SDL_Log("current turn is player %d", game->current_turn);

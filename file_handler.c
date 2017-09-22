@@ -199,37 +199,42 @@ int load_game(game* cur_game, char* filename) {
 	return 0;
 }
 
-
-int default_save(game* game, int game_index){
-	char filename[13]= "chess_game_";
-	strcat(filename, &(char)(game_index + '0'));
-	save_game(game, filename);
-	return 0;
+void generate_filename(int index, char* filename){
+	printf("In generate_filename\n");
+	filename = "chess_game_";
+	char idx[2] = {i + '0', '\0'};
+	printf("before strcat\n");
+	strcat(filename, idx);
+	printf("filename is %s\n", filename);
 }
 
 /*
  * called in case 5 games are saved, save the new game to chess_game_0 and shift all the others
  */
-int switch_games(game* game){
+void default_save(game* game, int num_games){
 	save_game(game, "tmp_game");
+	char filename[13];
 
-	for (int i=3; i>=0 ;i--){
-		char from_filename[13]= "chess_game_";
-		strcat(from_filename, &(char)(i + '0'));
-		load_game(game, from_filename);
-		default_save(game, i + 1);
+	for (int i=num_games; i > 0 ;i--){
+		generate_filename(i, filename);
+		load_game(game, filename);
+		if (num_games < 5){
+			generate_filename(i+1, filename);
+			save_game(game, filename);
+		}
 	}
 
 	load_game(game, "tmp_game");
-	default_save(game, 0);
-	return 0;
+	generate_filename(1, filename);
+	save_game(game, filename);
 }
 
 int get_num_games(){
 	int index = 0;
-	for (int i=0; i<5; i++){
+	for (int i=1; i<=5; i++){
 		char filename[13]= "chess_game_";
-		strcat(filename, &(char)(i + '0'));
+		char idx[2] = {i + '0', '\0'};
+		strcat(filename, idx);
 		FILE* fp = fopen(filename, "r");
 		if (fp == NULL){
 			break;

@@ -9,7 +9,7 @@ FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o minimax.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
-GUI_OBJS = GUI.o GUI_display_game.o game.o GUI_base.o moves.o minimax.o array_list.o setting.o game_commands.o file_handler.o
+GUI_OBJS = GUI.o GUI_display_game.o game.o GUI_base.o moves.o minimax.o array_list.o setting.o game_commands.o file_handler.o GUI_load.o
 SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
 
@@ -61,11 +61,11 @@ game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_lis
 	$(CC) $(COMP_FLAG) -c $*.c
 
 GUI_base.o: GUI_base.c GUI_base.h 
-GUI.o: GUI.c GUI.h game.c game.h GUI_base.h GUI_base.c
+GUI.o: GUI.c GUI.h game.c game.h GUI_base.h GUI_base.c GUI_load.c GUI_load.h
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 GUI_display_game.o: GUI_display_game.c GUI_display_game.h GUI_base.h GUI_base.c
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
-GUI_load.o: GUI_load.c GUI_base.c GUI_base.h GUI_display_game.c GUI_display_game.h GUI.c GUI.h
+GUI_load.o: GUI_load.c GUI_base.c GUI_base.h 
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
