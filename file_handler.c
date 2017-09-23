@@ -96,11 +96,11 @@ void update_pieces_for_load(game* cur_game){
 	}
 
 	for (int i=0;i<16;i++){
-		printf("whites[%d] is %c / %d\n", cur_game->whites[i]->piece_type,i, cur_game->whites[i]->alive);
+		printf("whites[%d] is %c / %d\n", i, cur_game->whites[i]->piece_type, cur_game->whites[i]->alive);
 	}
 
 	for (int i=0;i<16;i++){
-		printf("blacks[%d] is %c / %d\n", cur_game->blacks[i]->piece_type,i, cur_game->blacks[i]->alive);
+		printf("blacks[%d] is %c / %d\n", i, cur_game->blacks[i]->piece_type, cur_game->blacks[i]->alive);
 	}
 
 }
