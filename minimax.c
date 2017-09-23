@@ -261,13 +261,13 @@ move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
 	// user is black
 	if (game->user_color == 0){
-		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
+		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 		printf("comp run max\n");
 	}
 
 	// user is white
 	if (game->user_color == 1){
-		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
+		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
 		printf("comp run min\n");
 	}
 	return comp_move;
