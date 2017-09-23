@@ -94,6 +94,12 @@ void update_pieces_for_load(game* cur_game){
 			}
 		}
 	}
+
+	for (int i=0;i<16;i++){
+		printf("whites[i] is %c / %d\n", cur_game->whites[i]->piece_type, cur_game->whites[i]->alive);
+		printf("blacks[i] is %c / %d\n", cur_game->blacks[i]->piece_type, cur_game->blacks[i]->alive);
+	}
+
 }
 
 int save_game(game* cur_game, char* filename) {
