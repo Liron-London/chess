@@ -207,6 +207,31 @@ int load_game(game* cur_game, char* filename) {
 	return 0;
 }
 
+void generate_filename(int index, char* filename) {
+	sprintf(filename, "chess_game_%c", index + '0');
+}
+
+/*
+ * save the new game to chess_game_0 and shift all the others
+ */
+void default_save(game* game, int num_games){
+	save_game(game, "tmp_game");
+	char filename[13];
+
+	for (int i=num_games; i > 0 ;i--){
+		generate_filename(i, filename);
+		load_game(game, filename);
+		if (num_games < 5){
+			generate_filename(i+1, filename);
+			save_game(game, filename);
+		}
+	}
+
+	load_game(game, "tmp_game");
+	generate_filename(1, filename);
+	save_game(game, filename);
+}
+
 int get_num_games(){
 	int index = 0;
 	for (int i=1; i<=5; i++){

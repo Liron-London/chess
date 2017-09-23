@@ -36,8 +36,9 @@ SDL_Rect game_board_rec = { .x = 0, .y = 0, .w = 600, .h = 600};
 gui_piece white_grid[16];
 gui_piece black_grid[16];
 
+void initialize_rects() ;
+
 screen popup_mate(int color) {
-	SDL_Log("in popup mate");
 	char message[40];
 	if (color == 1) {
 		sprintf(message, "Game over - white player wins the game!");
@@ -75,14 +76,11 @@ screen popup_mate(int color) {
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
 		SDL_Log("error displaying message box");
 		return EXIT;
-	} else if (buttonid == 0) {
-		return EXIT;
 	}
-	return GAME_SCREEN;
+	return MENU_SCREEN;
 }
 
 screen popup_tie() {
-	SDL_Log("in popup tie");
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "OK"}
 	};
@@ -113,14 +111,11 @@ screen popup_tie() {
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
 		SDL_Log("error displaying message box");
 		return EXIT;
-	} else if (buttonid == 0) {
-		return EXIT;
 	}
-	return GAME_SCREEN;
+	return MENU_SCREEN;
 }
 
 screen popup_check(int color) {
-	SDL_Log("in popup check");
 	char message[40];
 	if (color == 1) {
 		sprintf(message, "Check: white King is threatened!");
@@ -148,20 +143,17 @@ screen popup_check(int color) {
 	const SDL_MessageBoxData messageboxdata = {
 			SDL_MESSAGEBOX_INFORMATION, /* .flags */
 			NULL, /* .window */
-			"Game Over", /* .title */
+			"Check", /* .title */
 			message, /* .message */
 			SDL_arraysize(buttons), /* .numbuttons */
 			buttons, /* .buttons */
 			&colorScheme /* .colorScheme */
 	};
-	SDL_Log("message is: %s", message);
 
 	int buttonid;
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
 		SDL_Log("error displaying message box");
 		return EXIT;
-//	} else if (buttonid == 0) {
-//		return GAME_SCREEN;
 	}
 	return GAME_SCREEN;
 }
@@ -175,6 +167,7 @@ screen check_game_status(game* game) {
 	screen display_screen = GAME_SCREEN;
 	int color = current_turn_color(game);
 	if (has_valid_moves(game) == false) {
+		change_turn(game);
 		if (is_check(game) == true) {
 			display_screen = popup_mate(color);
 		}
@@ -182,10 +175,12 @@ screen check_game_status(game* game) {
 			display_screen = popup_tie();
 		}
 	}
-
+	change_turn(game);
 	if (is_check(game)) {
 		display_screen = popup_check((color + 1)%2);
 	}
+	change_turn(game);
+
 	return display_screen;
 }
 
@@ -221,7 +216,6 @@ void update_history(move* move, game* game, array_list* history) {
 screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx, int history_size) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
-//	SDL_Log("Mouse state: x=%d, y=%d", mouse_x, mouse_y);
 	screen display_screen = GAME_SCREEN;
 
 	SDL_Texture* tex;
@@ -248,7 +242,6 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 	dest.x = mouse_x - dest.w / 2;
 	dest.y = mouse_y - dest.h / 2;
 	SDL_RenderCopy(renderer, tex, NULL, &dest);
-//	SDL_Log("copied rect with x=%d, y=%d", dest.x, dest.y);
 	SDL_RenderPresent(renderer);
 
 	return display_screen;
@@ -256,6 +249,7 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 
 
 void restart_game(game* cur_game) {
+	initialize_rects();
 	game* new_game = game_create();
 
 	// copying board
@@ -278,14 +272,11 @@ void restart_game(game* cur_game) {
 		cur_game->blacks[i]->piece_location->column = new_game->blacks[i]->piece_location->column;
 		cur_game->blacks[i]->piece_type = new_game->blacks[i]->piece_type;
 	}
+	cur_game->current_turn = new_game->current_turn;
 
 	game_destroy(new_game);
 }
 
-/*
- * iterates over the game object's pieces
- * updates the corresponding Rect's location accordingly
- */
 int update_pieces_rects(game* cur_game) {
 	int x_0 = ORIGIN_X;
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
@@ -313,30 +304,8 @@ int update_pieces_rects(game* cur_game) {
 			black_grid[i].rect.y = BOARD_HEIGHT;
 		}
 	}
-//	SDL_Log("Exiting render_current_game");
 	return 0;
 }
-
-
-////////////////////////////////////////////////////
-//int update_pieces_rects(game* cur_game) {
-//	int x_0 = ORIGIN_X;
-//	int y_0 = ORIGIN_Y - CELL_HEIGHT;
-//	int white_idx = 0;
-//	int black_idx = 0;
-//
-//	for (int i = 0; i < 8; i++) {
-//		for (int j = 0; j < 8; j++) {
-//			char cur_piece = cur_game->board[i][j];
-//			//whites
-//			if (cur_piece > 'a') {
-//				white_grid[white_idx] = location_to_piece();
-//			}
-//		}
-//	}
-//	return 0;
-//}
-/////////////////////////////////////////////////////
 
 
 
@@ -345,10 +314,8 @@ int update_pieces_rects(game* cur_game) {
  * updates the source param to contain the row&column the cursor is positioned on
  */
 void mouse_location_on_board(int mouse_x, int mouse_y, location* source) {
-	//	SDL_Log("Mouse coordinates are x=%d, y=%d", mouse_x, mouse_y);
 	source->row = (ORIGIN_Y - mouse_y) / CELL_HEIGHT;
 	source->column = (mouse_x - ORIGIN_X) / CELL_WIDTH;
-//	SDL_Log("Mouse location is row=%d, col=%d", source->row, source->column);
 }
 
 /*
@@ -375,21 +342,32 @@ screen draw_piece(SDL_Window* window, SDL_Renderer* renderer, gui_piece* guipiec
 	return GAME_SCREEN;
 }
 
+void initialize_rects() {
+	for (int i = 0; i < 16; i++) {
+		SDL_Rect white_square = {.x = BOARD_WIDTH, .y = BOARD_HEIGHT, .w = CELL_WIDTH, .h = CELL_HEIGHT};
+		white_grid[i].rect = white_square;
+		SDL_Rect black_square = {.x = BOARD_WIDTH, .y = BOARD_HEIGHT, .w = CELL_WIDTH, .h = CELL_HEIGHT};
+		black_grid[i].rect = black_square;
+	}
+}
+
 /*
  * loads all the pieces' images to the relevant Rects
  */
 screen initialize_pieces(SDL_Window* window, SDL_Renderer* renderer){
-	int x_0 = ORIGIN_X;
-	int y_0 = ORIGIN_Y - CELL_HEIGHT;
-	for (int i = 0; i < 16; i++) {
-		SDL_Rect square = {.x = x_0, .y = y_0, .w = CELL_WIDTH, .h = CELL_HEIGHT};
-		white_grid[i].rect = square;
-		x_0 += CELL_WIDTH;
-		if (i == 7) {
-			x_0 = ORIGIN_X;
-			y_0 -= CELL_HEIGHT;
-		}
-	}
+	initialize_rects();
+	//	int x_0 = ORIGIN_X;
+	//	int y_0 = ORIGIN_Y - CELL_HEIGHT;
+	//	for (int i = 0; i < 16; i++) {
+	//		SDL_Rect square = {.x = x_0, .y = y_0, .w = CELL_WIDTH, .h = CELL_HEIGHT};
+	//		white_grid[i].rect = square;
+	//		x_0 += CELL_WIDTH;
+	//		if (i == 7) {
+	//			x_0 = ORIGIN_X;
+	//			y_0 -= CELL_HEIGHT;
+	//		}
+	//	}
+
 
 	//	char* green_pieces[] = {"Green2 B.bmp", "Green2 K.bmp", "Green2 N.bmp", "Green2 P.bmp", "Green2 Q.bmp", "Green2 R.bmp"};
 	// draw white pieces
@@ -405,17 +383,18 @@ screen initialize_pieces(SDL_Window* window, SDL_Renderer* renderer){
 		draw_piece(window, renderer, &white_grid[idx], "Green2 P.bmp");
 	}
 
-	x_0 = ORIGIN_X;
-	y_0 = ORIGIN_Y - 8 * CELL_HEIGHT;
-	for (int i = 0; i < 16; i++) {
-		SDL_Rect square = {.x = x_0, .y = y_0, .w = CELL_WIDTH, .h = CELL_HEIGHT};
-		black_grid[i].rect = square;
-		x_0 += CELL_WIDTH;
-		if (i == 7) {
-			x_0 = ORIGIN_X;
-			y_0 += CELL_HEIGHT;
-		}
-	}
+	//	x_0 = ORIGIN_X;
+	//	y_0 = ORIGIN_Y - 8 * CELL_HEIGHT;
+	//	for (int i = 0; i < 16; i++) {
+	//		SDL_Rect square = {.x = x_0, .y = y_0, .w = CELL_WIDTH, .h = CELL_HEIGHT};
+	//		black_grid[i].rect = square;
+	//		x_0 += CELL_WIDTH;
+	//		if (i == 7) {
+	//			x_0 = ORIGIN_X;
+	//			y_0 += CELL_HEIGHT;
+	//		}
+	//	}
+
 	// draw black pieces
 	draw_piece(window, renderer, &black_grid[0], "Black R.bmp");
 	draw_piece(window, renderer, &black_grid[1], "Black N.bmp");
@@ -545,7 +524,6 @@ screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
 	SDL_Surface* game_board_surface = SDL_LoadBMP("./images/Diagramkit V2-5/Boards & Arrays/empty-numbered-chess-set.bmp");
 	display_screen = verify_surface(window, renderer, game_board_surface, GAME_SCREEN);
 
-	//Create RESTART GAME texture from surface
 	SDL_Texture* game_board_texture = SDL_CreateTextureFromSurface(renderer, game_board_surface);
 	display_screen = verify_texture(window, renderer, game_board_surface, game_board_texture, GAME_SCREEN);
 
@@ -611,17 +589,14 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT && click == false) {
 					mouse_location_on_board(mouse_x, mouse_y, new_move->source);
 
-					// get cursor position relative to window
-
+					// identify what rect was clicked on
 					for(int i = 0; i < 16; i++) {
 						if (check_mouse_button_event(event, white_grid[i].rect)) {
-//							SDL_Log("in if -> white grid");
 							dest = white_grid[i].rect;
 							moving_rect_idx = i;
 							moving_rect_color = 1;
 							break;
 						} else if (check_mouse_button_event(event, black_grid[i].rect)) {
-//							SDL_Log("in if -> black grid");
 							dest = black_grid[i].rect;
 							moving_rect_idx = i;
 							moving_rect_color = 0;
@@ -638,25 +613,25 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				mouse_y = event.button.y;
 				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT) {
 					mouse_location_on_board(mouse_x, mouse_y, new_move->dest);
-					SDL_Log("current turn is %d, user color is %d", game->current_turn, game->user_color);
 					click = false;
 					if (is_valid_move(game, new_move)) {
 						if (game->game_mode == 1){
 							update_history(new_move, game, history);
-							SDL_Log("history's size is %d", history->actualSize);
 						}
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
 						print_board(game); //DEBUG
 						display_screen = check_game_status(game);
+						if (display_screen == MENU_SCREEN) {
+							game_running = false;
+						}
 					}
-					update_pieces_rects(game);
+					//					update_pieces_rects(game);
 					render_game_screen(window, renderer, game, history->actualSize);
 				}
 
 				//checking buttons
 				else if (check_mouse_button_event(event, quit_rec)) {
-					SDL_Log("clicked on QUIT");
 					game_running = false;
 					return EXIT;
 				} else if (check_mouse_button_event(event, restart_game_rec)) {
@@ -665,20 +640,18 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, load_game_rec)) {
 					display_screen = loading_screen(window, renderer, GAME_SCREEN, game);
-
+					initialize_rects();
 					render_game_screen(window, renderer, game, 0);
 				} else if (check_mouse_button_event(event, save_game_rec)) {
 					int num_games = get_num_games();
-					SDL_Log("num games is: %d", num_games);
 					default_save(game, num_games);
-					SDL_Log("finished saving game");
 				} else if (check_mouse_button_event(event, undo_move_rec)) {
 					game = undo_move(history, game);
-					SDL_Log("current turn is player %d", game->current_turn);
 					update_pieces_rects(game);
 					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, main_menu_rec)) {
 					game_running = false;
+					display_screen = MENU_SCREEN;
 				}
 			}
 		}
@@ -696,15 +669,17 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 			render_game_screen(window, renderer, game, history->actualSize);
 			// update history
 			update_history(comp_move, game, history);
-			SDL_Log("history's size is %d", history->actualSize);
 			destroy_move(comp_move);
+			display_screen = check_game_status(game);
+			if (display_screen == MENU_SCREEN) {
+				game_running = false;
+			}
 
 		}
 	}
 	//free all resources
 	destroy_move(new_move);
 	array_list_destroy(history);
-	SDL_Log("finished outer while loop");
 	for (int i = 0; i < 16; i++) {
 		SDL_DestroyTexture(white_grid[i].texture);
 		SDL_DestroyTexture(black_grid[i].texture);

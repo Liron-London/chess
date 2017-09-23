@@ -130,7 +130,7 @@ screen loading_screen(SDL_Window* window, SDL_Renderer* renderer, screen prev_sc
 					//					SDL_Log("filename is: %s", filename);
 					display_screen = GAME_SCREEN;
 					loading_screen = false;
-					gui_load_game(game, filename);
+					load_game(game, filename);
 					SDL_Log("loading screen is false");
 				}
 			}
