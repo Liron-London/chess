@@ -167,31 +167,16 @@ screen set_game_mode_dialog(game* new_game) {
 }
 
 screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game) {
+	screen display_screen = MENU_SCREEN;
+
 	//Load NEW GAME button image as surface
 	SDL_Surface* new_game_surface = SDL_LoadBMP("./images/game buttons/button-new-game.bmp");
-	if (!new_game_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, new_game_surface, MENU_SCREEN);
 
-	//Create NEW GAME texture from surface
 	SDL_Texture* new_game_texture = SDL_CreateTextureFromSurface(renderer, new_game_surface);
-	SDL_FreeSurface(new_game_surface);
-	if (!new_game_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, new_game_surface, new_game_texture, MENU_SCREEN);
 
-	//Create rectangle
 	SDL_Rect new_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
-
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(new_game_texture, NULL, NULL, &new_game_rec.w, &new_game_rec.h);
 	new_game_rec.x = (SCREEN_WIDTH - new_game_rec.w) / 2;
 	//	new_game_rec.y = (SCREEN_HEIGHT + new_game_rec.h) + 30;
@@ -199,58 +184,24 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 
 	//Load LOAD GAME button image as surface
 	SDL_Surface* load_game_surface = SDL_LoadBMP("./images/game buttons/button-load-game.bmp");
-	if (!load_game_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, load_game_surface, MENU_SCREEN);
 
-	//Create NEW GAME texture from surface
 	SDL_Texture* load_game_texture = SDL_CreateTextureFromSurface(renderer, load_game_surface);
-	SDL_FreeSurface(load_game_surface);
-	if (!load_game_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, load_game_surface, load_game_texture, MENU_SCREEN);
 
-	//Create rectangle
 	SDL_Rect load_game_rec = { .x = 0, .y = 0, .w = 600, .h = 600};
-
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(load_game_texture, NULL, NULL, &load_game_rec.w, &load_game_rec.h);
 	load_game_rec.x = (SCREEN_WIDTH - load_game_rec.w) / 2;
 	load_game_rec.y = new_game_rec.y + 30 + new_game_rec.h;
 
 	//Load QUIT button image as surface
 	SDL_Surface* quit_surface = SDL_LoadBMP("./images/game buttons/button-quit.bmp");
-	if (!quit_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, quit_surface, MENU_SCREEN);
 
-	//Create texture from surface
 	SDL_Texture* quit_texture = SDL_CreateTextureFromSurface(renderer, quit_surface);
-	SDL_FreeSurface(quit_surface);
-	if (!quit_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, quit_surface, quit_texture, MENU_SCREEN);
 
-	//Create rectangle for button
 	SDL_Rect quit_rec = { .x = 0, .y = 0, .w = 50, .h = 50};
-
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(quit_texture, NULL, NULL, &quit_rec.w, &quit_rec.h);
 	quit_rec.x = (SCREEN_WIDTH - quit_rec.w) / 2;
 	quit_rec.y = load_game_rec.y + 30 + load_game_rec.h;
@@ -302,7 +253,7 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 	SDL_DestroyTexture(load_game_texture);
 
 	SDL_DestroyTexture(quit_texture);
-	return MENU_SCREEN;
+	return display_screen;
 }
 
 //int main(int argc, char* argv[]) {
@@ -356,6 +307,7 @@ int main() {
 			game_destroy(new_game);
 		} else if (running == LOAD_SCREEN) {
 			running = loading_screen(window, renderer, MENU_SCREEN, new_game);
+			running = game_screen(window, renderer, new_game);
 		}
 	}
 	//free resources

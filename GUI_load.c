@@ -44,7 +44,6 @@ screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int sele
 		verify_surface(window, renderer, surface, LOAD_SCREEN);
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 		verify_texture(window, renderer, surface, texture, LOAD_SCREEN);
-		SDL_FreeSurface(surface);
 
 		SDL_QueryTexture(texture, NULL, NULL, &load_buttons[i].w, &load_buttons[i].h);
 		load_buttons[i].w *= 0.6;
@@ -67,7 +66,7 @@ screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int sele
 	verify_surface(window, renderer, load_surface, LOAD_SCREEN);
 	SDL_Texture* load_texture = SDL_CreateTextureFromSurface(renderer, load_surface);
 	verify_texture(window, renderer, load_surface, load_texture, LOAD_SCREEN);
-	SDL_FreeSurface(load_surface);
+
 	SDL_QueryTexture(load_texture, NULL, NULL, &load_button.w, &load_button.h);
 	load_button.w *= 0.6;
 	load_button.h *= 0.6;
@@ -80,7 +79,7 @@ screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int sele
 	verify_surface(window, renderer, back_surface, LOAD_SCREEN);
 	SDL_Texture* back_texture = SDL_CreateTextureFromSurface(renderer, back_surface);
 	verify_texture(window, renderer, back_surface, back_texture, LOAD_SCREEN);
-	SDL_FreeSurface(back_surface);
+
 	SDL_QueryTexture(back_texture, NULL, NULL, &back_button.w, &back_button.h);
 	back_button.w *= 0.6;
 	back_button.h *= 0.6;
