@@ -33,6 +33,7 @@ void update_pieces_for_load(game* cur_game){
 						cur_game->whites[i]->alive = 1;
 						cur_game->whites[i]->piece_location->row = j;
 						cur_game->whites[i]->piece_location->column = k;
+						first_piece = false;
 					}
 					else{
 						cur_game->whites[7-i]->piece_type = cur_game->board[j][k];
@@ -46,12 +47,13 @@ void update_pieces_for_load(game* cur_game){
 	}
 
 	for (int i=0;i<8;i++){
+		printf ("in white pawn loop\n");
 		for (int j=0;j<8;j++){
 			if (cur_game->board[i][j] == 'm'){
 				cur_game->whites[pawn_index]->piece_type = 'm';
-				cur_game->whites[i]->alive = 1;
-				cur_game->whites[i]->piece_location->row = i;
-				cur_game->whites[i]->piece_location->column = j;
+				cur_game->whites[pawn_index]->alive = 1;
+				cur_game->whites[pawn_index]->piece_location->row = i;
+				cur_game->whites[pawn_index]->piece_location->column = j;
 				pawn_index += 1;
 			}
 		}
@@ -71,6 +73,7 @@ void update_pieces_for_load(game* cur_game){
 						cur_game->blacks[i]->alive = 1;
 						cur_game->blacks[i]->piece_location->row = j;
 						cur_game->blacks[i]->piece_location->column = k;
+						first_piece = false;
 					}
 					else{
 						cur_game->blacks[7-i]->piece_type = cur_game->board[j][k];
@@ -87,9 +90,9 @@ void update_pieces_for_load(game* cur_game){
 		for (int j=0;j<8;j++){
 			if (cur_game->board[i][j] == 'M'){
 				cur_game->blacks[pawn_index]->piece_type = 'M';
-				cur_game->blacks[i]->alive = 1;
-				cur_game->blacks[i]->piece_location->row = i;
-				cur_game->blacks[i]->piece_location->column = j;
+				cur_game->blacks[pawn_index]->alive = 1;
+				cur_game->blacks[pawn_index]->piece_location->row = i;
+				cur_game->blacks[pawn_index]->piece_location->column = j;
 				pawn_index += 1;
 			}
 		}
