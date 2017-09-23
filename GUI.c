@@ -19,6 +19,11 @@
 screen set_game_mode_dialog(game* new_game);
 screen set_difficulty_dialog(game* new_game);
 
+/*
+ * Presents a pop-up message, asking the user to set the game's user color
+ * sets the uesr color accordingly
+ * returns GAME SCREEN
+ */
 screen set_user_color_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "black"},
