@@ -114,9 +114,9 @@ void ask_for_move(game* cur_game) {
 	//player 1's turn, player 1 is white OR player 2's turn, player 1 is black
 	if ((cur_game->current_turn == 1 && cur_game->user_color == 1) ||
 			(cur_game->current_turn == 0 && cur_game->user_color == 0)) {
-		printf("White player - enter your move:\n");
+		printf("white player - enter your move:\n");
 	} else {
-		printf("Black player - enter your move:\n");
+		printf("black player - enter your move:\n");
 	}
 }
 
@@ -229,6 +229,7 @@ int game_play(game* game){
 			destroy_move(comp_move);
 			int color = current_turn_color(game);
 			if (has_valid_moves(game) == false){
+				change_turn(game);
 				if (is_check(game) == true){
 					announce_mate(color);
 				}
