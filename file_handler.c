@@ -47,7 +47,6 @@ void update_pieces_for_load(game* cur_game){
 	}
 
 	for (int i=0;i<8;i++){
-		printf ("in white pawn loop\n");
 		for (int j=0;j<8;j++){
 			if (cur_game->board[i][j] == 'm'){
 				cur_game->whites[pawn_index]->piece_type = 'm';
@@ -97,15 +96,6 @@ void update_pieces_for_load(game* cur_game){
 			}
 		}
 	}
-
-	for (int i=0;i<16;i++){
-		printf("whites[%d] is %c / %d\n", i, cur_game->whites[i]->piece_type, cur_game->whites[i]->alive);
-	}
-
-	for (int i=0;i<16;i++){
-		printf("blacks[%d] is %c / %d\n", i, cur_game->blacks[i]->piece_type, cur_game->blacks[i]->alive);
-	}
-
 }
 
 int save_game(game* cur_game, char* filename) {
