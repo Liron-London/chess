@@ -154,6 +154,7 @@ int set_game() {
 	while(true) {
 
 		char* command_text = malloc(1024 * sizeof(char));
+		scanf(" %1024[^\n]", command_text);
 		// ask_for_settings(command_text);
 		char command_param[100];
 		parse_line(command_text, command, command_param);
