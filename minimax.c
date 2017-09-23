@@ -139,7 +139,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					game_destroy(tmp_game);
 
-					if (tmp_best_move->source->row == -1 || new_score < tmp_score){
+					if (tmp_best_move->source->row == -1 || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
@@ -210,7 +210,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					game_destroy(tmp_game);
 
-					if (tmp_best_move->source->row == -1  || new_score > tmp_score){
+					if (tmp_best_move->source->row == -1  || new_score < tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
