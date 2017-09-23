@@ -163,9 +163,7 @@ int set_game() {
 			if (new_game->game_mode == 2){
 				new_game->user_color = 1;
 			}
-			if (new_game->game_mode == 1 && new_game->user_color == 0) {
-				new_game->current_turn = 0;
-			}
+
 			free(command_text);
 			destroy_command(command);
 			game_play(new_game);
@@ -185,6 +183,9 @@ int set_game() {
 			} else {
 				printf("Game mode is set to 1 player\n");
 			}
+			if (new_game->game_mode == 1 && new_game->user_color == 0) {
+				new_game->current_turn = 0;
+			}
 		}
 		if (command->cmd == DIFFICULTY) {
 			new_game->difficulty = command->arg;
@@ -192,6 +193,9 @@ int set_game() {
 		}
 		if (command->cmd == USER_COLOR) {
 			new_game->user_color = command->arg;
+			if (new_game->game_mode == 1 && new_game->user_color == 0) {
+				new_game->current_turn = 0;
+			}
 		}
 		if (command->cmd == LOAD) {
 			load_game(new_game, command_param);

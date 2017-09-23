@@ -39,7 +39,6 @@ gui_piece black_grid[16];
 void initialize_rects() ;
 
 screen popup_mate(int color) {
-	SDL_Log("in popup mate");
 	char message[40];
 	if (color == 1) {
 		sprintf(message, "Game over - white player wins the game!");
@@ -82,7 +81,6 @@ screen popup_mate(int color) {
 }
 
 screen popup_tie() {
-	SDL_Log("in popup tie");
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "OK"}
 	};
@@ -118,7 +116,6 @@ screen popup_tie() {
 }
 
 screen popup_check(int color) {
-	SDL_Log("in popup check");
 	char message[40];
 	if (color == 1) {
 		sprintf(message, "Check: white King is threatened!");
@@ -152,7 +149,6 @@ screen popup_check(int color) {
 			buttons, /* .buttons */
 			&colorScheme /* .colorScheme */
 	};
-	SDL_Log("message is: %s", message);
 
 	int buttonid;
 	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
@@ -220,7 +216,6 @@ void update_history(move* move, game* game, array_list* history) {
 screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx, int history_size) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
-	//	SDL_Log("Mouse state: x=%d, y=%d", mouse_x, mouse_y);
 	screen display_screen = GAME_SCREEN;
 
 	SDL_Texture* tex;
@@ -247,7 +242,6 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 	dest.x = mouse_x - dest.w / 2;
 	dest.y = mouse_y - dest.h / 2;
 	SDL_RenderCopy(renderer, tex, NULL, &dest);
-	//	SDL_Log("copied rect with x=%d, y=%d", dest.x, dest.y);
 	SDL_RenderPresent(renderer);
 
 	return display_screen;
@@ -283,78 +277,6 @@ void restart_game(game* cur_game) {
 	game_destroy(new_game);
 }
 
-/*
- * iterates over the game object's pieces
- * updates the corresponding Rect's location accordingly
- */
-//int update_pieces_rects(game* cur_game) {
-//	int x_0 = ORIGIN_X;
-//	int y_0 = ORIGIN_Y - CELL_HEIGHT;
-//	char white_pieces[] = {'r', 'n', 'b', 'q', 'k'};
-//	bool first_piece; //used for identifying pieces that have more than one instance
-//	int pawn_idx = 8; //used for identifying pawns on the board
-//
-//	//whites
-//	for (int i = 0; i < 5; i++) {
-//		first_piece = true;
-//		for (int j = 0; j < 16; j++) {
-//			if (cur_game->whites[j]->alive && cur_game->whites[j]->piece_type == white_pieces[i]) {
-//				SDL_Log("Alive piece: %c", cur_game->whites[j]->piece_type);
-//				int piece_row = cur_game->whites[j]->piece_location->row;
-//				int piece_col = cur_game->whites[j]->piece_location->column;
-//
-//				if (first_piece) {
-//					white_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
-//					white_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
-//					first_piece = false;
-//				} else {
-//					white_grid[7-i].rect.x = x_0 + piece_col * CELL_WIDTH;
-//					white_grid[7-i].rect.y = y_0 - piece_row * CELL_HEIGHT;
-//				}
-//			}  else if (cur_game->whites[j]->alive == 0 && cur_game->whites[j]->piece_type == white_pieces[i]) {
-////				SDL_Log("Encountered an eaten piece: %c", cur_game->whites[j]->piece_type);
-//				if (first_piece) {
-//					white_grid[i].rect.x = BOARD_WIDTH;
-//					white_grid[i].rect.y = BOARD_HEIGHT;
-//				} else {
-//					white_grid[7-i].rect.x = BOARD_WIDTH;
-//					white_grid[7-i].rect.y = BOARD_HEIGHT;
-//				}
-//			}
-//		}
-//	}
-//
-//	//white pawns
-//	for (int i = 0; i < 16; i++) {
-//		SDL_Log("in the white pawn loop");
-//		if (cur_game->whites[i]->alive && cur_game->whites[i]->piece_type == 'm') {
-//			SDL_Log("encountered a living pawn");
-//			int piece_row = cur_game->whites[i]->piece_location->row;
-//			int piece_col = cur_game->whites[i]->piece_location->column;
-//			white_grid[pawn_idx].rect.x = x_0 + piece_col * CELL_WIDTH;
-//			white_grid[pawn_idx].rect.y = y_0 - piece_row * CELL_HEIGHT;
-//			pawn_idx++;
-//		}
-//	}
-//
-//	//blacks
-//	for (int i = 0; i < 16; i++) {
-//		if (cur_game->blacks[i]->alive) {
-//			int piece_row = cur_game->blacks[i]->piece_location->row;
-//			int piece_col = cur_game->blacks[i]->piece_location->column;
-//			black_grid[i].rect.x = x_0 + piece_col * CELL_WIDTH;
-//			black_grid[i].rect.y = y_0 - piece_row * CELL_HEIGHT;
-//		} else {
-//			black_grid[i].rect.x = BOARD_WIDTH;
-//			black_grid[i].rect.y = BOARD_HEIGHT;
-//		}
-//	}
-//
-//	//	SDL_Log("Exiting render_current_game");
-//	return 0;
-//}
-
-
 int update_pieces_rects(game* cur_game) {
 	int x_0 = ORIGIN_X;
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
@@ -382,7 +304,6 @@ int update_pieces_rects(game* cur_game) {
 			black_grid[i].rect.y = BOARD_HEIGHT;
 		}
 	}
-//	SDL_Log("Exiting render_current_game");
 	return 0;
 }
 
@@ -393,10 +314,8 @@ int update_pieces_rects(game* cur_game) {
  * updates the source param to contain the row&column the cursor is positioned on
  */
 void mouse_location_on_board(int mouse_x, int mouse_y, location* source) {
-	//	SDL_Log("Mouse coordinates are x=%d, y=%d", mouse_x, mouse_y);
 	source->row = (ORIGIN_Y - mouse_y) / CELL_HEIGHT;
 	source->column = (mouse_x - ORIGIN_X) / CELL_WIDTH;
-	//	SDL_Log("Mouse location is row=%d, col=%d", source->row, source->column);
 }
 
 /*
@@ -673,13 +592,11 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					// identify what rect was clicked on
 					for(int i = 0; i < 16; i++) {
 						if (check_mouse_button_event(event, white_grid[i].rect)) {
-							//							SDL_Log("in if -> white grid");
 							dest = white_grid[i].rect;
 							moving_rect_idx = i;
 							moving_rect_color = 1;
 							break;
 						} else if (check_mouse_button_event(event, black_grid[i].rect)) {
-							//							SDL_Log("in if -> black grid");
 							dest = black_grid[i].rect;
 							moving_rect_idx = i;
 							moving_rect_color = 0;
@@ -696,12 +613,10 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				mouse_y = event.button.y;
 				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT) {
 					mouse_location_on_board(mouse_x, mouse_y, new_move->dest);
-					SDL_Log("current turn is %d, user color is %d", game->current_turn, game->user_color);
 					click = false;
 					if (is_valid_move(game, new_move)) {
 						if (game->game_mode == 1){
 							update_history(new_move, game, history);
-							SDL_Log("history's size is %d", history->actualSize);
 						}
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
@@ -717,7 +632,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 
 				//checking buttons
 				else if (check_mouse_button_event(event, quit_rec)) {
-					SDL_Log("clicked on QUIT");
 					game_running = false;
 					return EXIT;
 				} else if (check_mouse_button_event(event, restart_game_rec)) {
@@ -730,16 +644,14 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					render_game_screen(window, renderer, game, 0);
 				} else if (check_mouse_button_event(event, save_game_rec)) {
 					int num_games = get_num_games();
-					SDL_Log("num games is: %d", num_games);
 					default_save(game, num_games);
-					SDL_Log("finished saving game");
 				} else if (check_mouse_button_event(event, undo_move_rec)) {
 					game = undo_move(history, game);
-					SDL_Log("current turn is player %d", game->current_turn);
 					update_pieces_rects(game);
 					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, main_menu_rec)) {
 					game_running = false;
+					display_screen = MENU_SCREEN;
 				}
 			}
 		}
@@ -757,15 +669,17 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 			render_game_screen(window, renderer, game, history->actualSize);
 			// update history
 			update_history(comp_move, game, history);
-			SDL_Log("history's size is %d", history->actualSize);
 			destroy_move(comp_move);
+			display_screen = check_game_status(game);
+			if (display_screen == MENU_SCREEN) {
+				game_running = false;
+			}
 
 		}
 	}
 	//free all resources
 	destroy_move(new_move);
 	array_list_destroy(history);
-	SDL_Log("finished outer while loop");
 	for (int i = 0; i < 16; i++) {
 		SDL_DestroyTexture(white_grid[i].texture);
 		SDL_DestroyTexture(black_grid[i].texture);

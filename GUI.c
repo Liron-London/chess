@@ -21,8 +21,8 @@ screen set_difficulty_dialog(game* new_game);
 
 /*
  * Presents a pop-up message, asking the user to set the game's user color
- * sets the uesr color accordingly
- * returns GAME SCREEN
+ * sets the user color accordingly
+ *
  */
 screen set_user_color_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
@@ -306,13 +306,16 @@ int main() {
 			}
 		}
 
-		running = display_main_menu(window, renderer, new_game);
-		if (running == GAME_SCREEN) {
+		if (running == MENU_SCREEN) {
+			running = display_main_menu(window, renderer, new_game);
+		}
+		else if (running == GAME_SCREEN) {
 			running = game_screen(window, renderer, new_game);
 			game_destroy(new_game);
-		} else if (running == LOAD_SCREEN) {
+		}
+		else if (running == LOAD_SCREEN) {
 			running = loading_screen(window, renderer, MENU_SCREEN, new_game);
-			running = game_screen(window, renderer, new_game);
+//			running = game_screen(window, renderer, new_game);
 		}
 	}
 	//free resources
