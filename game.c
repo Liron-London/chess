@@ -308,7 +308,7 @@ void print_board(game* cur_game){
 		}
 		printf("|\n");
 	}
-	printf("  -----------------\n  ");
+	printf("  -----------------\n   ");
 	for (char c = 'A'; c <= 'H'; c++){
 		printf("%c ", c);
 	}

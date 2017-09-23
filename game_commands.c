@@ -296,11 +296,11 @@ int game_play(game* game){
 				cur_piece = location_to_piece(game, game_command->move->source);
 				move_piece(game, game_command->move, cur_piece);
 
-				print_board(game);
 				int color = current_turn_color(game);
 				if (has_valid_moves(game) == false){
 					change_turn(game);
 					if (is_check(game) == true){
+						change_turn(game);
 						announce_mate(color);
 					}
 					else{
@@ -314,6 +314,7 @@ int game_play(game* game){
 				if (is_check(game) == true){
 					announce_check(color);
 				}
+				print_board(game);
 			}
 		}
 
