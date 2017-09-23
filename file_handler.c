@@ -150,7 +150,6 @@ char* tag_finder(char* input_file_text, char* tag) {
 }
 
 int load_game(game* cur_game, char* filename) {
-	DEBUG("in load_game, filename is: %s\n", filename);
 	//strcat(filename, ".xml");
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
@@ -195,7 +194,7 @@ int load_game(game* cur_game, char* filename) {
 	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
 		print_board(cur_game);
 	}
-	game_play(cur_game);
+	// game_play(cur_game);
 	return 0;
 }
 
