@@ -22,7 +22,7 @@ void update_pieces_for_load(game* cur_game){
 	bool first_piece;
 	// UPDATE WHITES //
 
-	char white_pieces = {'r', 'n', 'b', 'q', 'k'};
+	char white_pieces[] = {'r', 'n', 'b', 'q', 'k'};
 	for (int i=0; i<5; i++){
 		first_piece = true;
 		for (int j=0; j<8;j++){
@@ -60,7 +60,7 @@ void update_pieces_for_load(game* cur_game){
 	// update blacks
 	pawn_index = 8;
 
-	char white_pieces = {'R', 'N', 'B', 'Q', 'K'};
+	char black_pieces[] = {'R', 'N', 'B', 'Q', 'K'};
 	for (int i=0; i<5; i++){
 		first_piece = true;
 		for (int j=0; j<8;j++){
