@@ -23,18 +23,18 @@ int scoring_function(game* game) {
 
 	// in case of mate give more points
 
-	if (has_valid_moves(game) == false){
-		change_turn(game);
-		if  (is_check(game) == true){
-			if (current_turn_color(game) == 1){
-				return 1000;
-			}
-			else{
-				return -1000;
-			}
-		}
-		change_turn(game);
-	}
+//	if (has_valid_moves(game) == false){
+//		change_turn(game);
+//		if  (is_check(game) == true){
+//			if (current_turn_color(game) == 1){
+//				return 1000;
+//			}
+//			else{
+//				return -1000;
+//			}
+//		}
+//		change_turn(game);
+//	}
 
 	for (int i = 0; i < 16; i++) {
 
