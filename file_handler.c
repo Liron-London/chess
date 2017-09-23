@@ -18,72 +18,81 @@ void update_pieces_for_load(game* cur_game){
 		cur_game->blacks[i]->alive = 0;
 	}
 
-	int white_index = 0;
-	int black_index = 0;
-
+	int pawn_index = 8;
+	bool first_piece;
 	// UPDATE WHITES //
 
-	// loop over the board
-	for (int i=0; i<8; i++){
+	char white_pieces[] = {'r', 'n', 'b', 'q', 'k'};
+	for (int i=0; i<5; i++){
+		first_piece = true;
 		for (int j=0; j<8;j++){
-			// check if there is a tool in the every location
-			if (cur_game->board[i][j] != EMPTY_ENTRY){
-				if (cur_game->board[i][j] > 'a'){
-					// check if white king
-					if (cur_game->board[i][j] != 'k'){
-						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
-						cur_game->whites[white_index]->alive = 1;
-						cur_game->whites[white_index]->piece_location->row = i;
-						cur_game->whites[white_index]->piece_location->column = j;
-						// we must not change whites[4] - it reserved for the king
-						if (white_index != 3){
-							white_index += 1;
-						}
-						else{
-							white_index += 2;
-						}
+			for (int k=0; k<8; k++){
+				if (cur_game->board[j][k] == white_pieces[i]){
+					if (first_piece){
+						cur_game->whites[i]->piece_type = cur_game->board[j][k];
+						cur_game->whites[i]->alive = 1;
+						cur_game->whites[i]->piece_location->row = j;
+						cur_game->whites[i]->piece_location->column = k;
+						first_piece = false;
 					}
-					// check other pieces
 					else{
-						cur_game->whites[4]->piece_type = 'k';
-						cur_game->whites[4]->alive = 1;
-						cur_game->whites[4]->piece_location->row = i;
-						cur_game->whites[4]->piece_location->column = j;
+						cur_game->whites[7-i]->piece_type = cur_game->board[j][k];
+						cur_game->whites[7-i]->alive = 1;
+						cur_game->whites[7-i]->piece_location->row = j;
+						cur_game->whites[7-i]->piece_location->column = k;
 					}
 				}
 			}
 		}
 	}
 
-	// UPDATE BLACKS //
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			if (cur_game->board[i][j] == 'm'){
+				cur_game->whites[pawn_index]->piece_type = 'm';
+				cur_game->whites[pawn_index]->alive = 1;
+				cur_game->whites[pawn_index]->piece_location->row = i;
+				cur_game->whites[pawn_index]->piece_location->column = j;
+				pawn_index += 1;
+			}
+		}
+	}
 
-	for (int i=0; i<8; i++){
+	// update blacks
+	pawn_index = 8;
+
+	char black_pieces[] = {'R', 'N', 'B', 'Q', 'K'};
+	for (int i=0; i<5; i++){
+		first_piece = true;
 		for (int j=0; j<8;j++){
-			// check if there is a tool in the every location
-			if (cur_game->board[i][j] != EMPTY_ENTRY){
-				if (cur_game->board[i][j] < 'a'){
-					// check if black king
-					if (cur_game->board[i][j] != 'K'){
-						cur_game->blacks[black_index]->piece_type = cur_game->board[i][j];
-						cur_game->blacks[black_index]->alive = 1;
-						cur_game->blacks[black_index]->piece_location->row = i;
-						cur_game->blacks[black_index]->piece_location->column = j;
-						// we must not change blacks[4] - it reserved for the king
-						if (black_index != 3){
-							black_index += 1;
-						}
-						else{
-							black_index += 2;
-						}
+			for (int k=0; k<8; k++){
+				if (cur_game->board[j][k] == black_pieces[i]){
+					if (first_piece){
+						cur_game->blacks[i]->piece_type = cur_game->board[j][k];
+						cur_game->blacks[i]->alive = 1;
+						cur_game->blacks[i]->piece_location->row = j;
+						cur_game->blacks[i]->piece_location->column = k;
+						first_piece = false;
 					}
-					// check other pieces
 					else{
-						cur_game->blacks[4]->piece_type = 'K';
-						cur_game->blacks[4]->alive = 1;
-						cur_game->blacks[4]->piece_location->row = i;
-						cur_game->blacks[4]->piece_location->column = j;
+						cur_game->blacks[7-i]->piece_type = cur_game->board[j][k];
+						cur_game->blacks[7-i]->alive = 1;
+						cur_game->blacks[7-i]->piece_location->row = j;
+						cur_game->blacks[7-i]->piece_location->column = k;
 					}
 				}
+			}
+		}
+	}
+
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			if (cur_game->board[i][j] == 'M'){
+				cur_game->blacks[pawn_index]->piece_type = 'M';
+				cur_game->blacks[pawn_index]->alive = 1;
+				cur_game->blacks[pawn_index]->piece_location->row = i;
+				cur_game->blacks[pawn_index]->piece_location->column = j;
+				pawn_index += 1;
 			}
 		}
 	}
@@ -150,7 +159,6 @@ char* tag_finder(char* input_file_text, char* tag) {
 }
 
 int load_game(game* cur_game, char* filename) {
-	DEBUG("in load_game, filename is: %s\n", filename);
 	//strcat(filename, ".xml");
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
@@ -192,88 +200,11 @@ int load_game(game* cur_game, char* filename) {
 	}
 	update_pieces_for_load(cur_game);
 
-	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
-		print_board(cur_game);
-	}
-	game_play(cur_game);
+//	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
+//		print_board(cur_game);
+//	}
+	// game_play(cur_game);
 	return 0;
-}
-
-int gui_load_game(game* cur_game, char* filename) {
-	DEBUG("in load_game, filename is: %s\n", filename);
-	//strcat(filename, ".xml");
-	FILE* fp = fopen(filename, "r");
-	if (fp == NULL) {
-		printf("Error: File doesn't exist or cannot be opened\n"); //TODO: message instead of print
-		return 1;
-	}
-	char input_file_text[50];
-	char* tag_content;
-
-	fgets(input_file_text, 50, fp); // gets the formatting line
-	fgets(input_file_text, 50, fp); // gets the <game> line
-	fgets(input_file_text, 50, fp); // gets the <current_turn> line
-	tag_content = tag_finder(input_file_text, "current_turn");
-	cur_game->current_turn = atoi(tag_content);
-
-	fgets(input_file_text, 50, fp); // gets the <game_mode> line
-	tag_content = tag_finder(input_file_text, "game_mode");
-	cur_game->game_mode = atoi(tag_content);
-
-	fgets(input_file_text, 50, fp); // gets the <difficulty> line
-	tag_content = tag_finder(input_file_text, "difficulty");
-	cur_game->difficulty = atoi(tag_content);
-
-	fgets(input_file_text, 50, fp); // gets the <user_color> line
-	tag_content = tag_finder(input_file_text, "user_color");
-	cur_game->user_color = atoi(tag_content);
-
-	fgets(input_file_text, 50, fp); // gets the <board> line
-
-	// fill board
-	for (int i = 8; i >= 1; i--) {
-	fgets(input_file_text, 50, fp); // gets the <row_i> line
-		char row_x[5];
-		sprintf(row_x, "row_%d", i);
-		tag_content = tag_finder(input_file_text, row_x);
-		for (int j = 0; j <= 7; j++) {
-			cur_game->board[i-1][j] = tag_content[j];
-		}
-	}
-	update_pieces_for_load(cur_game);
-	return 0;
-}
-
-void generate_filename(int index, char* filename) {
-	sprintf(filename, "chess_game_%c", index + '0');
-
-//	printf("In generate_filename\n");
-//	strcpy(filename, "chess_game_");
-//	char idx[2] = {index + '0', '\0'};
-//	printf("before strcat\n");
-//	strcat(filename, idx);
-	printf("filename is %s\n", filename);
-}
-
-/*
- * called in case 5 games are saved, save the new game to chess_game_0 and shift all the others
- */
-void default_save(game* game, int num_games){
-	save_game(game, "tmp_game");
-	char filename[13];
-
-	for (int i=num_games; i > 0 ;i--){
-		generate_filename(i, filename);
-		gui_load_game(game, filename);
-		if (num_games < 5){
-			generate_filename(i+1, filename);
-			save_game(game, filename);
-		}
-	}
-
-	gui_load_game(game, "tmp_game");
-	generate_filename(1, filename);
-	save_game(game, filename);
 }
 
 int get_num_games(){

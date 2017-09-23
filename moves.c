@@ -575,7 +575,6 @@ void valid_moves(location** valid_locs, game* cur_game, piece* cur_piece) {
 	if (type == WHITE_KING || type == BLACK_KING){
 		king_valid_moves(valid_locs, cur_game, cur_piece);
 	}
-	DEBUG("ERROR IN VALID MOVES");
 }
 
 void announce_invalid_move() {

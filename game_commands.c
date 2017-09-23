@@ -145,9 +145,8 @@ void announce_undo_move(int player, move* tmp_move) {
 	dst_col = tmp_move->dest->column+'A';
 	src_row = tmp_move->source->row+1;
 	src_col = tmp_move->source->column+'A';
-	printf("Undo move for player %s : <%d, %c> -> <%d, %c>\n",
+	printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
 			player_color, dst_row, dst_col, src_row, src_col);
-
 }
 
 
