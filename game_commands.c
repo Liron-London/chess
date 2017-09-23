@@ -53,12 +53,12 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
 		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
 		//check for invalid move parameters
-		if (game_command->move->source == NULL ||
-				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
-				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
-			announce_invalid_location();
-			game_command->validArg = false;
-		}
+//		if (game_command->move->source == NULL ||
+//				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
+//				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
+//			announce_invalid_location();
+//			game_command->validArg = false;
+//		}
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
@@ -118,6 +118,10 @@ void ask_for_move(game* cur_game) {
 	} else {
 		printf("black player - enter your move:\n");
 	}
+}
+
+void announce_invalid_location() {
+	printf("Invalid position on the board\n");
 }
 
 void announce_empty_history() {
@@ -183,9 +187,6 @@ void announce_reset() {
 	printf("Restarting...\n");
 }
 
-void announce_invalid_location() {
-	printf("Invalid position on the board\n");
-}
 
 void announce_mate(int color) {
 	color = (color + 1) % 2;
@@ -300,8 +301,9 @@ int game_play(game* game){
 				if (has_valid_moves(game) == false){
 					change_turn(game);
 					if (is_check(game) == true){
-						change_turn(game);
+						color = current_turn_color(game);
 						announce_mate(color);
+						change_turn(game);
 					}
 					else{
 						announce_tie();
@@ -310,10 +312,12 @@ int game_play(game* game){
 					game_command_destroy(game_command);
 					break;
 				}
-
+				change_turn(game);
 				if (is_check(game) == true){
+					color = current_turn_color(game);
 					announce_check(color);
 				}
+				change_turn(game);
 				print_board(game);
 			}
 		}
