@@ -25,8 +25,7 @@
 #define ORIGIN_X (72)
 #define ORIGIN_Y (527)
 //old ORIGIN_Y = 463
-// speed in pixels/second
-#define SPEED (300)
+
 SDL_Rect restart_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
 SDL_Rect save_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
 SDL_Rect load_game_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
@@ -36,6 +35,159 @@ SDL_Rect quit_rec = { .x = 0, .y = 30, .w = 600, .h = 600};
 SDL_Rect game_board_rec = { .x = 0, .y = 0, .w = 600, .h = 600};
 gui_piece white_grid[16];
 gui_piece black_grid[16];
+
+screen popup_mate(int color) {
+	SDL_Log("in popup mate");
+	char message[40];
+	if (color == 1) {
+		sprintf(message, "Game over - white player wins the game!");
+	} else {
+		sprintf(message, "Game over - black player wins the game!");
+	}
+
+	const SDL_MessageBoxButtonData buttons[] = {
+			{ /* .flags, .buttonid, .text */        0, 0, "OK"}
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+			{ /* .colors (.r, .g, .b) */
+					/* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+					{255, 255, 255},
+					/* [SDL_MESSAGEBOX_COLOR_TEXT] */
+					{50, 50, 50},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+					{153, 255, 255}
+			}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION, /* .flags */
+			NULL, /* .window */
+			"Game Over", /* .title */
+			message, /* .message */
+			SDL_arraysize(buttons), /* .numbuttons */
+			buttons, /* .buttons */
+			&colorScheme /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		SDL_Log("error displaying message box");
+		return EXIT;
+	} else if (buttonid == 0) {
+		return EXIT;
+	}
+	return GAME_SCREEN;
+}
+
+screen popup_tie() {
+	SDL_Log("in popup tie");
+	const SDL_MessageBoxButtonData buttons[] = {
+			{ /* .flags, .buttonid, .text */        0, 0, "OK"}
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+			{ /* .colors (.r, .g, .b) */
+					/* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+					{255, 255, 255},
+					/* [SDL_MESSAGEBOX_COLOR_TEXT] */
+					{50, 50, 50},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+					{153, 255, 255}
+			}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION, /* .flags */
+			NULL, /* .window */
+			"Game Over", /* .title */
+			"The game ends in a tie", /* .message */
+			SDL_arraysize(buttons), /* .numbuttons */
+			buttons, /* .buttons */
+			&colorScheme /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		SDL_Log("error displaying message box");
+		return EXIT;
+	} else if (buttonid == 0) {
+		return EXIT;
+	}
+	return GAME_SCREEN;
+}
+
+screen popup_check(int color) {
+	SDL_Log("in popup check");
+	char message[40];
+	if (color == 1) {
+		sprintf(message, "Check: white King is threatened!");
+	} else {
+		sprintf(message, "Check: black King is threatened!");
+	}
+
+	const SDL_MessageBoxButtonData buttons[] = {
+			{ /* .flags, .buttonid, .text */        0, 0, "OK"}
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+			{ /* .colors (.r, .g, .b) */
+					/* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+					{255, 255, 255},
+					/* [SDL_MESSAGEBOX_COLOR_TEXT] */
+					{50, 50, 50},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+					{153, 255, 255}
+			}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION, /* .flags */
+			NULL, /* .window */
+			"Game Over", /* .title */
+			message, /* .message */
+			SDL_arraysize(buttons), /* .numbuttons */
+			buttons, /* .buttons */
+			&colorScheme /* .colorScheme */
+	};
+	SDL_Log("message is: %s", message);
+
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		SDL_Log("error displaying message box");
+		return EXIT;
+//	} else if (buttonid == 0) {
+//		return GAME_SCREEN;
+	}
+	return GAME_SCREEN;
+}
+
+/*
+ * checks for check / mate / tie
+ * displays popup message if needed
+ * returns EXIT screen if mate or tie, GAME_SCREEN if check or none
+ */
+screen check_game_status(game* game) {
+	screen display_screen = GAME_SCREEN;
+	int color = current_turn_color(game);
+	if (has_valid_moves(game) == false) {
+		if (is_check(game) == true) {
+			display_screen = popup_mate(color);
+		}
+		else {
+			display_screen = popup_tie();
+		}
+	}
+
+	if (is_check(game)) {
+		display_screen = popup_check((color + 1)%2);
+	}
+	return display_screen;
+}
 
 game* undo_move (array_list* history, game* game) {
 	if (history->actualSize == 0) {
@@ -165,6 +317,33 @@ int update_pieces_rects(game* cur_game) {
 	return 0;
 }
 
+
+////////////////////////////////////////////////////
+//int update_pieces_rects(game* cur_game) {
+//	int x_0 = ORIGIN_X;
+//	int y_0 = ORIGIN_Y - CELL_HEIGHT;
+//	int white_idx = 0;
+//	int black_idx = 0;
+//
+//	for (int i = 0; i < 8; i++) {
+//		for (int j = 0; j < 8; j++) {
+//			char cur_piece = cur_game->board[i][j];
+//			//whites
+//			if (cur_piece > 'a') {
+//				white_grid[white_idx] = location_to_piece();
+//			}
+//		}
+//	}
+//	return 0;
+//}
+/////////////////////////////////////////////////////
+
+
+
+
+/*
+ * updates the source param to contain the row&column the cursor is positioned on
+ */
 void mouse_location_on_board(int mouse_x, int mouse_y, location* source) {
 	//	SDL_Log("Mouse coordinates are x=%d, y=%d", mouse_x, mouse_y);
 	source->row = (ORIGIN_Y - mouse_y) / CELL_HEIGHT;
@@ -172,6 +351,9 @@ void mouse_location_on_board(int mouse_x, int mouse_y, location* source) {
 //	SDL_Log("Mouse location is row=%d, col=%d", source->row, source->column);
 }
 
+/*
+ * makes the rectangle that was clicked on follow the cursor
+ */
 screen draw_piece(SDL_Window* window, SDL_Renderer* renderer, gui_piece* guipiece, char* filename) {
 	char fullpath[50];
 	char* directory = "./images/Diagramkit V2-5/Figurines/";
@@ -251,175 +433,88 @@ screen initialize_pieces(SDL_Window* window, SDL_Renderer* renderer){
 
 
 screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer, int history_size) {
-	//Load RESTART GAME button image as surface
+	screen display_screen = GAME_SCREEN;
+
+	//RESTART GAME
 	SDL_Surface* restart_game_surface = SDL_LoadBMP("./images/game buttons/button-restart.bmp");
-	if (!restart_game_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, restart_game_surface, GAME_SCREEN);
 
-	//Create RESTART GAME texture from surface
 	SDL_Texture* restart_game_texture = SDL_CreateTextureFromSurface(renderer, restart_game_surface);
-	if (!restart_game_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(restart_game_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, restart_game_surface, restart_game_texture, GAME_SCREEN);
 
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(restart_game_texture, NULL, NULL, &restart_game_rec.w, &restart_game_rec.h);
 	restart_game_rec.w /=3;
 	restart_game_rec.h /=3;
 	restart_game_rec.x = SCREEN_WIDTH - restart_game_rec.w;
 	restart_game_rec.y = (restart_game_rec.h) + 30;
 
-	//Load SAVE GAME button image as surface
+
+	//SAVE GAME
 	SDL_Surface* save_game_surface = SDL_LoadBMP("./images/game buttons/button-save.bmp");
-	if (!save_game_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, save_game_surface, GAME_SCREEN);
 
-	//Create SAVE GAME texture from surface
 	SDL_Texture* save_game_texture = SDL_CreateTextureFromSurface(renderer, save_game_surface);
-	if (!save_game_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(save_game_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, save_game_surface, save_game_texture, GAME_SCREEN);
 
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(save_game_texture, NULL, NULL, &save_game_rec.w, &save_game_rec.h);
 	save_game_rec.w /=3;
 	save_game_rec.h /=3;
 	save_game_rec.x = SCREEN_WIDTH - save_game_rec.w;
 	save_game_rec.y = (restart_game_rec.y + restart_game_rec.h) + 15;
 
-	//Load LOAD GAME button image as surface
+
+	//LOAD GAME
 	SDL_Surface* load_game_surface = SDL_LoadBMP("./images/game buttons/button-load-game.bmp");
-	if (!load_game_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, load_game_surface, GAME_SCREEN);
 
-	//Create SAVE GAME texture from surface
 	SDL_Texture* load_game_texture = SDL_CreateTextureFromSurface(renderer, load_game_surface);
-	if (!load_game_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(load_game_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, load_game_surface, load_game_texture, GAME_SCREEN);
 
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(load_game_texture, NULL, NULL, &load_game_rec.w, &load_game_rec.h);
 	load_game_rec.w /=3;
 	load_game_rec.h /=3;
 	load_game_rec.x = SCREEN_WIDTH - load_game_rec.w;
 	load_game_rec.y = (save_game_rec.y + save_game_rec.h) + 15;
 
-	//Load UNDO MOVE button image as surface
+
+	//UNDO MOVE
 	SDL_Surface* undo_move_surface;
 	if (history_size > 0) {
 		undo_move_surface = SDL_LoadBMP("./images/game buttons/button-undo-move.bmp");
 	} else {
 		undo_move_surface = SDL_LoadBMP("./images/game buttons/undo-disabled-button.bmp");
 	}
-	if (!undo_move_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, undo_move_surface, GAME_SCREEN);
 
-	//Create UNDO MOVE texture from surface
 	SDL_Texture* undo_move_texture = SDL_CreateTextureFromSurface(renderer, undo_move_surface);
-	if (!undo_move_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(undo_move_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, undo_move_surface, undo_move_texture, GAME_SCREEN);
 
-	//Create rectangle
-
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(undo_move_texture, NULL, NULL, &undo_move_rec.w, &undo_move_rec.h);
 	undo_move_rec.w /=3;
 	undo_move_rec.h /=3;
 	undo_move_rec.x = SCREEN_WIDTH - undo_move_rec.w;
 	undo_move_rec.y = (load_game_rec.y + load_game_rec.h) + 15;
 
-	//Load MAIN MENU button image as surface
+	//MAIN MENU
 	SDL_Surface* main_menu_surface = SDL_LoadBMP("./images/game buttons/button-main-menu.bmp");
-	if (!main_menu_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, main_menu_surface, GAME_SCREEN);
 
-	//Create MAIN MENU texture from surface
 	SDL_Texture* main_menu_texture = SDL_CreateTextureFromSurface(renderer, main_menu_surface);
-	if (!main_menu_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(main_menu_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, main_menu_surface, main_menu_texture, GAME_SCREEN);
 
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(main_menu_texture, NULL, NULL, &main_menu_rec.w, &main_menu_rec.h);
 	main_menu_rec.w /=3;
 	main_menu_rec.h /=3;
 	main_menu_rec.x = SCREEN_WIDTH - main_menu_rec.w;
 	main_menu_rec.y = (undo_move_rec.y + undo_move_rec.h) + 15;
 
-	//Load QUIT button image as surface
+	//QUIT
 	SDL_Surface* quit_surface = SDL_LoadBMP("./images/game buttons/button-quit.bmp");
-	if (!quit_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, quit_surface, GAME_SCREEN);
 
-	//Create MAIN MENU texture from surface
 	SDL_Texture* quit_texture = SDL_CreateTextureFromSurface(renderer, quit_surface);
-	if (!quit_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(quit_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, quit_surface, quit_texture, GAME_SCREEN);
 
-	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(quit_texture, NULL, NULL, &quit_rec.w, &quit_rec.h);
 	quit_rec.w /=3;
 	quit_rec.h /=3;
@@ -439,33 +534,20 @@ screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer, int hist
 
 	SDL_RenderCopy(renderer, quit_texture, NULL, &quit_rec);
 
-	//show what was drawn on screen
-	//	SDL_RenderPresent(renderer);
-
-	return GAME_SCREEN;
+	return display_screen;
 }
 
-
+/*
+ * displays the game board
+ */
 screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
+	screen display_screen = GAME_SCREEN;
 	SDL_Surface* game_board_surface = SDL_LoadBMP("./images/Diagramkit V2-5/Boards & Arrays/empty-numbered-chess-set.bmp");
-	if (!game_board_surface) {
-		printf("Error creating SDL surface: %s\n", SDL_GetError());
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_surface(window, renderer, game_board_surface, GAME_SCREEN);
 
 	//Create RESTART GAME texture from surface
 	SDL_Texture* game_board_texture = SDL_CreateTextureFromSurface(renderer, game_board_surface);
-	if (!game_board_texture) {
-		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(game_board_surface);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return EXIT;
-	}
+	display_screen = verify_texture(window, renderer, game_board_surface, game_board_texture, GAME_SCREEN);
 
 	//updates the rectangle to fit the texture dimensions
 	SDL_QueryTexture(game_board_texture, NULL, NULL, &game_board_rec.w, &game_board_rec.h);
@@ -474,7 +556,7 @@ screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
 
 	SDL_RenderCopy(renderer, game_board_texture, NULL, &game_board_rec);
 	//	SDL_RenderPresent(renderer);
-	return GAME_SCREEN;
+	return display_screen;
 }
 
 /*
@@ -524,7 +606,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				game_running = false;
 				return EXIT;
 			case SDL_MOUSEBUTTONDOWN:
-				SDL_Log("button down event");
 				mouse_x = event.button.x;
 				mouse_y = event.button.y;
 				if (mouse_x <= BOARD_WIDTH && mouse_y <= BOARD_HEIGHT && click == false) {
@@ -552,7 +633,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 				break;
 			case SDL_MOUSEBUTTONUP:
 				click = false;
-				SDL_Log("button up event");
 				//checking if mouse was released within game board
 				mouse_x = event.button.x;
 				mouse_y = event.button.y;
@@ -567,12 +647,13 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 						}
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
-						print_board(game);
-						// update history
+						print_board(game); //DEBUG
+						display_screen = check_game_status(game);
 					}
 					update_pieces_rects(game);
 					render_game_screen(window, renderer, game, history->actualSize);
 				}
+
 				//checking buttons
 				else if (check_mouse_button_event(event, quit_rec)) {
 					SDL_Log("clicked on QUIT");

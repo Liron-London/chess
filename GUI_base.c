@@ -30,9 +30,9 @@ screen verify_surface(SDL_Window* window, SDL_Renderer* renderer, SDL_Surface* s
 }
 
 screen verify_texture(SDL_Window* window, SDL_Renderer* renderer, SDL_Surface* surface, SDL_Texture* texture, screen cur_screen) {
+	SDL_FreeSurface(surface);
 	if (!texture) {
 		printf("Error creating SDL texture: %s\n", SDL_GetError());
-		SDL_FreeSurface(surface);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
