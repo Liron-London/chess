@@ -53,12 +53,12 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
 		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
 		//check for invalid move parameters
-		if (game_command->move->source == NULL ||
-				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
-				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
-			announce_invalid_location();
-			game_command->validArg = false;
-		}
+//		if (game_command->move->source == NULL ||
+//				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
+//				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
+//			announce_invalid_location();
+//			game_command->validArg = false;
+//		}
 
 		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
@@ -114,10 +114,14 @@ void ask_for_move(game* cur_game) {
 	//player 1's turn, player 1 is white OR player 2's turn, player 1 is black
 	if ((cur_game->current_turn == 1 && cur_game->user_color == 1) ||
 			(cur_game->current_turn == 0 && cur_game->user_color == 0)) {
-		printf("White player - enter your move:\n");
+		printf("white player - enter your move:\n");
 	} else {
-		printf("Black player - enter your move:\n");
+		printf("black player - enter your move:\n");
 	}
+}
+
+void announce_invalid_location() {
+	printf("Invalid position on the board\n");
 }
 
 void announce_empty_history() {
@@ -183,9 +187,6 @@ void announce_reset() {
 	printf("Restarting...\n");
 }
 
-void announce_invalid_location() {
-	printf("Invalid position on the board\n");
-}
 
 void announce_mate(int color) {
 	color = (color + 1) % 2;
@@ -296,11 +297,13 @@ int game_play(game* game){
 				cur_piece = location_to_piece(game, game_command->move->source);
 				move_piece(game, game_command->move, cur_piece);
 
-				print_board(game);
 				int color = current_turn_color(game);
 				if (has_valid_moves(game) == false){
+					change_turn(game);
 					if (is_check(game) == true){
+						color = current_turn_color(game);
 						announce_mate(color);
+						change_turn(game);
 					}
 					else{
 						announce_tie();
@@ -309,10 +312,13 @@ int game_play(game* game){
 					game_command_destroy(game_command);
 					break;
 				}
-
+				change_turn(game);
 				if (is_check(game) == true){
+					color = current_turn_color(game);
 					announce_check(color);
 				}
+				change_turn(game);
+				print_board(game);
 			}
 		}
 

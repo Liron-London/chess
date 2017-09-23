@@ -302,16 +302,17 @@ void print_board(game* cur_game){
 		return ;
 
 	for (int i=8; i>=1; i--){
-		printf("%d|", i);
+		printf("%d| ", i);
 		for (int j=0; j<8 ; j++){
 			printf("%c ", cur_game->board[i-1][j]);
 		}
 		printf("|\n");
 	}
-	printf("  -----------------\n  ");
-	for (char c = 'A'; c <= 'H'; c++){
+	printf("  -----------------\n   ");
+	for (char c = 'A'; c <= 'G'; c++){
 		printf("%c ", c);
 	}
+	printf("H");
 	printf("\n");
 }
 

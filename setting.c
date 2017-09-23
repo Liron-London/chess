@@ -143,13 +143,19 @@ char* ask_for_settings(char* command_text) {
 	return command_text;
 }
 
+void ask_for_settings2(){
+	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
+}
+
 int set_game() {
 	game* new_game = game_create();
 	Command* command = create_command();
+	ask_for_settings2();
 	while(true) {
 
 		char* command_text = malloc(1024 * sizeof(char));
-		ask_for_settings(command_text);
+		scanf(" %1024[^\n]", command_text);
+		// ask_for_settings(command_text);
 		char command_param[100];
 		parse_line(command_text, command, command_param);
 
