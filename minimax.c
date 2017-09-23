@@ -135,6 +135,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
+					printf("new score is: %d", new_score);
 
 					game_destroy(tmp_game);
 
