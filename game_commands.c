@@ -229,7 +229,6 @@ int game_play(game* game){
 			destroy_move(comp_move);
 			int color = current_turn_color(game);
 			if (has_valid_moves(game) == false){
-				change_turn(game);
 				if (is_check(game) == true){
 					announce_mate(color);
 				}
@@ -300,6 +299,7 @@ int game_play(game* game){
 				print_board(game);
 				int color = current_turn_color(game);
 				if (has_valid_moves(game) == false){
+					change_turn(game);
 					if (is_check(game) == true){
 						announce_mate(color);
 					}
