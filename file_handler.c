@@ -18,72 +18,79 @@ void update_pieces_for_load(game* cur_game){
 		cur_game->blacks[i]->alive = 0;
 	}
 
-	int white_index = 0;
-	int black_index = 0;
-
+	int pawn_index = 8;
+	bool first_piece;
 	// UPDATE WHITES //
 
-	// loop over the board
-	for (int i=0; i<8; i++){
+	char white_pieces = {'r', 'n', 'b', 'q', 'k'};
+	for (int i=0; i<5; i++){
+		first_piece = true;
 		for (int j=0; j<8;j++){
-			// check if there is a tool in the every location
-			if (cur_game->board[i][j] != EMPTY_ENTRY){
-				if (cur_game->board[i][j] > 'a'){
-					// check if white king
-					if (cur_game->board[i][j] != 'k'){
-						cur_game->whites[white_index]->piece_type = cur_game->board[i][j];
-						cur_game->whites[white_index]->alive = 1;
-						cur_game->whites[white_index]->piece_location->row = i;
-						cur_game->whites[white_index]->piece_location->column = j;
-						// we must not change whites[4] - it reserved for the king
-						if (white_index != 3){
-							white_index += 1;
-						}
-						else{
-							white_index += 2;
-						}
+			for (int k=0; k<8; k++){
+				if (cur_game->board[j][k] == white_pieces[i]){
+					if (first_piece){
+						cur_game->whites[i]->piece_type = cur_game->board[j][k];
+						cur_game->whites[i]->alive = 1;
+						cur_game->whites[i]->piece_location->row = j;
+						cur_game->whites[i]->piece_location->column = k;
 					}
-					// check other pieces
 					else{
-						cur_game->whites[4]->piece_type = 'k';
-						cur_game->whites[4]->alive = 1;
-						cur_game->whites[4]->piece_location->row = i;
-						cur_game->whites[4]->piece_location->column = j;
+						cur_game->whites[7-i]->piece_type = cur_game->board[j][k];
+						cur_game->whites[7-i]->alive = 1;
+						cur_game->whites[7-i]->piece_location->row = j;
+						cur_game->whites[7-i]->piece_location->column = k;
 					}
 				}
 			}
 		}
 	}
 
-	// UPDATE BLACKS //
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			if (cur_game->board[i][j] == 'm'){
+				cur_game->whites[pawn_index]->piece_type = 'm';
+				cur_game->whites[i]->alive = 1;
+				cur_game->whites[i]->piece_location->row = i;
+				cur_game->whites[i]->piece_location->column = j;
+				pawn_index += 1;
+			}
+		}
+	}
 
-	for (int i=0; i<8; i++){
+	// update blacks
+	pawn_index = 8;
+
+	char white_pieces = {'R', 'N', 'B', 'Q', 'K'};
+	for (int i=0; i<5; i++){
+		first_piece = true;
 		for (int j=0; j<8;j++){
-			// check if there is a tool in the every location
-			if (cur_game->board[i][j] != EMPTY_ENTRY){
-				if (cur_game->board[i][j] < 'a'){
-					// check if black king
-					if (cur_game->board[i][j] != 'K'){
-						cur_game->blacks[black_index]->piece_type = cur_game->board[i][j];
-						cur_game->blacks[black_index]->alive = 1;
-						cur_game->blacks[black_index]->piece_location->row = i;
-						cur_game->blacks[black_index]->piece_location->column = j;
-						// we must not change blacks[4] - it reserved for the king
-						if (black_index != 3){
-							black_index += 1;
-						}
-						else{
-							black_index += 2;
-						}
+			for (int k=0; k<8; k++){
+				if (cur_game->board[j][k] == black_pieces[i]){
+					if (first_piece){
+						cur_game->blacks[i]->piece_type = cur_game->board[j][k];
+						cur_game->blacks[i]->alive = 1;
+						cur_game->blacks[i]->piece_location->row = j;
+						cur_game->blacks[i]->piece_location->column = k;
 					}
-					// check other pieces
 					else{
-						cur_game->blacks[4]->piece_type = 'K';
-						cur_game->blacks[4]->alive = 1;
-						cur_game->blacks[4]->piece_location->row = i;
-						cur_game->blacks[4]->piece_location->column = j;
+						cur_game->blacks[7-i]->piece_type = cur_game->board[j][k];
+						cur_game->blacks[7-i]->alive = 1;
+						cur_game->blacks[7-i]->piece_location->row = j;
+						cur_game->blacks[7-i]->piece_location->column = k;
 					}
 				}
+			}
+		}
+	}
+
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			if (cur_game->board[i][j] == 'M'){
+				cur_game->blacks[pawn_index]->piece_type = 'M';
+				cur_game->blacks[i]->alive = 1;
+				cur_game->blacks[i]->piece_location->row = i;
+				cur_game->blacks[i]->piece_location->column = j;
+				pawn_index += 1;
 			}
 		}
 	}
