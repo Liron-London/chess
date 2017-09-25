@@ -317,7 +317,9 @@ int game_play(game* game){
 					announce_check(color);
 				}
 				change_turn(game);
-				// print_board(game);
+				if (game->game_mode == 2){
+					print_board(game);
+				}
 			}
 		}
 
