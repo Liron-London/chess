@@ -61,6 +61,7 @@ game_command_unitest.o: game.c game.h setting.c setting.h array_list.c array_lis
 	$(CC) $(COMP_FLAG) -c $*.c
 
 GUI_base.o: GUI_base.c GUI_base.h 
+	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 GUI.o: GUI.c GUI.h game.c game.h GUI_base.h GUI_base.c GUI_load.c GUI_load.h
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 GUI_display_game.o: GUI_display_game.c GUI_display_game.h GUI_base.h GUI_base.c
