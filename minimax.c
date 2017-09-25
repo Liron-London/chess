@@ -135,8 +135,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
-					printf("new score is: %d", new_score);
-
+,
 					game_destroy(tmp_game);
 
 					if (tmp_best_move->source->row == -1 || new_score > tmp_score){
@@ -206,7 +205,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
-					new_score = alphabeta(tmp_game, depth-1, alpha, beta, true, best_move);
+ch					new_score = alphabeta(tmp_game, depth-1, alpha, beta, true, best_move);
 
 					game_destroy(tmp_game);
 
@@ -262,13 +261,11 @@ move* get_recommended_move_for_comp(game* game, int depth){
 	// user is black
 	if (game->user_color == 0){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
-		printf("comp run max\n");
 	}
 
 	// user is white
 	if (game->user_color == 1){
 		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
-		printf("comp run min\n");
 	}
 	return comp_move;
 }
