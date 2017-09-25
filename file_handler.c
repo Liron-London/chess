@@ -97,9 +97,10 @@ void update_pieces_for_load(game* cur_game){
 		}
 	}
 }
-
+/*
+ * save game object to a file - no extension is added!
+ */
 int save_game(game* cur_game, char* filename) {
-	//strcat(filename, ".xml");
 	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
@@ -132,29 +133,24 @@ int save_game(game* cur_game, char* filename) {
 	return 0;
 }
 
+/*
+ * finds the string in a tag in a save game
+ */
 char* tag_finder(char* input_file_text, char* tag) {
 //	int tag_len = strlen(tag);
 	char open_tag[30], close_tag[30];
 
-	DEBUG2("Input file text: %s\n", input_file_text);
-
 	sprintf(open_tag, "<%s>", tag);
 	sprintf(close_tag, "</%s>", tag);
-
-	DEBUG2("open tag is %s, close tag is %s\n", open_tag, close_tag);
 
 	char* content_start = strstr(input_file_text, ">");
 	char* content_end = strstr(input_file_text, "</");
 
-	DEBUG2("content_start is %s, content_end is %s\n", content_start, content_end);
-
 	int len = (int)(content_end - content_start) - 1;
 
-	DEBUG2("Content length is %d\n", len);
 	char* content = malloc((len + 1)* sizeof(char));
 	strncpy(content, content_start+1, len);
 	content[len] = '\0';
-	DEBUG2("Content is %s\n", content);
 	return content;
 }
 
