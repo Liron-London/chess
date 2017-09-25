@@ -7,7 +7,7 @@
 
 #ifndef GUI_BASE_H_
 #define GUI_BASE_H_
-#include <SDL2/SDL.h>
+#include "SDL.h"
 #include "game.h"
 
 #define SCREEN_WIDTH (800)
