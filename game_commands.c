@@ -153,28 +153,28 @@ void announce_undo_move(int player, move* tmp_move) {
 void announce_computer_move(game* game, move* move){
 	char piece_type = location_to_piece(game, move->source)->piece_type;
 	if (piece_type == 'm' || piece_type == 'M'){
-		printf("Computer: move pawn at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move pawn at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'n' || piece_type == 'N'){
-		printf("Computer: move knight at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move knight at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'b' || piece_type == 'B'){
-		printf("Computer: move bishop at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move bishop at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'q' || piece_type == 'Q'){
-		printf("Computer: move queen at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move queen at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'k' || piece_type == 'K'){
-		printf("Computer: move king at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move king at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'r' || piece_type == 'R'){
-		printf("Computer: move rook at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move rook at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 }
 
@@ -317,7 +317,7 @@ int game_play(game* game){
 					announce_check(color);
 				}
 				change_turn(game);
-				print_board(game);
+				// print_board(game);
 			}
 		}
 
