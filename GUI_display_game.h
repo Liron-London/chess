@@ -8,7 +8,7 @@
 #ifndef GUI_DISPLAY_GAME_H_
 #define GUI_DISPLAY_GAME_H_
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 typedef struct gui_piece_t {
 	SDL_Rect rect;
