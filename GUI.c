@@ -293,9 +293,9 @@ int main() {
 		return 1;
 	}
 
+	game* new_game = game_create();
 	screen running = MENU_SCREEN;
 	while(running != EXIT) {
-		game* new_game = game_create();
 		SDL_Event event;
 		//loop runs as long as event queue isn't empty
 		while (SDL_PollEvent(&event)) {
@@ -309,9 +309,10 @@ int main() {
 		if (running == MENU_SCREEN) {
 			running = display_main_menu(window, renderer, new_game);
 		}
-		else if (running == GAME_SCREEN) {
+		if (running == GAME_SCREEN) {
+			SDL_Log("Game mode is %d", new_game->game_mode);
 			running = game_screen(window, renderer, new_game);
-			game_destroy(new_game);
+//			game_destroy(new_game);
 		}
 		else if (running == LOAD_SCREEN) {
 			running = loading_screen(window, renderer, MENU_SCREEN, new_game);
@@ -319,6 +320,7 @@ int main() {
 		}
 	}
 	//free resources
+	game_destroy(new_game);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	//Quit SDL

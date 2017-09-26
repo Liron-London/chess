@@ -49,9 +49,23 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	if (strcmp(command_text, "move") == 0){
 		//DEBUG("detected that command is move\n");
 		game_command->cmd = MOVE;
-
-		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
-		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
+		int row = atoi(strtok(NULL, "<, ")) - 1;
+		if (row >=0 && row <= 7) {
+			game_command->move->source->row = row;
+			int col = strtok(NULL, "<,> ")[0] - 'A';
+			if (col >=0 && col <= 7) {
+				game_command->move->source->column = col;
+			} else {
+				announce_invalid_location();
+				game_command->move->source->column = -1;
+				return game_command;
+			}
+		} else {
+			announce_invalid_location();
+			game_command->move->source->row = -1;
+			game_command->move->source->column = -1;
+			return game_command;
+		}
 		//check for invalid move parameters
 //		if (game_command->move->source == NULL ||
 //				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
@@ -60,7 +74,6 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 //			game_command->validArg = false;
 //		}
 
-		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
 		//DEBUG("command_text is: %s\n", command_text);
 		if (strcmp(command_text, "to") != 0){
