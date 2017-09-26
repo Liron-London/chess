@@ -58,18 +58,7 @@ void array_list_destroy(array_list* src) {
     }
 }
 
-/*
-ARRAY_LIST_MESSAGE array_list_clear(array_list* src) {
-    if (src == NULL) {
-        return ARRAY_LIST_INVALID_ARGUMENT;
-    }
-    for (int i = 0; i < src->actualSize; i++) {
-        src->elements[i] = 0;
-    }
-    src->actualSize = 0;
-    return ARRAY_LIST_SUCCESS;
-}
-*/
+
 
 
 ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, game* game, move* move, int index) {
@@ -92,17 +81,23 @@ ARRAY_LIST_MESSAGE array_list_add_at(array_list* src, game* game, move* move, in
     return ARRAY_LIST_SUCCESS;
 }
 
-
+/*
+ * add a game and a move to the head of the list
+ */
  ARRAY_LIST_MESSAGE array_list_add_first(array_list* src, game* game, move* move) {
      return(array_list_add_at(src, game, move, 0));
  }
 
-
+/*
+ * add a game and a move to the top of the list
+ */
  ARRAY_LIST_MESSAGE array_list_add_last(array_list* src, game* game, move* move) {
      return array_list_add_at(src, game, move, src->actualSize);
  }
 
-
+/*
+ * remove item from the list from a specific index
+ */
 ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
         if (src == NULL || index < 0 || index > src->actualSize) {
             return ARRAY_LIST_INVALID_ARGUMENT;
@@ -116,15 +111,23 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
         return ARRAY_LIST_SUCCESS;
     }
 
-
+/*
+ * remove the first element from the list
+ */
  ARRAY_LIST_MESSAGE array_list_remove_first(array_list* src) {
      return array_list_remove_at(src, 0);
  }
 
+ /*
+  * remove the last element of the list
+  */
  ARRAY_LIST_MESSAGE array_list_remove_last(array_list* src) {
      return array_list_remove_at(src, src->actualSize-1);
  }
 
+ /*
+  * get the game from a specific index of the list
+  */
  game* array_list_get_game_at(array_list* src, int index) {
      if (src == NULL || index < 0 || index > src->actualSize) {
                 return NULL;
@@ -133,7 +136,9 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
          return src->previous_games[index];
      }
  }
-
+/*
+ * return a move from specific index
+ */
  move* array_list_get_move_at(array_list* src, int index) {
       if (src == NULL || index < 0 || index > src->actualSize) {
                  return NULL;
@@ -143,19 +148,27 @@ ARRAY_LIST_MESSAGE array_list_remove_at(array_list* src, int index) {
       }
   }
 
-
+/*
+ * get the top game of the list
+ */
  game* array_list_get_first_game(array_list* src) {
      return array_list_get_game_at(src, 0);
  }
-
+/*
+ * remove first game and move from the top of the list
+ */
  move* array_list_get_first_move(array_list* src) {
       return array_list_get_move_at(src, 0);
   }
-
+/*
+ * get game in the bottom of the list
+ */
  game* array_list_get_last_game(array_list* src) {
      return array_list_get_game_at(src, src->actualSize-1);
  }
-
+/*
+ * get the move in the bottom of the list
+ */
  move* array_list_get_last_move(array_list* src) {
      return array_list_get_move_at(src, src->actualSize-1);
  }

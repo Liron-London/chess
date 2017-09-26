@@ -31,6 +31,7 @@ void game_command_destroy(Gamecommand* command) {
 	free(command);
 }
 
+// parse command line from user and initialize game_command
 Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
@@ -47,8 +48,9 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		break;
 	}
 	if (strcmp(command_text, "move") == 0){
-		//DEBUG("detected that command is move\n");
 		game_command->cmd = MOVE;
+
+		// set move to game_command if the text is valid
 		int row = atoi(strtok(NULL, "<, ")) - 1;
 		if (row >=0 && row <= 7) {
 			game_command->move->source->row = row;
@@ -75,9 +77,9 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 //		}
 
 		char* command_text = strtok(NULL, " \t\n");
-		//DEBUG("command_text is: %s\n", command_text);
+
+		// free in case command is not legal
 		if (strcmp(command_text, "to") != 0){
-			// game_command->is_val is false...
 			free(str_copy);
 			return game_command;
 		}
@@ -145,6 +147,7 @@ void announce_undo_not_available() {
 	printf("Undo command not available in 2 players mode\n");
 }
 
+// print a massage when UNDO is done
 void announce_undo_move(int player, move* tmp_move) {
 	int src_row, dst_row;
 	char src_col, dst_col;
@@ -166,28 +169,28 @@ void announce_undo_move(int player, move* tmp_move) {
 void announce_computer_move(game* game, move* move){
 	char piece_type = location_to_piece(game, move->source)->piece_type;
 	if (piece_type == 'm' || piece_type == 'M'){
-		printf("Computer: move pawn at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move pawn at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'n' || piece_type == 'N'){
-		printf("Computer: move knight at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move knight at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'b' || piece_type == 'B'){
-		printf("Computer: move bishop at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move bishop at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'q' || piece_type == 'Q'){
-		printf("Computer: move queen at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move queen at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'k' || piece_type == 'K'){
-		printf("Computer: move king at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move king at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'r' || piece_type == 'R'){
-		printf("Computer: move rook at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move rook at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 }
 
@@ -330,13 +333,15 @@ int game_play(game* game){
 					announce_check(color);
 				}
 				change_turn(game);
-				print_board(game);
+				// print board only in case 2 players are playing
+				if (game->game_mode == 2){
+					print_board(game);
+				}
 			}
 		}
 
 		// UNDO
 		if (game_command->validArg == true && game_command->cmd == UNDO){
-			DEBUG("In UNDO\n");
 			if (game->game_mode != 1){
 				announce_undo_not_available();
 			}
@@ -347,10 +352,8 @@ int game_play(game* game){
 				}
 
 				else {
-					DEBUG("history is not empty!\n");
 					// takes 2 moves and games out of history
 					move* tmp_move = create_move();
-					DEBUG("move created!\n");
 					tmp_move = array_list_get_last_move(history);
 					announce_undo_move(current_turn_color(game), tmp_move);
 					array_list_remove_last(history);
