@@ -8,8 +8,13 @@
 #ifndef GUI_H_
 #define GUI_H_
 #include <stdbool.h>
+#include <SDL2/SDL.h>
+//#include "GUI_base.h"
+//#include "GUI_load.h"
+//#include "GUI_display_game.h"
 
 
+int gui();
 bool check_mouse_button_event(SDL_Event event, SDL_Rect rect);
 
 ///*

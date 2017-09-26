@@ -262,7 +262,7 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 }
 
 //int main(int argc, char* argv[]) {
-int main() {
+int gui() {
 	//Start SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		printf("ERROR: unable to initialize SDL: %s\n", SDL_GetError());

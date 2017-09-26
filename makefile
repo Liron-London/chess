@@ -9,7 +9,7 @@ FILE_HANDLER_TEST_OBJS = file_handler.o
 MINIMAX_TEST_OBJ = array_list.o game.o
 SETTINGS_TEST_OBJ = array_list.o game.o setting_test.o setting.o game_commands.o moves.o file_handler.o minimax.o
 GAME_TEST_OBJ = array_list.o game.o setting.o game_unit_test.o game_commands.o moves.o
-GUI_OBJS = GUI.o GUI_display_game.o game.o GUI_base.o moves.o minimax.o array_list.o setting.o game_commands.o file_handler.o GUI_load.o
+GUI_OBJS = GUI.o GUI_display_game.o GUI_base.o GUI_load.o
 SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
 
@@ -18,12 +18,14 @@ COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors -g
 
 LINK_FLAG = $(SDL_LDFLAGS) -g
 
-SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/SDL2 -D_REENTRANT
+SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/ -D_REENTRANT
 SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib/ -Wl,--enable-new-dtags -lSDL2 -lSDL2main
 
 
-$(EXEC): $(OBJS)
-	$(CC) $(OBJS) $(SDL_LIB) -o $@
+$(EXEC): $(OBJS) $(GUI_OBJS)
+	$(CC) $(OBJS) $(GUI_OBJS) $(SDL_LIB) -o $@ -lm
+all: $(OBJS) $(GUI_OBJS)
+	$(CC) $(OBJS) $(GUI_OBJS) $(SDL_LIB) -o $(EXEC)
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 setting_test: $(SETTINGS_TEST_OBJ)
@@ -32,8 +34,8 @@ game_unit_test: $(GAME_TEST_OBJ)
 	$(CC) $(GAME_TEST_OBJ) -o $@
 game_command_unitest: $(GAME_COMMANDS_TEST_OBJS)
 	$(CC) $(GAME_COMMANDS_TEST_OBJS) -o $@
-gui_test: $(GUI_OBJS)
-	$(CC) $(GUI_OBJS) $(SDL_LIB) -o $@ -lm
+#gui_test: $(OBJS) $(GUI_OBJS)
+#	$(CC) $(OBJS) $(GUI_OBJS) $(SDL_LIB) -o $@ -lm
 	
 array_list_unit_test.o: array_list_unit_test.c array_list.h array_list.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -51,7 +53,7 @@ setting.o: game_commands.c game_commands.h game.c game.h setting.c setting.h arr
 	$(CC) $(COMP_FLAG) -c $*.c
 game_commands.o: moves.h moves.c game_commands.c game_commands.h game.c game.h array_list.c array_list.h file_handler.c file_handler.h minimax.c minimax.h
 	$(CC) $(COMP_FLAG) -c $*.c
-main.o: setting.c setting.h
+main.o: setting.c setting.h main.c
 
 setting_test.o: moves.c moves.h game_commands.c game_commands.h game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
