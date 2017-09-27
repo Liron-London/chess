@@ -16,10 +16,10 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 # COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors -g
 
-LINK_FLAG = $(SDL_LDFLAGS) -g
+#LINK_FLAG = $(SDL_LDFLAGS) -g
 
 SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/ -D_REENTRANT
-SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib/ -Wl,--enable-new-dtags -lSDL2 -lSDL2main
+SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib -Wl,--enable-new-dtags -lSDL2 -lSDL2main
 
 
 $(EXEC): $(OBJS) $(GUI_OBJS)
@@ -53,7 +53,7 @@ setting.o: game_commands.c game_commands.h game.c game.h setting.c setting.h arr
 	$(CC) $(COMP_FLAG) -c $*.c
 game_commands.o: moves.h moves.c game_commands.c game_commands.h game.c game.h array_list.c array_list.h file_handler.c file_handler.h minimax.c minimax.h
 	$(CC) $(COMP_FLAG) -c $*.c
-main.o: setting.c setting.h main.c
+
 
 setting_test.o: moves.c moves.h game_commands.c game_commands.h game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
@@ -69,6 +69,8 @@ GUI.o: GUI.c GUI.h game.c game.h GUI_base.h GUI_base.c GUI_load.c GUI_load.h
 GUI_display_game.o: GUI_display_game.c GUI_display_game.h GUI_base.h GUI_base.c
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 GUI_load.o: GUI_load.c GUI_base.c GUI_base.h 
+	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
+main.o: setting.c setting.h main.c
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 clean:
 	rm -f *.o $(EXEC) $(OBJS) $(TEST_OBJS)
