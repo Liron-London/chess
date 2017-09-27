@@ -195,11 +195,6 @@ int load_game(game* cur_game, char* filename) {
 		}
 	}
 	update_pieces_for_load(cur_game);
-
-//	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
-//		print_board(cur_game);
-//	}
-	// game_play(cur_game);
 	return 0;
 }
 
