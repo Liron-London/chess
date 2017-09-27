@@ -8,7 +8,7 @@
 #ifndef GUI_H_
 #define GUI_H_
 #include <stdbool.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 //#include "GUI_base.h"
 //#include "GUI_load.h"
 //#include "GUI_display_game.h"
