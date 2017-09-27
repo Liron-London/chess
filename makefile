@@ -16,10 +16,10 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 # COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors -g
 
-LINK_FLAG = $(SDL_LDFLAGS) -g
+#LINK_FLAG = $(SDL_LDFLAGS) -g
 
 SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/SDL2 -D_REENTRANT
-SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib/ -Wl,--enable-new-dtags -lSDL2 -lSDL2main
+SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib/ -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib/ -Wl,--enable-new-dtags -lSDL2 -lSDL2main
 
 
 $(EXEC): $(OBJS) $(GUI_OBJS)
