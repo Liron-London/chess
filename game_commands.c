@@ -68,13 +68,6 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 			game_command->move->source->column = -1;
 			return game_command;
 		}
-		//check for invalid move parameters
-//		if (game_command->move->source == NULL ||
-//				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
-//				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
-//			announce_invalid_location();
-//			game_command->validArg = false;
-//		}
 
 		char* command_text = strtok(NULL, " \t\n");
 
@@ -113,8 +106,12 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	}
 
 	if (strcmp(command_text, "save") == 0) {
-		strcpy(file_name, strtok(NULL, " \t\n"));
-		//DEBUG("in parse line, file_name is: %s\n", file_name);
+		char* tmp_name = strtok(NULL, " \t\n");
+		if (tmp_name == NULL) {
+			printf("File cannot be created or modified\n");
+		} else {
+			strcpy(file_name, tmp_name);
+		}
 		game_command->cmd = SAVE;
 		game_command->validArg = true;
 		free(str_copy);
@@ -249,8 +246,10 @@ int game_play(game* game){
 			destroy_move(comp_move);
 			int color = current_turn_color(game);
 			if (has_valid_moves(game) == false){
+				change_turn(game);
 				if (is_check(game) == true){
 					announce_mate(color);
+					change_turn(game);
 				}
 				else{
 					announce_tie_pc();
@@ -258,8 +257,10 @@ int game_play(game* game){
 				break;
 
 			}
+			change_turn(game);
 			if (is_check(game)) {
 				announce_check_pc();
+				change_turn(game);
 			}
 
 		}

@@ -5,8 +5,9 @@
  *      Author: lironl
  */
 # include "file_handler.h"
-#include "debug.h"
-#include <string.h>
+# include "debug.h"
+# include <string.h>
+# define FILE_LIMIT (5)
 
 /*
  * get a game and uses its board to update all pieces status
@@ -216,7 +217,7 @@ void default_save(game* game, int num_games){
 	for (int i=num_games; i > 0 ;i--){
 		generate_filename(i, filename);
 		load_game(game, filename);
-		if (num_games < 5){
+		if (num_games < FILE_LIMIT){
 			generate_filename(i+1, filename);
 			save_game(game, filename);
 		}
@@ -229,7 +230,7 @@ void default_save(game* game, int num_games){
 
 int get_num_games(){
 	int index = 0;
-	for (int i=1; i<=5; i++){
+	for (int i=1; i<=FILE_LIMIT; i++){
 		char filename[13]= "chess_game_";
 		char idx[2] = {i + '0', '\0'};
 		strcat(filename, idx);
