@@ -450,9 +450,9 @@ bool is_check(game* cur_game){
 	location* king_loc;
 	piece** enemies;
 
-	// white turn
 	int color = (cur_game->current_turn + cur_game->user_color) %2;
 
+	// white turn
 	if (color == 1){
 		king_loc = cur_game->whites[4]->piece_location;
 		enemies = cur_game->blacks;
