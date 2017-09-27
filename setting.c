@@ -110,8 +110,15 @@ Command* parse_line(const char* str, Command* command, char* command_param) {
 		strcpy(command_param, strtok(NULL, " \t\n"));
 		if (parser_is_int(command_param) == true){
 			command->arg = atoi(command_param); // 1 for single player and 2 for two players
-			if (command->arg == 1 || command->arg == 2){
+			if (command->arg == 2){
 				command->validArg = true;
+				printf("Game mode is set to 2 players\n");
+			} else if (command->arg == 1) {
+				command->validArg = true;
+				printf("Game mode is set to 1 player\n");
+			} else {
+				printf("Wrong game mode\n");
+				command->arg = 1;
 			}
 		}
 	}
@@ -186,22 +193,25 @@ int set_game() {
 			new_game->game_mode = command->arg;
 			if (new_game->game_mode == 2) {
 				new_game->user_color = 1;
-				printf("Game mode is set to 2 players\n");
-			} else {
-				printf("Game mode is set to 1 player\n");
 			}
 			if (new_game->game_mode == 1 && new_game->user_color == 0) {
 				new_game->current_turn = 0;
 			}
 		}
 		if (command->cmd == DIFFICULTY) {
-			new_game->difficulty = command->arg;
+			if (new_game->game_mode == 1) {
+				new_game->difficulty = command->arg;
+			} else {
+				printf("ERROR: invalid command\n");
+			}
 
 		}
 		if (command->cmd == USER_COLOR) {
 			new_game->user_color = command->arg;
 			if (new_game->game_mode == 1 && new_game->user_color == 0) {
 				new_game->current_turn = 0;
+			} else if (new_game->game_mode == 2) {
+				printf("ERROR: invalid command\n");
 			}
 		}
 		if (command->cmd == LOAD) {
@@ -216,7 +226,7 @@ int set_game() {
 			print_settings(new_game);
 		}
 		if (command->cmd == INVALID_COMMAND) {
-
+			printf("ERROR: invalid command\n");
 		}
 		free(command_text);
 	}

@@ -214,8 +214,12 @@ void announce_mate(int color) {
 	printf("Checkmate! %s player wins the game\n", color_name);
 }
 
-void announce_tie() {
+void announce_tie_pc() {
 	printf("The game ends in a tie\n");
+}
+
+void announce_tie_user() {
+	printf("The game is tied\n");
 }
 
 // called when the command "start" is pressed in settings
@@ -249,13 +253,13 @@ int game_play(game* game){
 					announce_mate(color);
 				}
 				else{
-					announce_tie();
+					announce_tie_pc();
 				}
 				break;
 
 			}
 			if (is_check(game)) {
-				announce_check((current_turn_color(game) + 1)%2);
+				announce_check_pc();
 			}
 
 		}
@@ -321,7 +325,7 @@ int game_play(game* game){
 						change_turn(game);
 					}
 					else{
-						announce_tie();
+						announce_tie_user();
 					}
 					free(command_str);
 					game_command_destroy(game_command);
@@ -330,7 +334,7 @@ int game_play(game* game){
 				change_turn(game);
 				if (is_check(game) == true){
 					color = current_turn_color(game);
-					announce_check(color);
+					announce_check_user(color);
 				}
 				change_turn(game);
 				// print board only in case 2 players are playing
