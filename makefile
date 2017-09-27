@@ -54,7 +54,7 @@ setting.o: game_commands.c game_commands.h game.c game.h setting.c setting.h arr
 game_commands.o: moves.h moves.c game_commands.c game_commands.h game.c game.h array_list.c array_list.h file_handler.c file_handler.h minimax.c minimax.h
 	$(CC) $(COMP_FLAG) -c $*.c
 main.o: setting.c setting.h main.c
-	$(CC) $(COMP_FLAG) -c $*.c
+	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 
 setting_test.o: moves.c moves.h game_commands.c game_commands.h game.c game.h setting.c setting.h array_list.c array_list.h setting_test.c
 	$(CC) $(COMP_FLAG) -c $*.c
