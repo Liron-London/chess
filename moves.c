@@ -578,6 +578,13 @@ void announce_illegal_place_on_board(){
 	printf("Invalid position on the board\n");
 }
 
+void destroy_valid_locs(location** valid_locs) {
+	for (int i = 0; i < 64; i++) {
+		destroy_location(valid_locs[i]);
+	}
+	free(valid_locs);
+}
+
 // given a move and a board says if the move is legal or not
 bool is_valid_move(game* cur_game, move* cur_move) {
 	int color;
@@ -592,6 +599,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	if (cur_move->source->row < 0 || cur_move->source->row > 7 || cur_move->dest->row < 0 || cur_move->dest->row > 7 ||
 			cur_move->source->column < 0 || cur_move->source->column > 7 || cur_move->dest->column < 0 || cur_move->dest->column > 7){
 		announce_illegal_place_on_board();
+		destroy_valid_locs(valid_locs);
 		return false;
 	}
 
@@ -599,6 +607,7 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	if (source == EMPTY_ENTRY ||
 			color_by_type(cur_game->board[cur_move->source->row][cur_move->source->column]) != color) {
 		announce_illegal_move_src();
+		destroy_valid_locs(valid_locs);
 		return false;
 	}
 
@@ -631,19 +640,11 @@ bool is_valid_move(game* cur_game, move* cur_move) {
 	// if cur_move->dest is one of the possible moves, return true
 	for (int i=0; i<64; i++){
 		if (valid_locs[i]->row == cur_move->dest->row && valid_locs[i]->column == cur_move->dest->column){
-
-			for (int i=0; i<64; i++){
-				free(valid_locs[i]);
-			}
-			free(valid_locs);
-
+			destroy_valid_locs(valid_locs);
 			return true;
 		}
 	}
-	for (int i=0; i<64; i++){
-		destroy_location(valid_locs[i]);
-	}
-	free(valid_locs);
+	destroy_valid_locs(valid_locs);
 	announce_invalid_move();
 	return false;
 }
