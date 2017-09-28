@@ -282,12 +282,12 @@ move* get_recommended_move_for_comp(game* game, int depth){
 	int color = (game->current_turn + game->user_color)%2;
 
 
-	if (color == 0){
+	if (color == 1){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	}
 
 	// user is white
-	if (color == 1){
+	if (color == 0){
 		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
 	}
 	return comp_move;
