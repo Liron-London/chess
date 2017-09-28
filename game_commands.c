@@ -285,7 +285,7 @@ int game_play(game* game){
 		}
 
 		//RESET
-		if (game_command->validArg == true && game_command->cmd == RESET) {
+		else if (game_command->validArg == true && game_command->cmd == RESET) {
 			// freeing all variables
 			array_list_destroy(history);
 			free(command_str);
@@ -297,12 +297,12 @@ int game_play(game* game){
 		}
 
 		//SAVE
-		if (game_command->validArg == true && game_command->cmd == SAVE){
+		else if (game_command->validArg == true && game_command->cmd == SAVE){
 			save_game(game, file_name);
 		}
 
 		// MOVE
-		if (game_command->validArg == true && game_command->cmd == MOVE){
+		else if (game_command->validArg == true && game_command->cmd == MOVE){
 			// check if valid move
 			if (is_valid_move(game, game_command->move) == true){
 
@@ -346,7 +346,7 @@ int game_play(game* game){
 		}
 
 		// UNDO
-		if (game_command->validArg == true && game_command->cmd == UNDO){
+		else if (game_command->validArg == true && game_command->cmd == UNDO){
 			if (game->game_mode != 1){
 				announce_undo_not_available();
 			}
@@ -373,6 +373,10 @@ int game_play(game* game){
 					print_board(game);
 				}
 			}
+		}
+
+		else{
+
 		}
 
 		free(command_str);
