@@ -229,6 +229,9 @@ int game_play(game* game){
 			print_board(game);
 		}
 
+		if (game->game_mode == 2){
+			print_board(game);
+		}
 	// relevant only in one player mode -- need to create history array
 	array_list* history = array_list_create(6);
 	while (1){

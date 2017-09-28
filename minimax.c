@@ -63,7 +63,7 @@ int scoring_function(game* game) {
 	}
 
 	// checks whether score should be given to the white or to the black
-	if (game->user_color == 0) {
+	if (game->user_color == 1) {
 		score = white_sum - black_sum;
 	} else {
 		score = black_sum - white_sum;
