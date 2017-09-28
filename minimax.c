@@ -147,6 +147,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
+
+						printf("---max---\n");
+						printf("tmp score is: %d\n", tmp_score);
+						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row,tmp_best_move->source->column,tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					// update alpha in case new_score is better than alpha
@@ -223,6 +227,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
+						printf("---min---\n");
+						printf("tmp score is: %d\n", tmp_score);
+						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row,tmp_best_move->source->column,tmp_best_move->dest->row, tmp_best_move->dest->column);
 					}
 
 					// update alpha in case new_score is better than alpha
