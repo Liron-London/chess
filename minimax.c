@@ -63,7 +63,7 @@ int scoring_function(game* game) {
 	}
 
 	// checks whether score should be given to the white or to the black
-	if (current_turn_color(game) == 1) {
+	if (game->user_color == 1) {
 		score = white_sum - black_sum;
 	} else {
 		score = black_sum - white_sum;
@@ -283,7 +283,6 @@ move* get_recommended_move_for_comp(game* game, int depth){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	}
 
-	// user is white
 	else {
 		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
 	}
