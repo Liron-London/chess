@@ -228,7 +228,7 @@ int game_play(game* game){
 //		print_board(game);
 //	}
 
-	if (game->game_mode == 1 && game->user_color == 0 && game->current_turn == 1){
+	if (game->game_mode == 1 && game->user_color == 0 && game->current_turn == 0){
 		print_board(game);
 	}
 
