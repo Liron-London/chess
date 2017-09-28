@@ -366,13 +366,13 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 
 // check if enemy threaten the king in parallel - used for rook and queen
 bool check_parallels(game* cur_game, const location* king_loc, location* enemy_loc){
-	// up
+	// right
 	for (char i=1; i<8; i++){
 		if (enemy_loc->column + i == king_loc->column && enemy_loc->row  == king_loc->row){
 			return true;
 		}
 
-		if (enemy_loc->column + i < 7){
+		if (enemy_loc->column + i > 7){
 			break;
 		}
 
@@ -382,7 +382,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 		}
 	}
 
-	// down
+	// left
 	for (char i=1; i<8; i++){
 		if (enemy_loc->column - i == king_loc->column&& enemy_loc->row  == king_loc->row){
 			return true;
@@ -398,7 +398,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 		}
 	}
 
-	// right
+	// up
 	for (int i=1; i<8; i++){
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
@@ -413,7 +413,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 		}
 	}
 
-	// left
+	// down
 	for (int i=1; i<8; i++){
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
@@ -423,7 +423,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 			break;
 		}
 
-		if (enemy_loc->row- i < 1 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
+		if (enemy_loc->row- i < 0 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
 			break;
 		}
 	}
