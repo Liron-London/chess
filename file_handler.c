@@ -169,18 +169,22 @@ int load_game(game* cur_game, char* filename) {
 	fgets(input_file_text, 50, fp); // gets the <current_turn> line
 	tag_content = tag_finder(input_file_text, "current_turn");
 	cur_game->current_turn = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <game_mode> line
 	tag_content = tag_finder(input_file_text, "game_mode");
 	cur_game->game_mode = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <difficulty> line
 	tag_content = tag_finder(input_file_text, "difficulty");
 	cur_game->difficulty = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <user_color> line
 	tag_content = tag_finder(input_file_text, "user_color");
 	cur_game->user_color = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <board> line
 
@@ -193,8 +197,10 @@ int load_game(game* cur_game, char* filename) {
 		for (int j = 0; j <= 7; j++) {
 			cur_game->board[i-1][j] = tag_content[j];
 		}
+		free(tag_content);
 	}
 	update_pieces_for_load(cur_game);
+	fclose(fp);
 	return 0;
 }
 

@@ -665,7 +665,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 						}
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
-						print_board(game); //DEBUG
 						display_screen = check_game_status(game);
 						if (display_screen == MENU_SCREEN) {
 							game_running = false;
@@ -716,7 +715,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
 			//			announce_computer_move(game, comp_move);
 			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
-			print_board(game);
 			update_pieces_rects(game);
 			render_game_screen(window, renderer, game, history->actualSize);
 			// update history
