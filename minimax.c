@@ -279,7 +279,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
 
-	if (game->user_color == 1){
+	if (game->user_color == 0){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	}
 
