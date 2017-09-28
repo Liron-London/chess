@@ -166,6 +166,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					// stop the process in case alpha is larger than beta
 					if (beta <= alpha){
 						tmp_best_move->source->row = -1;
+						printf("---max--- prune\n");
 						tmp_score = beta;
 						quit = true;
 						break; // beta cut-off
@@ -244,6 +245,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					// stop the process in case alpha is larger than beta
 					if (beta <= alpha){
+						printf("---min--- prune\n");
 						tmp_best_move->source->row = -1;
 						tmp_score = alpha;
 						quit = true;
@@ -278,6 +280,8 @@ move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
 	// user is black
 	int color = (game->current_turn + game->user_color)%2;
+
+
 	if (color == 0){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	}
