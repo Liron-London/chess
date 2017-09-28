@@ -224,10 +224,17 @@ int game_play(game* game){
 	Gamecommand* game_command;
 	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
-	if(!(game->game_mode == 1 && game->user_color == game->current_turn )) {
+//	if(!(game->game_mode == 1 && game->user_color == 0)) {
+//		print_board(game);
+//	}
+
+	if (game->game_mode == 1 && game->user_color == 0 && game->current_turn == 0){
 		print_board(game);
 	}
 
+	if (game->game_mode == 1 && game->user_color == 1 && game->current_turn == 1){
+			print_board(game);
+		}
 	// relevant only in one player mode -- need to create history array
 	array_list* history = array_list_create(6);
 	while (1){
