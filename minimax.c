@@ -148,9 +148,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
 
-						printf("---max---\n");
-						printf("tmp score is: %d\n", tmp_score);
-						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row+1,tmp_best_move->source->column+'A',tmp_best_move->dest->row+1, tmp_best_move->dest->column+'A');
+//						printf("---max---\n");
+//						printf("tmp score is: %d\n", tmp_score);
+//						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row+1,tmp_best_move->source->column+'A',tmp_best_move->dest->row+1, tmp_best_move->dest->column+'A');
 					}
 
 					// update alpha in case new_score is better than alpha
@@ -166,7 +166,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					// stop the process in case alpha is larger than beta
 					if (beta <= alpha){
 						//tmp_best_move->source->row = -1;
-						printf("---max--- prune\n");
+						// printf("---max--- prune\n");
 						tmp_score = beta;
 						quit = true;
 						break; // beta cut-off
@@ -228,9 +228,9 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
-						printf("---min---\n");
-						printf("tmp score is: %d\n", tmp_score);
-						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row+1,tmp_best_move->source->column+'A',tmp_best_move->dest->row+1, tmp_best_move->dest->column+'A');
+//						printf("---min---\n");
+//						printf("tmp score is: %d\n", tmp_score);
+//						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row+1,tmp_best_move->source->column+'A',tmp_best_move->dest->row+1, tmp_best_move->dest->column+'A');
 					}
 
 					// update alpha in case new_score is better than alpha
@@ -245,7 +245,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 
 					// stop the process in case alpha is larger than beta
 					if (beta <= alpha){
-						printf("---min--- prune\n");
+//						printf("---min--- prune\n");
 						//tmp_best_move->source->row = -1;
 						tmp_score = alpha;
 						quit = true;
