@@ -278,16 +278,13 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 // call the alpha-beta pruning algorithm with min/max depends on user color
 move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
-	// user is black
-	int color = (game->current_turn + game->user_color)%2;
 
-
-	if (color == 1){
+	if (game->user_color == 1){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
 	}
 
 	// user is white
-	if (color == 0){
+	else {
 		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
 	}
 	return comp_move;
