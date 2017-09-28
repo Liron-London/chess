@@ -224,7 +224,7 @@ int game_play(game* game){
 	Gamecommand* game_command;
 	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
-	if(!(game->game_mode == 1 && game->user_color == 0 == game->current_turn == 0)) {
+	if(!(game->game_mode == 1 && game->user_color == game->current_turn )) {
 		print_board(game);
 	}
 
