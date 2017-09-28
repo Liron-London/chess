@@ -376,7 +376,7 @@ int game_play(game* game){
 		}
 
 		else{
-
+			printf("ERROR: Invalid command\n");
 		}
 
 		free(command_str);
