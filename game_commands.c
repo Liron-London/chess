@@ -302,47 +302,48 @@ int game_play(game* game){
 		}
 
 		// MOVE
-		else if (game_command->validArg == true && game_command->cmd == MOVE){
-			// check if valid move
-			if (is_valid_move(game, game_command->move) == true){
+		else if (game_command->cmd == MOVE){
+			if (game_command->validArg == true){
+				// check if valid move
+				if (is_valid_move(game, game_command->move) == true){
 
-				// update history
-				if (game->game_mode == 1){
-					if (array_list_is_full(history) == true){
-						array_list_remove_first(history);
+					// update history
+					if (game->game_mode == 1){
+						if (array_list_is_full(history) == true){
+							array_list_remove_first(history);
+						}
+						array_list_add_last(history, game_copy(game), copy_move(game_command->move));
 					}
-					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
-				}
 
-				cur_piece = location_to_piece(game, game_command->move->source);
-				move_piece(game, game_command->move, cur_piece);
+					cur_piece = location_to_piece(game, game_command->move->source);
+					move_piece(game, game_command->move, cur_piece);
 
-				int color = current_turn_color(game);
-				if (has_valid_moves(game) == false){
+					int color = current_turn_color(game);
+					if (has_valid_moves(game) == false){
+						change_turn(game);
+						if (is_check(game) == true){
+							color = current_turn_color(game);
+							announce_mate(color);
+							change_turn(game);
+						}
+						else{
+							announce_tie_user();
+						}
+						free(command_str);
+						game_command_destroy(game_command);
+						break;
+					}
 					change_turn(game);
 					if (is_check(game) == true){
 						color = current_turn_color(game);
-						announce_mate(color);
-						change_turn(game);
+						announce_check_user(color);
 					}
-					else{
-						announce_tie_user();
+					change_turn(game);
+					// print board only in case 2 players are playing
+					if (game->game_mode == 2){
+						print_board(game);
 					}
-					free(command_str);
-					game_command_destroy(game_command);
-					break;
-				}
-				change_turn(game);
-				if (is_check(game) == true){
-					color = current_turn_color(game);
-					announce_check_user(color);
-				}
-				change_turn(game);
-				// print board only in case 2 players are playing
-				if (game->game_mode == 2){
-					print_board(game);
-				}
-			}
+				}}
 		}
 
 		// UNDO
