@@ -248,6 +248,7 @@ int game_play(game* game){
 			if (has_valid_moves(game) == false){
 				change_turn(game);
 				if (is_check(game) == true){
+					color = current_turn_color(game);
 					announce_mate(color);
 					change_turn(game);
 				}
@@ -255,13 +256,12 @@ int game_play(game* game){
 					announce_tie_pc();
 				}
 				break;
-
 			}
 			change_turn(game);
 			if (is_check(game)) {
 				announce_check_pc();
-				change_turn(game);
 			}
+			change_turn(game);
 
 		}
 
