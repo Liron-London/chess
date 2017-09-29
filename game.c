@@ -13,6 +13,22 @@ int current_turn_color(game* game) {
 	return (game->current_turn + game->user_color)%2;
 }
 
+//DEBUG: prints all the game->whites and game->blacks
+void print_pieces(game* cur_game) {
+	printf("WHITES\n");
+	for (int i = 0; i < 16; i++) {
+		piece* cur_piece = cur_game->whites[i];
+		printf("%d piece type: %c, row: %d, col: %d, alive: %d\n", i,
+				cur_piece->piece_type, cur_piece->piece_location->row, cur_piece->piece_location->column, cur_piece->alive);
+	}
+	printf("BLACKS\n");
+	for (int i = 0; i < 16; i++) {
+		piece* cur_piece = cur_game->blacks[i];
+		printf("%d piece type: %c, row: %d, col: %d, alive: %d\n", i,
+				cur_piece->piece_type, cur_piece->piece_location->row, cur_piece->piece_location->column, cur_piece->alive);
+	}
+}
+
 // return the pieces located in a specific location on the board
 piece* location_to_piece(game* cur_game, location* loc){
 	char type = cur_game->board[loc->row][loc->column];
@@ -24,7 +40,8 @@ piece* location_to_piece(game* cur_game, location* loc){
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
 			if (cur_game->whites[i]->piece_location->row == loc->row &&
-					cur_game->whites[i]->piece_location->column == loc->column && cur_game->whites[i]->alive == 1){
+					cur_game->whites[i]->piece_location->column == loc->column &&
+					cur_game->whites[i]->alive == 1){
 				return cur_game->whites[i];
 			}
 		}
@@ -32,8 +49,9 @@ piece* location_to_piece(game* cur_game, location* loc){
 
 	else{
 		for (int i=0; i<16;i++){
-			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column
-					&& cur_game->blacks[i]->alive == 1){
+			if (cur_game->blacks[i]->piece_location->row == loc->row &&
+					cur_game->blacks[i]->piece_location->column == loc->column &&
+					cur_game->blacks[i]->alive == 1){
 				return cur_game->blacks[i];
 			}
 		}
@@ -70,10 +88,10 @@ piece* create_piece() {
 	new_piece->color = 0;
 	new_piece->piece_location = create_location();
 	if (new_piece->piece_location == NULL){
-			destroy_location(new_piece->piece_location);
-			free(new_piece);
-			return NULL;
-		}
+		destroy_location(new_piece->piece_location);
+		free(new_piece);
+		return NULL;
+	}
 	// initial it to EMPTY ENTRY
 	new_piece->piece_type = EMPTY_ENTRY;
 	return new_piece;
@@ -491,9 +509,9 @@ bool is_check(game* cur_game){
 		// knight
 		if (enemy_type == BLACK_KNIGHT || enemy_type == WHITE_KNIGHT){
 			if (((enemy_loc->column == (king_loc->column) + 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1))) ||
-				((enemy_loc->column == (king_loc->column) - 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1)))||
-				((enemy_loc->row == (king_loc->row) + 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))||
-				((enemy_loc->row == (king_loc->row) - 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))){
+					((enemy_loc->column == (king_loc->column) - 2) && ((enemy_loc->row == (king_loc->row) + 1) ||(enemy_loc->row == (king_loc->row) - 1)))||
+					((enemy_loc->row == (king_loc->row) + 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))||
+					((enemy_loc->row == (king_loc->row) - 2) && ((enemy_loc->column == (king_loc->column) + 1) ||(enemy_loc->column == (king_loc->column) - 1)))){
 				return true;
 			}
 		}
@@ -515,7 +533,7 @@ bool is_check(game* cur_game){
 		// queen
 		if (enemy_type == BLACK_QUEEN || enemy_type == WHITE_QUEEN){
 			if ((check_parallels(cur_game, king_loc, enemy_loc) == true) ||
-				(check_diagonals(cur_game, king_loc, enemy_loc) == true)){
+					(check_diagonals(cur_game, king_loc, enemy_loc) == true)){
 				return true;
 			}
 		}
@@ -523,7 +541,7 @@ bool is_check(game* cur_game){
 		// king
 		if (enemy_type == BLACK_KING || enemy_type == WHITE_KING){
 			if (((king_loc->row - (enemy_loc->row)) <= 1 && (king_loc->row - (enemy_loc->row)) >= -1) &&
-				((king_loc->column - (enemy_loc->column)) <= 1 && (king_loc->column - (enemy_loc->column)) >= -1)){
+					((king_loc->column - (enemy_loc->column)) <= 1 && (king_loc->column - (enemy_loc->column)) >= -1)){
 				return true;
 			}
 		}

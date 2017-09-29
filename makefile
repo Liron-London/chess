@@ -14,7 +14,7 @@ SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
 
 # COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors $(SDL_CFLAGS)
-COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors -g
+COMP_FLAG = -std=c99 -Wall -Wextra -Werror -pedantic-errors
 
 #LINK_FLAG = $(SDL_LDFLAGS) -g
 

@@ -38,12 +38,6 @@ gui_piece black_grid[16];
 
 void initialize_rects() ;
 
-<<<<<<< HEAD
-/*
- * Presents a pop-up message when the game ends with mate and informs who won
- * Returns the screen that needs to be presented - EXIT if an error occurred, MAIN MENU by default
- */
-=======
 screen popup_save(game* game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */ 0, 0, "Yes"},
@@ -89,7 +83,10 @@ screen popup_save(game* game) {
 	return MENU_SCREEN;
 }
 
->>>>>>> 97ffd8abb74086c7ef57504b30ee5ae7df235236
+/*
+ * Presents a pop-up message when the game ends with mate and informs who won
+ * Returns the screen that needs to be presented - EXIT if an error occurred, MAIN MENU by default
+ */
 screen popup_mate(int color) {
 	char message[40];
 	if (color == 1) {
@@ -255,11 +252,10 @@ game* undo_move (array_list* history, game* game) {
 	}
 	move* tmp_move = create_move();
 	tmp_move = array_list_get_last_move(history);
-	announce_undo_move(current_turn_color(game), tmp_move);//DEBUG?
+
 	array_list_remove_last(history);
 
 	tmp_move = array_list_get_last_move(history);
-	announce_undo_move((current_turn_color(game)+1)%2, tmp_move); //DEBUG?
 	game = array_list_get_last_game(history);
 	array_list_remove_last(history);
 

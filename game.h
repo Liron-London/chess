@@ -125,4 +125,9 @@ location* copy_location(location* loc);
 
 void destroy_location(location* loc);
 
+/*
+ * DEBUG prints game whites[] and blacks[]
+ */
+void print_pieces(game* cur_game);
+
 #endif // GAME_H_INCLUDED
