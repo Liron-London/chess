@@ -38,6 +38,10 @@ gui_piece black_grid[16];
 
 void initialize_rects() ;
 
+/*
+ * Presents a pop-up message when the game ends with mate and informs who won
+ * Returns the screen that needs to be presented - EXIT if an error occurred, MAIN MENU by default
+ */
 screen popup_mate(int color) {
 	char message[40];
 	if (color == 1) {
@@ -80,6 +84,10 @@ screen popup_mate(int color) {
 	return MENU_SCREEN;
 }
 
+/*
+ * Presents a pop-up message when the game ends with a tie
+ * Returns the screen that needs to be presented - EXIT if an error occurred, MAIN MENU by default
+ */
 screen popup_tie() {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "OK"}
@@ -115,6 +123,10 @@ screen popup_tie() {
 	return MENU_SCREEN;
 }
 
+/*
+ * Presents a pop-up message when the game reaches "check" and informs which king is threatened
+ * Returns the screen that needs to be presented - EXIT if an error occurred, MAIN MENU by default
+ */
 screen popup_check(int color) {
 	char message[40];
 	if (color == 1) {
@@ -160,7 +172,7 @@ screen popup_check(int color) {
 
 /*
  * checks for check / mate / tie
- * displays popup message if needed
+ * displays popup message if needed (by calling popup_X())
  * returns EXIT screen if mate or tie, GAME_SCREEN if check or none
  */
 screen check_game_status(game* game) {
@@ -184,17 +196,22 @@ screen check_game_status(game* game) {
 	return display_screen;
 }
 
+/*
+ * Called when the UNDO MOVE button is clicked
+ * Removes the last 2 elements from the history
+ * @Return value: the updates game
+ */
 game* undo_move (array_list* history, game* game) {
 	if (history->actualSize == 0) {
 		return game;
 	}
 	move* tmp_move = create_move();
 	tmp_move = array_list_get_last_move(history);
-	announce_undo_move(current_turn_color(game), tmp_move);
+	announce_undo_move(current_turn_color(game), tmp_move);//DEBUG?
 	array_list_remove_last(history);
 
 	tmp_move = array_list_get_last_move(history);
-	announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
+	announce_undo_move((current_turn_color(game)+1)%2, tmp_move); //DEBUG?
 	game = array_list_get_last_game(history);
 	array_list_remove_last(history);
 
@@ -203,8 +220,11 @@ game* undo_move (array_list* history, game* game) {
 	return game;
 }
 
+/*
+ * Adds the move&game to the last history element
+ * if history is full before adding - removes the oldest element from history to make room
+ */
 void update_history(move* move, game* game, array_list* history) {
-	// update history
 
 	if (array_list_is_full(history) == true){
 		array_list_remove_first(history);
@@ -212,7 +232,10 @@ void update_history(move* move, game* game, array_list* history) {
 	array_list_add_last(history, game_copy(game), copy_move(move));
 }
 
-//save_rec, load_game_rec, undo_move_rec, main_menu_rec, quit_rec;
+/*
+ *  Given a 'dest' Rect param, makes it follow the cursor by re-rendering the screen
+ *  @Return value: the screen that needs to be displayed - EXIT is an error occurred, GAME_SCREEN by default
+ */
 screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SDL_Rect dest, int moving_rect_color, int moving_rect_idx, int history_size) {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -247,7 +270,10 @@ screen drag_piece(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, SD
 	return display_screen;
 }
 
-
+/*
+ * Called when the RESTART GAME button is clicked
+ * given the current game - restarts it (re-initializes its fields), leaving the level, mode and user color unchanged
+ */
 void restart_game(game* cur_game) {
 	initialize_rects();
 	game* new_game = game_create();
@@ -277,6 +303,10 @@ void restart_game(game* cur_game) {
 	game_destroy(new_game);
 }
 
+/*
+ * Called when drag&drop ends (on drop)
+ * given the current game - updates the rectangles that hold the pieces to be located according to the game's blacks[] and whites[]
+ */
 int update_pieces_rects(game* cur_game) {
 	int x_0 = ORIGIN_X;
 	int y_0 = ORIGIN_Y - CELL_HEIGHT;
@@ -342,6 +372,10 @@ screen draw_piece(SDL_Window* window, SDL_Renderer* renderer, gui_piece* guipiec
 	return GAME_SCREEN;
 }
 
+/*
+ * Initializes the black/white_grid[]'s rectangles to be outside of the board and in the correct size
+ * They are later repositioned by update_pieces_rects
+ */
 void initialize_rects() {
 	for (int i = 0; i < 16; i++) {
 		SDL_Rect white_square = {.x = BOARD_WIDTH, .y = BOARD_HEIGHT, .w = CELL_WIDTH, .h = CELL_HEIGHT};
@@ -410,7 +444,11 @@ screen initialize_pieces(SDL_Window* window, SDL_Renderer* renderer){
 	return GAME_SCREEN;
 }
 
-
+/*
+ * Creates and copies to renderer the GAME SCREEN buttons, enabled/disabled correctly
+ * history_size param used for determining if "undo" is enabled
+ * @Return value: the screen that needs to be presented - EXIT if an error occurred, GAME_SCREEN by default
+ */
 screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer, int history_size) {
 	screen display_screen = GAME_SCREEN;
 
@@ -517,7 +555,7 @@ screen display_game_buttons(SDL_Window* window, SDL_Renderer* renderer, int hist
 }
 
 /*
- * displays the game board
+ * Creates the game board image and copies it to the renderer
  */
 screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
 	screen display_screen = GAME_SCREEN;
@@ -542,7 +580,7 @@ screen display_game_board(SDL_Window* window, SDL_Renderer* renderer) {
  * calls display_game_buttons, display_game_board, updates_pieces_rects
  * copies all the Rects to the renderer
  * presents the renderer
- * returns GAME_SCREEN if all is ok, else EXIT
+ * @Return value: GAME_SCREEN if all is ok, else EXIT
  */
 screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_game, int history_size) {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
@@ -562,6 +600,12 @@ screen render_game_screen(SDL_Window* window, SDL_Renderer* renderer, game* cur_
 	return display_screen;
 }
 
+/*
+ * Management method of the GAME SCREEN
+ * Holds the event loop and manages the game state
+ * @Return value: the screen that needs to be presented - EXIT if an error occurred, GAME_SCREEN by default, LOAD / MAIN MENU
+ * if the corresponding buttons were clicked
+ */
 screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 	screen display_screen = GAME_SCREEN;
 	move* new_move = create_move();

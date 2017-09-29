@@ -22,7 +22,6 @@ screen set_difficulty_dialog(game* new_game);
 /*
  * Presents a pop-up message, asking the user to set the game's user color
  * sets the user color accordingly
- *
  */
 screen set_user_color_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
@@ -72,7 +71,10 @@ screen set_user_color_dialog(game* new_game) {
 	return MENU_SCREEN;
 }
 
-
+/*
+ * Presents a pop-up message, asking the user to set the game's difficulty level
+ * sets the difficulty level accordingly
+ */
 screen set_difficulty_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "noob" },
@@ -122,6 +124,10 @@ screen set_difficulty_dialog(game* new_game) {
 	return MENU_SCREEN;
 }
 
+/*
+ * Presents a pop-up message, asking the user to set the game's game mode
+ * sets the game mode accordingly
+ */
 screen set_game_mode_dialog(game* new_game) {
 	const SDL_MessageBoxButtonData buttons[] = {
 			{ /* .flags, .buttonid, .text */        0, 0, "1 player" },
@@ -171,6 +177,11 @@ screen set_game_mode_dialog(game* new_game) {
 	return MENU_SCREEN;
 }
 
+/*
+ * Presents the main menu buttons and handles them
+ * returns what screen needs to be presented: EXIT if an error occured / QUIT was clicked, GAME SCREEN if the user finished
+ * setting all the relevant settings, LOAD SCREEN if LOAD was clicked
+ */
 screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_game) {
 	screen display_screen = MENU_SCREEN;
 
