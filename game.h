@@ -64,9 +64,16 @@ void destroy_piece(piece* cur_piece);
 piece* create_piece();
 
 /*
+ * called when the user causes a check state
  * prints which king is threatened
  */
-void announce_check(int color);
+void announce_check_user(int color);
+
+/*
+ * called when the computer causes a check state
+ * prints "Check!"
+ */
+void announce_check_pc();
 
 /*
 * checks that the King's not threatened

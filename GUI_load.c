@@ -36,7 +36,6 @@ void free_load_resources() {
  */
 screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int selected) {
 	int num_games = get_num_games();
-	SDL_Log("num games is %d", num_games);
 	int y = 15;
 	char image_name[39];
 	for (int i = 0; i < num_games; i++) {
@@ -48,7 +47,6 @@ screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int sele
 		char idx[2] = {i + 1 + '0', '\0'};
 		strcat(image_name, idx);
 		strcat(image_name, ".bmp");
-		//		SDL_Log("image name is: %s", image_name);
 		SDL_Surface* surface = SDL_LoadBMP(image_name);
 		verify_surface(window, renderer, surface, LOAD_SCREEN);
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -145,7 +143,6 @@ screen loading_screen(SDL_Window* window, SDL_Renderer* renderer, screen prev_sc
 					loading_screen = false;
 				} else if (check_mouse_button_event(event, load_button) && selected_game >= 0) {
 					generate_filename(selected_game + 1, filename);
-					//					SDL_Log("filename is: %s", filename);
 					display_screen = GAME_SCREEN;
 					loading_screen = false;
 					load_game(game, filename);

@@ -38,10 +38,58 @@ gui_piece black_grid[16];
 
 void initialize_rects() ;
 
+<<<<<<< HEAD
 /*
  * Presents a pop-up message when the game ends with mate and informs who won
  * Returns the screen that needs to be presented - EXIT if an error occurred, MAIN MENU by default
  */
+=======
+screen popup_save(game* game) {
+	const SDL_MessageBoxButtonData buttons[] = {
+			{ /* .flags, .buttonid, .text */ 0, 0, "Yes"},
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "No"},
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Cancel"}
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+			{ /* .colors (.r, .g, .b) */
+					/* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+					{255, 255, 255},
+					/* [SDL_MESSAGEBOX_COLOR_TEXT] */
+					{50, 50, 50},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+					{123, 182, 86},
+					/* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+					{153, 255, 255}
+			}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION, /* .flags */
+			NULL, /* .window */
+			"Are you sure?", /* .title */
+			"Would you like to save your current game before exiting?", /* .message */
+			SDL_arraysize(buttons), /* .numbuttons */
+			buttons, /* .buttons */
+			&colorScheme /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		SDL_Log("error displaying message box");
+		return EXIT;
+	} else if (buttonid == 0) {
+		int num_games = get_num_games();
+		default_save(game, num_games);
+		return EXIT;
+	} else if (buttonid == 1) {
+		return EXIT;
+	} else if (buttonid == 2) {
+		return GAME_SCREEN;
+	}
+	return MENU_SCREEN;
+}
+
+>>>>>>> 97ffd8abb74086c7ef57504b30ee5ae7df235236
 screen popup_mate(int color) {
 	char message[40];
 	if (color == 1) {
@@ -664,7 +712,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 						}
 						piece* cur_piece = location_to_piece(game, new_move->source);
 						move_piece(game, new_move, cur_piece);
-						print_board(game); //DEBUG
 						display_screen = check_game_status(game);
 						if (display_screen == MENU_SCREEN) {
 							game_running = false;
@@ -676,8 +723,11 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 
 				//checking buttons
 				else if (check_mouse_button_event(event, quit_rec)) {
-					game_running = false;
-					return EXIT;
+					display_screen = popup_save(game);
+					if (display_screen == EXIT) {
+						game_running = false;
+						return EXIT;
+					}
 				} else if (check_mouse_button_event(event, restart_game_rec)) {
 					restart_game(game);
 					update_pieces_rects(game);
@@ -694,8 +744,12 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 					update_pieces_rects(game);
 					render_game_screen(window, renderer, game, history->actualSize);
 				} else if (check_mouse_button_event(event, main_menu_rec)) {
-					game_running = false;
-					display_screen = MENU_SCREEN;
+					display_screen = popup_save(game);
+					if (display_screen == EXIT) {
+						game_running = false;
+						restart_game(game);
+						return MENU_SCREEN;
+					}
 				}
 			}
 		}
@@ -708,7 +762,6 @@ screen game_screen(SDL_Window* window, SDL_Renderer* renderer, game* game) {
 			comp_move = get_recommended_move_for_comp(game, game->difficulty);
 			//			announce_computer_move(game, comp_move);
 			move_piece(game, comp_move, location_to_piece(game, comp_move->source));
-			print_board(game);
 			update_pieces_rects(game);
 			render_game_screen(window, renderer, game, history->actualSize);
 			// update history

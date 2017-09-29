@@ -5,8 +5,9 @@
  *      Author: lironl
  */
 # include "file_handler.h"
-#include "debug.h"
-#include <string.h>
+# include "debug.h"
+# include <string.h>
+# define FILE_LIMIT (5)
 
 /*
  * get a game and uses its board to update all pieces status
@@ -97,10 +98,10 @@ void update_pieces_for_load(game* cur_game){
 		}
 	}
 }
-
+/*
+ * save game object to a file - no extension is added!
+ */
 int save_game(game* cur_game, char* filename) {
-	//strcat(filename, ".xml");
-	DEBUG("filename is: %s\n", filename);
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
 		printf("File cannot be created or modified\n");
@@ -132,29 +133,24 @@ int save_game(game* cur_game, char* filename) {
 	return 0;
 }
 
+/*
+ * finds the string in a tag in a save game
+ */
 char* tag_finder(char* input_file_text, char* tag) {
 //	int tag_len = strlen(tag);
 	char open_tag[30], close_tag[30];
 
-	DEBUG2("Input file text: %s\n", input_file_text);
-
 	sprintf(open_tag, "<%s>", tag);
 	sprintf(close_tag, "</%s>", tag);
-
-	DEBUG2("open tag is %s, close tag is %s\n", open_tag, close_tag);
 
 	char* content_start = strstr(input_file_text, ">");
 	char* content_end = strstr(input_file_text, "</");
 
-	DEBUG2("content_start is %s, content_end is %s\n", content_start, content_end);
-
 	int len = (int)(content_end - content_start) - 1;
 
-	DEBUG2("Content length is %d\n", len);
 	char* content = malloc((len + 1)* sizeof(char));
 	strncpy(content, content_start+1, len);
 	content[len] = '\0';
-	DEBUG2("Content is %s\n", content);
 	return content;
 }
 
@@ -173,18 +169,22 @@ int load_game(game* cur_game, char* filename) {
 	fgets(input_file_text, 50, fp); // gets the <current_turn> line
 	tag_content = tag_finder(input_file_text, "current_turn");
 	cur_game->current_turn = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <game_mode> line
 	tag_content = tag_finder(input_file_text, "game_mode");
 	cur_game->game_mode = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <difficulty> line
 	tag_content = tag_finder(input_file_text, "difficulty");
 	cur_game->difficulty = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <user_color> line
 	tag_content = tag_finder(input_file_text, "user_color");
 	cur_game->user_color = atoi(tag_content);
+	free(tag_content);
 
 	fgets(input_file_text, 50, fp); // gets the <board> line
 
@@ -197,13 +197,10 @@ int load_game(game* cur_game, char* filename) {
 		for (int j = 0; j <= 7; j++) {
 			cur_game->board[i-1][j] = tag_content[j];
 		}
+		free(tag_content);
 	}
 	update_pieces_for_load(cur_game);
-
-//	if((cur_game->game_mode == 1 && cur_game->user_color == 0)) {
-//		print_board(cur_game);
-//	}
-	// game_play(cur_game);
+	fclose(fp);
 	return 0;
 }
 
@@ -221,7 +218,7 @@ void default_save(game* game, int num_games){
 	for (int i=num_games; i > 0 ;i--){
 		generate_filename(i, filename);
 		load_game(game, filename);
-		if (num_games < 5){
+		if (num_games < FILE_LIMIT){
 			generate_filename(i+1, filename);
 			save_game(game, filename);
 		}
@@ -234,7 +231,7 @@ void default_save(game* game, int num_games){
 
 int get_num_games(){
 	int index = 0;
-	for (int i=1; i<=5; i++){
+	for (int i=1; i<=FILE_LIMIT; i++){
 		char filename[13]= "chess_game_";
 		char idx[2] = {i + '0', '\0'};
 		strcat(filename, idx);

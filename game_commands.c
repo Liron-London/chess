@@ -31,6 +31,7 @@ void game_command_destroy(Gamecommand* command) {
 	free(command);
 }
 
+// parse command line from user and initialize game_command
 Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	char* str_copy = malloc(strlen(str) + 1);
 	if (str_copy == NULL){
@@ -47,24 +48,31 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 		break;
 	}
 	if (strcmp(command_text, "move") == 0){
-		//DEBUG("detected that command is move\n");
 		game_command->cmd = MOVE;
 
-		game_command->move->source->row = atoi(strtok(NULL, "<, ")) - 1;
-		game_command->move->source->column = strtok(NULL, "<,> ")[0] - 'A';
-		//check for invalid move parameters
-//		if (game_command->move->source == NULL ||
-//				game_command->move->source->row < 0 || game_command->move->source->row > 7 ||
-//				game_command->move->source->column < 0 || game_command->move->source->column > 7) {
-//			announce_invalid_location();
-//			game_command->validArg = false;
-//		}
+		// set move to game_command if the text is valid
+		int row = atoi(strtok(NULL, "<, ")) - 1;
+		if (row >=0 && row <= 7) {
+			game_command->move->source->row = row;
+			int col = strtok(NULL, "<,> ")[0] - 'A';
+			if (col >=0 && col <= 7) {
+				game_command->move->source->column = col;
+			} else {
+				announce_invalid_location();
+				game_command->move->source->column = -1;
+				return game_command;
+			}
+		} else {
+			announce_invalid_location();
+			game_command->move->source->row = -1;
+			game_command->move->source->column = -1;
+			return game_command;
+		}
 
-		// command_text is printed because the variable must be in use
 		char* command_text = strtok(NULL, " \t\n");
-		//DEBUG("command_text is: %s\n", command_text);
+
+		// free in case command is not legal
 		if (strcmp(command_text, "to") != 0){
-			// game_command->is_val is false...
 			free(str_copy);
 			return game_command;
 		}
@@ -98,8 +106,12 @@ Gamecommand* game_command_parse_line(char* str, char* file_name) {
 	}
 
 	if (strcmp(command_text, "save") == 0) {
-		strcpy(file_name, strtok(NULL, " \t\n"));
-		//DEBUG("in parse line, file_name is: %s\n", file_name);
+		char* tmp_name = strtok(NULL, " \t\n");
+		if (tmp_name == NULL) {
+			printf("File cannot be created or modified\n");
+		} else {
+			strcpy(file_name, tmp_name);
+		}
 		game_command->cmd = SAVE;
 		game_command->validArg = true;
 		free(str_copy);
@@ -132,6 +144,7 @@ void announce_undo_not_available() {
 	printf("Undo command not available in 2 players mode\n");
 }
 
+// print a massage when UNDO is done
 void announce_undo_move(int player, move* tmp_move) {
 	int src_row, dst_row;
 	char src_col, dst_col;
@@ -153,28 +166,28 @@ void announce_undo_move(int player, move* tmp_move) {
 void announce_computer_move(game* game, move* move){
 	char piece_type = location_to_piece(game, move->source)->piece_type;
 	if (piece_type == 'm' || piece_type == 'M'){
-		printf("Computer: move pawn at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move pawn at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'n' || piece_type == 'N'){
-		printf("Computer: move knight at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move knight at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'b' || piece_type == 'B'){
-		printf("Computer: move bishop at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move bishop at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'q' || piece_type == 'Q'){
-		printf("Computer: move queen at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move queen at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'k' || piece_type == 'K'){
-		printf("Computer: move king at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move king at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 	if (piece_type == 'r' || piece_type == 'R'){
-		printf("Computer: move rook at <%d,%c> to <%d,%c>\n", move->source->row,
-				move->source->column + 'A', move->dest->row, move->dest->column + 'A');
+		printf("Computer: move rook at <%d,%c> to <%d,%c>\n", move->source->row+1,
+				move->source->column + 'A', move->dest->row+1, move->dest->column + 'A');
 	}
 }
 
@@ -198,8 +211,12 @@ void announce_mate(int color) {
 	printf("Checkmate! %s player wins the game\n", color_name);
 }
 
-void announce_tie() {
+void announce_tie_pc() {
 	printf("The game ends in a tie\n");
+}
+
+void announce_tie_user() {
+	printf("The game is tied\n");
 }
 
 // called when the command "start" is pressed in settings
@@ -207,9 +224,14 @@ int game_play(game* game){
 	Gamecommand* game_command;
 	// char command_str[1024]; // assuming that the command is no longer the 1024 chars
 	piece* cur_piece;
-	if(!(game->game_mode == 1 && game->user_color == 0)) {
-		print_board(game);
-	}
+
+		if((game->game_mode == 1 && game->current_turn == 1)) {
+			print_board(game);
+		}
+
+		if (game->game_mode == 2){
+			print_board(game);
+		}
 	// relevant only in one player mode -- need to create history array
 	array_list* history = array_list_create(6);
 	while (1){
@@ -229,18 +251,22 @@ int game_play(game* game){
 			destroy_move(comp_move);
 			int color = current_turn_color(game);
 			if (has_valid_moves(game) == false){
+				change_turn(game);
 				if (is_check(game) == true){
+					color = current_turn_color(game);
 					announce_mate(color);
+					change_turn(game);
 				}
 				else{
-					announce_tie();
+					announce_tie_pc();
 				}
 				break;
-
 			}
+			change_turn(game);
 			if (is_check(game)) {
-				announce_check((current_turn_color(game) + 1)%2);
+				announce_check_pc();
 			}
+			change_turn(game);
 
 		}
 
@@ -264,7 +290,7 @@ int game_play(game* game){
 		}
 
 		//RESET
-		if (game_command->validArg == true && game_command->cmd == RESET) {
+		else if (game_command->validArg == true && game_command->cmd == RESET) {
 			// freeing all variables
 			array_list_destroy(history);
 			free(command_str);
@@ -276,54 +302,57 @@ int game_play(game* game){
 		}
 
 		//SAVE
-		if (game_command->validArg == true && game_command->cmd == SAVE){
+		else if (game_command->validArg == true && game_command->cmd == SAVE){
 			save_game(game, file_name);
 		}
 
 		// MOVE
-		if (game_command->validArg == true && game_command->cmd == MOVE){
-			// check if valid move
-			if (is_valid_move(game, game_command->move) == true){
+		else if (game_command->cmd == MOVE){
+			if (game_command->validArg == true){
+				// check if valid move
+				if (is_valid_move(game, game_command->move) == true){
 
-				// update history
-				if (game->game_mode == 1){
-					if (array_list_is_full(history) == true){
-						array_list_remove_first(history);
+					// update history
+					if (game->game_mode == 1){
+						if (array_list_is_full(history) == true){
+							array_list_remove_first(history);
+						}
+						array_list_add_last(history, game_copy(game), copy_move(game_command->move));
 					}
-					array_list_add_last(history, game_copy(game), copy_move(game_command->move));
-				}
 
-				cur_piece = location_to_piece(game, game_command->move->source);
-				move_piece(game, game_command->move, cur_piece);
+					cur_piece = location_to_piece(game, game_command->move->source);
+					move_piece(game, game_command->move, cur_piece);
 
-				int color = current_turn_color(game);
-				if (has_valid_moves(game) == false){
+					int color = current_turn_color(game);
+					if (has_valid_moves(game) == false){
+						change_turn(game);
+						if (is_check(game) == true){
+							color = current_turn_color(game);
+							announce_mate(color);
+							change_turn(game);
+						}
+						else{
+							announce_tie_user();
+						}
+						free(command_str);
+						game_command_destroy(game_command);
+						break;
+					}
 					change_turn(game);
 					if (is_check(game) == true){
 						color = current_turn_color(game);
-						announce_mate(color);
-						change_turn(game);
+						announce_check_user(color);
 					}
-					else{
-						announce_tie();
+					change_turn(game);
+					// print board only in case 2 players are playing
+					if (game->game_mode == 2){
+						print_board(game);
 					}
-					free(command_str);
-					game_command_destroy(game_command);
-					break;
-				}
-				change_turn(game);
-				if (is_check(game) == true){
-					color = current_turn_color(game);
-					announce_check(color);
-				}
-				change_turn(game);
-				print_board(game);
-			}
+				}}
 		}
 
 		// UNDO
-		if (game_command->validArg == true && game_command->cmd == UNDO){
-			DEBUG("In UNDO\n");
+		else if (game_command->validArg == true && game_command->cmd == UNDO){
 			if (game->game_mode != 1){
 				announce_undo_not_available();
 			}
@@ -334,10 +363,8 @@ int game_play(game* game){
 				}
 
 				else {
-					DEBUG("history is not empty!\n");
 					// takes 2 moves and games out of history
 					move* tmp_move = create_move();
-					DEBUG("move created!\n");
 					tmp_move = array_list_get_last_move(history);
 					announce_undo_move(current_turn_color(game), tmp_move);
 					array_list_remove_last(history);
@@ -352,6 +379,10 @@ int game_play(game* game){
 					print_board(game);
 				}
 			}
+		}
+
+		else{
+			printf("ERROR: invalid command\n");
 		}
 
 		free(command_str);

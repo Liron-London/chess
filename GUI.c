@@ -59,11 +59,9 @@ screen set_user_color_dialog(game* new_game) {
 	} else if (buttonid == 0) {
 		new_game->user_color = 0;
 		new_game->current_turn = 0;
-		SDL_Log("User color is black");
 		return GAME_SCREEN;
 	} else if (buttonid == 1) {
 		new_game->user_color = 1;
-		SDL_Log("User color is white");
 		return GAME_SCREEN;
 	} else {
 		return set_difficulty_dialog(new_game);
@@ -114,9 +112,7 @@ screen set_difficulty_dialog(game* new_game) {
 	if (buttonid == -1) {
 		SDL_Log("no selection");
 	} else if (buttonid <= 3) {
-		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->difficulty = buttonid + 1;
-		SDL_Log("Game difficulty is %d", new_game->difficulty);
 		return set_user_color_dialog(new_game);
 	} else {
 		return set_game_mode_dialog(new_game);
@@ -164,13 +160,10 @@ screen set_game_mode_dialog(game* new_game) {
 	}
 	if (buttonid == -1) {
 		SDL_Log("no selection");
-		SDL_Log("Game mode is %d", new_game->game_mode);
 	} else if (buttonid == 0) {
-		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->game_mode = 1;
 		return set_difficulty_dialog(new_game);
 	} else if (buttonid == 1) {
-		SDL_Log("selection was %s", buttons[buttonid].text);
 		new_game->game_mode = 2;
 		return GAME_SCREEN;
 	}
@@ -273,7 +266,7 @@ screen display_main_menu(SDL_Window* window, SDL_Renderer* renderer, game* new_g
 }
 
 //int main(int argc, char* argv[]) {
-int main() {
+int gui() {
 	//Start SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		printf("ERROR: unable to initialize SDL: %s\n", SDL_GetError());
@@ -304,9 +297,9 @@ int main() {
 		return 1;
 	}
 
+	game* new_game = game_create();
 	screen running = MENU_SCREEN;
 	while(running != EXIT) {
-		game* new_game = game_create();
 		SDL_Event event;
 		//loop runs as long as event queue isn't empty
 		while (SDL_PollEvent(&event)) {
@@ -320,9 +313,9 @@ int main() {
 		if (running == MENU_SCREEN) {
 			running = display_main_menu(window, renderer, new_game);
 		}
-		else if (running == GAME_SCREEN) {
+		if (running == GAME_SCREEN) {
 			running = game_screen(window, renderer, new_game);
-			game_destroy(new_game);
+//			game_destroy(new_game);
 		}
 		else if (running == LOAD_SCREEN) {
 			running = loading_screen(window, renderer, MENU_SCREEN, new_game);
@@ -330,6 +323,7 @@ int main() {
 		}
 	}
 	//free resources
+	game_destroy(new_game);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	//Quit SDL

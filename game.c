@@ -8,29 +8,23 @@
 #include "game.h"
 #include "debug.h"
 
-/*
- * TODO
- * (1) need to change the size of the valid_moves array to 29 and initialize it to default locations (will make all checks much easier)
- * (2) in Is_valid_move there might be a memory leak in valid_locs (initialized as location* but needed to be location[64]
- */
-
+// returns the turn of the current player
 int current_turn_color(game* game) {
 	return (game->current_turn + game->user_color)%2;
 }
 
+// return the pieces located in a specific location on the board
 piece* location_to_piece(game* cur_game, location* loc){
-	// DEBUG("in location_to_piece\n");
 	char type = cur_game->board[loc->row][loc->column];
 	if (type == EMPTY_ENTRY){
 		return NULL;
 	}
 
+	// check if black or white
 	if (type > 'a'){
 		for (int i=0; i<16;i++){
-			DEBUG("piece location is: ROW %d, COL %d\n", cur_game->whites[i]->piece_location->row, cur_game->whites[i]->piece_location->column);
 			if (cur_game->whites[i]->piece_location->row == loc->row &&
 					cur_game->whites[i]->piece_location->column == loc->column && cur_game->whites[i]->alive == 1){
-				DEBUG("NON-NULL is returned\n");
 				return cur_game->whites[i];
 			}
 		}
@@ -40,13 +34,10 @@ piece* location_to_piece(game* cur_game, location* loc){
 		for (int i=0; i<16;i++){
 			if (cur_game->blacks[i]->piece_location->row == loc->row && cur_game->blacks[i]->piece_location->column == loc->column
 					&& cur_game->blacks[i]->alive == 1){
-				DEBUG("NON-NULL is returned\n");
 				return cur_game->blacks[i];
 			}
 		}
 	}
-	DEBUG2("NULL is returned\n");
-	DEBUG2("piece location is: ROW %d, COL %d\n", loc->row, loc->column)
 	return NULL;
 }
 
@@ -77,14 +68,8 @@ piece* create_piece() {
 	}
 	new_piece->alive = 1;
 	new_piece->color = 0;
-	//DEBUG("about to create location!\n");
 	new_piece->piece_location = create_location();
-	//DEBUG("location created!\n");
-	// default values
-	//piece->piece_location->row = -1;
-	//piece->piece_location->column = -1;
 	if (new_piece->piece_location == NULL){
-			//free(piece->piece_location);
 			destroy_location(new_piece->piece_location);
 			free(new_piece);
 			return NULL;
@@ -252,12 +237,6 @@ game* game_copy(game* cur_game) {
 		}
 	}
 
-	/* copying history
-	for (int i=0; i<6; i++){
-		copy->history[i] = cur_game->history[i];
-	}
-	*/
-
 	copy->current_turn = cur_game->current_turn;
 	copy->difficulty = cur_game->difficulty;
 	copy->game_mode = cur_game->game_mode;
@@ -326,11 +305,9 @@ void change_turn(game* cur_game){
 	}
 }
 
-
+// check if enemy threaten the king in diagonals - used for bishop and queen
 bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_loc){
 	// up right diagonal
-	DEBUG("KING LOC IS: ROW %d, COL %d\n", king_loc->row, king_loc->column);
-	DEBUG("ENEMY LOC IS: ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 	for (int i=1; i<8; i++){
 
 		if ((enemy_loc->row + i == king_loc->row) && (enemy_loc->column + i == king_loc->column)){
@@ -387,14 +364,15 @@ bool check_diagonals(game* cur_game, const location* king_loc, location* enemy_l
 	return false;
 }
 
+// check if enemy threaten the king in parallel - used for rook and queen
 bool check_parallels(game* cur_game, const location* king_loc, location* enemy_loc){
-	// up
+	// right
 	for (char i=1; i<8; i++){
 		if (enemy_loc->column + i == king_loc->column && enemy_loc->row  == king_loc->row){
 			return true;
 		}
 
-		if (enemy_loc->column + i < 7){
+		if (enemy_loc->column + i > 7){
 			break;
 		}
 
@@ -404,7 +382,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 		}
 	}
 
-	// down
+	// left
 	for (char i=1; i<8; i++){
 		if (enemy_loc->column - i == king_loc->column&& enemy_loc->row  == king_loc->row){
 			return true;
@@ -420,7 +398,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 		}
 	}
 
-	// right
+	// up
 	for (int i=1; i<8; i++){
 		if (enemy_loc->row + i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
@@ -435,7 +413,7 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 		}
 	}
 
-	// left
+	// down
 	for (int i=1; i<8; i++){
 		if (enemy_loc->row - i == king_loc->row && enemy_loc->column == king_loc->column){
 			return true;
@@ -445,19 +423,23 @@ bool check_parallels(game* cur_game, const location* king_loc, location* enemy_l
 			break;
 		}
 
-		if (enemy_loc->row- i < 1 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
+		if (enemy_loc->row- i < 0 || cur_game->board[enemy_loc->row - i][enemy_loc->column] != EMPTY_ENTRY){
 			break;
 		}
 	}
 	return false;
 }
 
-void announce_check(int color) {
+void announce_check_user(int color) {
 	if (color == 1) {
 		printf("Check: white King is threatened!\n");
 	} else {
 		printf("Check: black King is threatened!\n");
 	}
+}
+
+void announce_check_pc() {
+	printf("Check!\n");
 }
 
 // if it's white's turn, white king cannot be threatened by a black piece, the opposite if it's black's turn
@@ -468,9 +450,9 @@ bool is_check(game* cur_game){
 	location* king_loc;
 	piece** enemies;
 
-	// white turn
 	int color = (cur_game->current_turn + cur_game->user_color) %2;
 
+	// white turn
 	if (color == 1){
 		king_loc = cur_game->whites[4]->piece_location;
 		enemies = cur_game->blacks;
@@ -485,9 +467,7 @@ bool is_check(game* cur_game){
 
 		// putting location into variable for readability
 		location* enemy_loc = enemies[i]->piece_location;
-		//DEBUG("enemy loc is ROW %d, COL %d\n", enemy_loc->row, enemy_loc->column);
 		char enemy_type = enemies[i]->piece_type;
-		//DEBUG("enemy type %c\n",enemy_type);
 		if (enemies[i]->alive == 0){
 			continue;
 		}

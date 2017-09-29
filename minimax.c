@@ -12,6 +12,7 @@
 #define min(a,b)  ((((a)-(b))&0x80000000) >> 31)? (a) : (b)
 #define max(a,b)  ((((a)-(b))&0x80000000) >> 31)? (b) : (a)
 
+//evaluate score for board
 int scoring_function(game* game) {
 	if (game == NULL) {
 		return 0;
@@ -19,10 +20,8 @@ int scoring_function(game* game) {
 	int score = 0;
 	int white_sum = 0;
 	int black_sum = 0;
-	//calculate white pieces
 
-	// in case of mate give more points
-
+	//calculate white pieces score
 	for (int i = 0; i < 16; i++) {
 
 		char cur_piece_type = game->whites[i]->piece_type;
@@ -43,7 +42,7 @@ int scoring_function(game* game) {
 		}
 	}
 
-	//calculate black pieces
+	//calculate black pieces score
 	for (int i = 0; i < 16; i++) {
 		char cur_piece_type = game->blacks[i]->piece_type;
 		if (cur_piece_type == BLACK_PAWN && game->blacks[i]->alive == 1) {
@@ -63,16 +62,17 @@ int scoring_function(game* game) {
 		}
 	}
 
-	if (current_turn_color(game) == 1) {
+	// checks whether score should be given to the white or to the black
+	if (game->user_color == 1) {
 		score = white_sum - black_sum;
 	} else {
 		score = black_sum - white_sum;
 	}
-	return -score;
+	return score;
 }
 
 
-// returns the move the computer should do, the move will be in best_move
+// save the computer move to the variable best_move
 int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player, move* best_move){
 	if (depth == 0){
 		return scoring_function(node);
@@ -105,15 +105,16 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			your_pieces = node->whites;
 		}
 
-		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
+		// iterate over all pieces
 		for (int i=0; i<16; i++){
 			if (quit == true){
 				break;
 			}
+			// calculate valid moves only for alive pieces
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
 
-				//TODO -- need to export to another func
+
 				for (int k=0; k<64; k++){
 					valid_locs[k]->row=-1;
 					valid_locs[k]->column=-1;
@@ -132,21 +133,27 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 					total_possible_moves += 1;
 
+					//generate a new board with the new move
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, false, best_move);
-					printf("new score is: %d", new_score);
 
 					game_destroy(tmp_game);
 
+					// update best move in case new_score is better than tmp_score
 					if (tmp_best_move->source->row == -1 || new_score > tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
+
+//						printf("---max---\n");
+//						printf("tmp score is: %d\n", tmp_score);
+//						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row+1,tmp_best_move->source->column+'A',tmp_best_move->dest->row+1, tmp_best_move->dest->column+'A');
 					}
 
+					// update alpha in case new_score is better than alpha
 					if (new_score > alpha){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
@@ -156,8 +163,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_score = new_score;
 					}
 
+					// stop the process in case alpha is larger than beta
 					if (beta <= alpha){
-						tmp_best_move->source->row = -1;
+						//tmp_best_move->source->row = -1;
+						// printf("---max--- prune\n");
 						tmp_score = beta;
 						quit = true;
 						break; // beta cut-off
@@ -167,6 +176,7 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 		}
 	}
 
+	// minimize
 	else{
 		tmp_score = 10000000;
 		if (color == 0){
@@ -177,15 +187,15 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 			your_pieces = node->whites;
 		}
 
-		// all_valid_moves(node, possible_moves, amount_of_valid_moves);
+		// iterate over all pieces
 		for (int i=0; i<16; i++){
 			if (quit == true){
 				break;
 			}
+			// check valid moves only for the alive pieces
 			if (your_pieces[i]->alive){
 				tmp_piece = your_pieces[i];
 
-				//TODO -- need to export to another func
 				for (int k=0; k<64; k++){
 					valid_locs[k]->row=-1;
 					valid_locs[k]->column=-1;
@@ -204,20 +214,26 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 					j += 1;
 					total_possible_moves += 1;
 
+					//generate a new board with the new move
 					move_piece(tmp_game, tmp_move, location_to_piece(tmp_game, tmp_move->source));
 
 					new_score = alphabeta(tmp_game, depth-1, alpha, beta, true, best_move);
 
 					game_destroy(tmp_game);
 
+					// update best move in case new_score is better than tmp_score
 					if (tmp_best_move->source->row == -1  || new_score < tmp_score){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
 						tmp_best_move->dest->row = tmp_move->dest->row;
 						tmp_best_move->dest->column = tmp_move->dest->column;
 						tmp_score = new_score;
+//						printf("---min---\n");
+//						printf("tmp score is: %d\n", tmp_score);
+//						printf("tmp best_move is source_row: %d, source_col: %c, dest_row: %d, dest_col: %c\n", tmp_best_move->source->row+1,tmp_best_move->source->column+'A',tmp_best_move->dest->row+1, tmp_best_move->dest->column+'A');
 					}
 
+					// update alpha in case new_score is better than alpha
 					if (new_score < beta){
 						tmp_best_move->source->row = tmp_move->source->row;
 						tmp_best_move->source->column = tmp_move->source->column;
@@ -227,8 +243,10 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 						tmp_score = new_score;
 					}
 
+					// stop the process in case alpha is larger than beta
 					if (beta <= alpha){
-						tmp_best_move->source->row = -1;
+//						printf("---min--- prune\n");
+						//tmp_best_move->source->row = -1;
 						tmp_score = alpha;
 						quit = true;
 						break; // alpha cut-off
@@ -257,18 +275,16 @@ int alphabeta(game* node, int depth, int alpha, int beta, bool maximizing_player
 	return tmp_score;
 }
 
+// call the alpha-beta pruning algorithm with min/max depends on user color
 move* get_recommended_move_for_comp(game* game, int depth){
 	move* comp_move = create_move();
-	// user is black
+
 	if (game->user_color == 0){
 		alphabeta(game, depth, INT_MIN, INT_MAX, true, comp_move);
-		printf("comp run max\n");
 	}
 
-	// user is white
-	if (game->user_color == 1){
+	else {
 		alphabeta(game, depth, INT_MIN, INT_MAX, false, comp_move);
-		printf("comp run min\n");
 	}
 	return comp_move;
 }
