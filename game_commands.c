@@ -370,12 +370,22 @@ int game_play(game* game){
 					array_list_remove_last(history);
 					tmp_move = array_list_get_last_move(history);
 					announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
-
+					
+					printf("A\n");
+					
 					//updating game and history
 					game = array_list_get_last_game(history);
-
+					
+					printf("B\n");
+					
 					array_list_remove_last(history);
+					
+					printf("C\n");
+					
 					destroy_move(tmp_move);
+					
+					printf("D\n");
+					
 					print_board(game);
 				}
 			}
