@@ -373,23 +373,15 @@ int game_play(game* game){
 					//announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
 					announce_undo_move((current_turn_color(game)+1)%2, array_list_get_last_move(history));
 					
-					printf("A\n");
-					
 					//updating game and history
 					game = game_copy(array_list_get_last_game(history));
-					
-					printf("B\n");
 					
 					//printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
 					array_list_remove_last(history);
 					
-					printf("C\n");
-					
 					//printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
 					//destroy_move(tmp_move);
 					// free(tmp_move);
-					
-					printf("D\n");
 					
 					print_board(game);
 				}
