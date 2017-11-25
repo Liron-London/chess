@@ -200,7 +200,7 @@ int set_game() {
 			}
 		}
 		if (command->cmd == DIFFICULTY) {
-			if (new_game->game_mode == 1 && command->validArg = true) {
+			if (new_game->game_mode == 1 && command->validArg == true) {
 				new_game->difficulty = command->arg;
 			} else {
 				printf("ERROR: invalid command\n");
