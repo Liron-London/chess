@@ -250,17 +250,12 @@ game* undo_move (array_list* history, game* game) {
 	if (history->actualSize == 0) {
 		return game;
 	}
-	move* tmp_move = create_move();
-	tmp_move = array_list_get_last_move(history);
 
 	array_list_remove_last(history);
 
-	tmp_move = array_list_get_last_move(history);
-	game = array_list_get_last_game(history);
+	game = game_copy(array_list_get_last_game(history));
 	array_list_remove_last(history);
 
-	//updating game and history
-	destroy_move(tmp_move);
 	return game;
 }
 
