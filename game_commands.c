@@ -371,7 +371,7 @@ int game_play(game* game){
 					array_list_remove_last(history);
 					//tmp_move = array_list_get_last_move(history);
 					//announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
-					announce_undo_move((current_turn_color(game)+1)%2, array_list_remove_last(history));
+					announce_undo_move((current_turn_color(game)+1)%2, array_list_get_last_move(history));
 					
 					printf("A\n");
 					
