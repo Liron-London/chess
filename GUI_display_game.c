@@ -337,7 +337,12 @@ void restart_game(game* cur_game) {
 		cur_game->blacks[i]->piece_location->column = new_game->blacks[i]->piece_location->column;
 		cur_game->blacks[i]->piece_type = new_game->blacks[i]->piece_type;
 	}
-	cur_game->current_turn = new_game->current_turn;
+
+	if (cur_game->game_mode == 1) {
+		cur_game->current_turn = cur_game->user_color;
+	} else {
+		cur_game->current_turn = 1;
+	}
 
 	game_destroy(new_game);
 }

@@ -62,6 +62,7 @@ screen set_user_color_dialog(game* new_game) {
 		return GAME_SCREEN;
 	} else if (buttonid == 1) {
 		new_game->user_color = 1;
+		new_game->current_turn = 1;
 		return GAME_SCREEN;
 	} else {
 		return set_difficulty_dialog(new_game);
