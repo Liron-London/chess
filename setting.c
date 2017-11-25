@@ -129,15 +129,16 @@ Command* parse_line(const char* str, Command* command, char* command_param) {
 		command->cmd = DIFFICULTY;
 		if (parser_is_int(command_param) == true) {
 			command->arg = atoi(command_param);
-			printf("command_arg is: %d", command->arg);
 			if (command->arg >= 1 && command->arg <= 4) {
 				command->validArg = true;
 			}
 			else if (command->arg == 5) {
 				print_level_not_supported();
+				command->validArg = false;
 			}
 			else {
 				print_invalid_difficulty();
+				command->validArg = false;
 			}
 		}
 	}
@@ -199,7 +200,7 @@ int set_game() {
 			}
 		}
 		if (command->cmd == DIFFICULTY) {
-			if (new_game->game_mode == 1) {
+			if (new_game->game_mode == 1 && command->validArg = true) {
 				new_game->difficulty = command->arg;
 			} else {
 				printf("ERROR: invalid command\n");
