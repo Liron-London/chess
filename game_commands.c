@@ -376,7 +376,7 @@ int game_play(game* game){
 					printf("A\n");
 					
 					//updating game and history
-					game = array_list_get_last_game(history);
+					game = game_copy(array_list_get_last_game(history));
 					
 					printf("B\n");
 					
