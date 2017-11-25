@@ -368,10 +368,8 @@ int game_play(game* game){
 					tmp_move = array_list_get_last_move(history);
 					announce_undo_move(current_turn_color(game), tmp_move);
 					array_list_remove_last(history);
-					
 					tmp_move = array_list_get_last_move(history);
 					announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
-					array_list_remove_last(history);
 					
 					printf("A\n");
 					
@@ -380,7 +378,11 @@ int game_play(game* game){
 					
 					printf("B\n");
 					
-					//destroy_move(second_tmp_move);
+					array_list_remove_last(history);
+					
+					printf("C\n");
+					
+					destroy_move(tmp_move);
 					
 					printf("D\n");
 					
