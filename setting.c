@@ -128,9 +128,9 @@ Command* parse_line(const char* str, Command* command, char* command_param) {
 		strcpy(command_param, strtok(NULL, " \t\n"));
 		command->cmd = DIFFICULTY;
 		if (parser_is_int(command_param) == true) {
-			command->arg = atoi(command_param);
 			if (command->arg >= 1 && command->arg <= 4) {
 				command->validArg = true;
+				command->arg = atoi(command_param);
 			}
 			else if (command->arg == 5) {
 				print_level_not_supported();
