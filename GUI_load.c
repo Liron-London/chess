@@ -19,12 +19,21 @@ SDL_Rect load_button, back_button;
 SDL_Surface* load_surfaces[5];
 SDL_Texture* load_textures[5];
 
+/*
+ * frees all the LOAD SCREEN SDL resources (textures)
+ * called when exiting the LOAD SCREEN
+ */
 void free_load_resources() {
 	for(int i = 0; i < 5; i++) {
 		SDL_DestroyTexture(load_textures[i]);
 	}
 }
 
+/*
+ * Creates the LOAD SCREEN buttons - GAME X (1<=X<=5, according to the number of currently saved games),
+ * LOAD (enabled or disabled according to the 'selected' param), BACK
+ * @Return value: the screen that needs to be presented - stay in LOAD SCREEN or EXIT if an error occurred
+ */
 screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int selected) {
 	int num_games = get_num_games();
 	int y = 15;
@@ -88,15 +97,24 @@ screen display_load_buttons(SDL_Window* window, SDL_Renderer* renderer, int sele
 	return LOAD_SCREEN;
 }
 
+/*
+ * renders the LOAD SCREEN and its elements (by calling display_load_buttons)
+ * @Return value: the screen that needs to be presented - LOAD SCREEN by default, EXIT if an error occurred
+ */
 screen render_loading_screen(SDL_Window* window, SDL_Renderer* renderer, int selected) {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
 	SDL_RenderClear(renderer);
-	screen display_screen;
+	screen display_screen = LOAD_SCREEN;
 	display_screen = display_load_buttons(window, renderer, selected);
 	SDL_RenderPresent(renderer);
 	return display_screen;
 }
 
+/*
+ * Management function of the LOAD SCREEN - holds the event loop, manages button clicking
+ * Loads a game if one was selected
+ * @Return value: the screen that needs to be presented - LOAD SCREEN by default, EXIT if an error occurred
+ */
 screen loading_screen(SDL_Window* window, SDL_Renderer* renderer, screen prev_screen, game* game) {
 	char filename[14];
 	int num_games = get_num_games();
