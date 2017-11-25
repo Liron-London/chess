@@ -188,6 +188,7 @@ int set_game() {
 			free(command_text);
 			destroy_command(command);
 			game_destroy(new_game);
+			printf("Exiting...\n");
 			return 0;
 		}
 		if (command->cmd == GAME_MODE) {
