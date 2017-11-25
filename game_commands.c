@@ -364,12 +364,14 @@ int game_play(game* game){
 
 				else {
 					// takes 2 moves and games out of history
-					move* tmp_move = create_move();
-					tmp_move = array_list_get_last_move(history);
-					announce_undo_move(current_turn_color(game), tmp_move);
+					//move* tmp_move = create_move();
+					//tmp_move = array_list_get_last_move(history);
+					//announce_undo_move(current_turn_color(game), tmp_move);
+					announce_undo_move(current_turn_color(game), array_list_get_last_move(history));
 					array_list_remove_last(history);
-					tmp_move = array_list_get_last_move(history);
-					announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
+					//tmp_move = array_list_get_last_move(history);
+					//announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
+					announce_undo_move((current_turn_color(game)+1)%2, array_list_remove_last(history));
 					
 					printf("A\n");
 					
@@ -378,12 +380,12 @@ int game_play(game* game){
 					
 					printf("B\n");
 					
-					printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
+					//printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
 					array_list_remove_last(history);
 					
 					printf("C\n");
 					
-					printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
+					//printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
 					//destroy_move(tmp_move);
 					// free(tmp_move);
 					
