@@ -365,14 +365,14 @@ int game_play(game* game){
 				else {
 					// takes 2 moves and games out of history
 					move* first_tmp_move = create_move();
-					tmp_move = array_list_get_last_move(history);
-					announce_undo_move(current_turn_color(game), tmp_move);
+					first_tmp_move = array_list_get_last_move(history);
+					announce_undo_move(current_turn_color(game), first_tmp_move);
 					array_list_remove_last(history);
 					destroy_move(first_tmp_move);
 					
 					move* second_tmp_move = create_move();
 					second_tmp_move = array_list_get_last_move(history);
-					announce_undo_move((current_turn_color(game)+1)%2, tmp_move);
+					announce_undo_move((current_turn_color(game)+1)%2, second_tmp_move);
 					array_list_remove_last(history);
 					destroy_move(second_tmp_move);
 					printf("C\n");
