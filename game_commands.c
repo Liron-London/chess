@@ -382,7 +382,7 @@ int game_play(game* game){
 					
 					printf("C\n");
 					
-					destroy_move(tmp_move);
+					//destroy_move(tmp_move);
 					
 					printf("D\n");
 					
