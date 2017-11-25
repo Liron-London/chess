@@ -378,6 +378,7 @@ int game_play(game* game){
 					
 					printf("B\n");
 					
+					printf("tmp move is %d, %d\n", tmp_move->dest->row, tmp_move->source->row);
 					array_list_remove_last(history);
 					
 					printf("C\n");
